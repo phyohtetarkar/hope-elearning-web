@@ -1,0 +1,113 @@
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
+@import "swiper/css/zoom";
+@import "../styles/bootstrap-custom.css";
+@import "../styles/codeblock.css";
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background-color: #fafafa;
+  font-family: Inter, Noto Sans Myanmar UI, -apple-system, BlinkMacSystemFont, Roboto,
+    Segoe UI, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+    sans-serif !important;
+}
+
+svg {
+  display: block;
+}
+
+a {
+  color: var(--bs-anchor);
+}
+
+.lifted-card {
+  transition: box-shadow 0.25s;
+}
+
+.lifted-card:hover {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-none {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* width */
+.scrollbar-custom::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+/* Track */
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: #f2f2f2;
+  border-radius: 3px;
+}
+
+/* Handle */
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+/* Handle on hover */
+.scrollbar-custom::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
+.overlay {
+  /* Height & width depends on how you want to reveal the overlay (see JS below) */
+  height: 100%;
+  width: 100%;
+  position: fixed; /* Stay in place */
+  z-index: 9999; /* Sit on top */
+  left: 0;
+  top: 0;
+  background-color: rgb(1, 0, 0); /* Black fallback color */
+  background-color: rgb(1, 0, 0, 0.4); /* Black w/opacity */
+  overflow-x: hidden; /* Disable horizontal scroll */
+}
+
+/* Swiper */
+.swiper-pagination-bullet {
+  background-color: #fff;
+  width: 10px;
+  height: 10px;
+}
+.swiper-pagination-bullet-active {
+  background-color: #fff;
+}
+
+.swiper-button-next, .swiper-button-prev {
+  --swiper-navigation-color: var(--bs-primary);
+}
+
+/* Tinymce */
+.tox-pop .tox-pop__dialog .tox-toolbar {
+  padding: 0 !important;
+}
+
+.mce-edit-focus {
+  outline: none;
+}
+
+/* Editorjs */
+.ce-block__content,
+.ce-toolbar__content {
+  max-width: calc(100% - 0px) !important;
+  margin-left: 40px;
+}
+
+.cdx-block {
+  max-width: 100% !important;
+}

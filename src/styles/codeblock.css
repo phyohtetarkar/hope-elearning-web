@@ -1,0 +1,52 @@
+.cdx-codeblock-codewrapper {
+  font-family: Menlo, Monaco, Consolas, Courier New, monospace;
+  color: #41314e;
+  line-height: 1.6em;
+  font-size: 16px;
+  background: #f8f7fa;
+  box-shadow: none;
+  white-space: pre;
+  word-wrap: normal;
+  overflow-x: auto;
+  border-radius: 0 0 4px 4px;
+}
+
+.cdx-codeblock-selectwrapper {
+  background: #2b2b2b;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 0.5px solid #555;
+  border-radius: 4px 4px 0 0;
+}
+
+.cdx-codeblock-select {
+  cursor: pointer;
+  border: none;
+  color: #999;
+  background: transparent;
+  background-image: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  text-indent: 0.01px;
+  text-overflow: "";
+}
+
+.cdx-codeblock-select:hover {
+  border: 0;
+  outline: 0;
+  color: #555;
+}
+
+.cdx-codeblock-select:focus {
+  border: 0;
+  outline: 0;
+}
+
+.cdx-codeblock-select:active {
+  border: 0;
+  outline: 0;
+}
+
+.cm-focused {
+  outline: none !important;
+}
