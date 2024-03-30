@@ -22,19 +22,26 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
       onBlur,
       error,
       style,
+      className,
     } = props;
 
+    const isInvalid = !!error;
+
     return (
-      <>
-        {label && <label className="form-label">{label}</label>}
-        <div className={`input-group ${error ? "has-validation" : ""}`}>
+      <div className={`flex flex-col ${className ?? ""}`}>
+        {label && <label className="font-medium mb-1">{label}</label>}
+        <div className={`flex rounded ${className ?? ""}`}>
           <input
             ref={ref}
             id={id}
             type={isPassword ? "password" : "text"}
             name={name}
             autoComplete={autoComplete}
-            className={`form-control px-3 ${error ? "is-invalid" : ""}`}
+            className={`flex-grow ${
+              isInvalid
+                ? "border-danger focus:border-danger focus:ring-1 focus:ring-danger"
+                : "border-gray-300 focus:border-primary"
+            } rounded-l focus:ring-0 z-10`}
             placeholder={placeholder}
             disabled={disabled}
             value={value}
@@ -44,15 +51,15 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
             style={style}
           />
           <div
-            className="input-group-text px-3 text-muted"
+            className="border border-l-0 rounded-r px-3 flex items-center bg-gray-100"
             role="button"
             onClick={() => setIsPassword(!isPassword)}
           >
             {isPassword ? <RiEyeOffFill size={20} /> : <RiEyeFill size={20} />}
           </div>
-          {error && <div className="invalid-feedback">{error}</div>}
         </div>
-      </>
+        {error && <div className="text-danger text-small mt-1.5">{error}</div>}
+      </div>
     );
   }
 );

@@ -6,10 +6,9 @@ interface RatingProps {
 
 const stars = [1, 2, 3, 4, 5];
 
-function Rating(props: RatingProps) {
-  const { rating } = props;
+function Rating({ rating }: RatingProps) {
   return (
-    <div className="hstack">
+    <div className="flex">
       {stars.map((e, i) => {
         if (rating >= e) {
           return <RiStarFill key={i} size={18} className="text-warning" />;
@@ -33,7 +32,7 @@ function Rating(props: RatingProps) {
           // );
         }
 
-        return <RiStarLine key={i} size={18} className="text-default" />;
+        return <RiStarLine key={i} size={18} className="text-muted" />;
       })}
     </div>
   );

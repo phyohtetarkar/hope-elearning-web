@@ -1,7 +1,7 @@
 "use client";
 import Alert from "@/components/Alert";
-import ProgressButton from "@/components/ProgressButton";
 import { Input, PasswordInput } from "@/components/forms";
+import { Button } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -105,14 +105,14 @@ function SignUpPage() {
                 </div>
 
                 <div className="col-md-12 mt-4">
-                  <ProgressButton
+                  <Button
                     type="submit"
                     className="w-100 py-2h"
                     disabled={isSubmitting || !!oauthLogin}
-                    loading={isSubmitting}
+                    isLoading={isSubmitting}
                   >
                     Sign up
-                  </ProgressButton>
+                  </Button>
                 </div>
                 <div className="col-md-12 mb-2">
                   <div className="row g-2">
@@ -130,12 +130,11 @@ function SignUpPage() {
 
                 <div className="col-md-12">
                   <div className="hstack gap-2 align-items-center">
-                    <ProgressButton
+                    <Button
                       className="border w-50"
                       variant="light"
-                      theme="outline"
                       disabled={isSubmitting || !!oauthLogin}
-                      loading={oauthLogin === "facebook"}
+                      isLoading={oauthLogin === "facebook"}
                       onClick={async () => {
                         try {
                           setError(undefined);
@@ -155,14 +154,13 @@ function SignUpPage() {
                       <span className="text-dark ms-1 text-truncate">
                         Facebook
                       </span>
-                    </ProgressButton>
+                    </Button>
 
-                    <ProgressButton
+                    <Button
                       className="border w-50"
                       variant="light"
-                      theme="outline"
                       disabled={isSubmitting || !!oauthLogin}
-                      loading={oauthLogin === "google"}
+                      isLoading={oauthLogin === "google"}
                       onClick={async () => {
                         try {
                           setError(undefined);
@@ -182,7 +180,7 @@ function SignUpPage() {
                       <span className="text-dark ms-1 text-truncate">
                         Google
                       </span>
-                    </ProgressButton>
+                    </Button>
                   </div>
                 </div>
               </form>

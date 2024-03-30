@@ -1,9 +1,11 @@
 "use client";
+
+import { NextUIProvider } from "@nextui-org/react";
 import NextNProgress from "nextjs-progressbar";
 import NProgress from "nprogress";
 import { Suspense, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
-import { NavigationEvents } from "./NavigationEvents";
+import { NavigationEvents } from "./navigation-events";
 
 type PushStateInput = [
   data: any,
@@ -11,8 +13,7 @@ type PushStateInput = [
   url?: string | URL | null | undefined
 ];
 
-export default function ClientComponentsWrapper() {
-
+export function Providers({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const handleAnchorClick = (event: MouseEvent) => {
       const targetUrl = (event.currentTarget as HTMLAnchorElement).href;
@@ -38,28 +39,30 @@ export default function ClientComponentsWrapper() {
       apply: (target, thisArg, argArray: PushStateInput) => {
         NProgress.done();
         return target.apply(thisArg, argArray);
-      }
+      },
     });
   }, []);
-
   return (
-    <Suspense>
-      <NavigationEvents />
-      <NextNProgress
-        color="#5863f8"
-        startPosition={0.3}
-        height={2}
-        options={{
-          showSpinner: false
-        }}
-      />
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar
-        newestOnTop
-        theme="colored"
-      />
-    </Suspense>
+    <>
+      <Suspense>
+        <NavigationEvents />
+        <NextNProgress
+          color="#5863f8"
+          startPosition={0.3}
+          height={2}
+          options={{
+            showSpinner: false,
+          }}
+        />
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar
+          newestOnTop
+          theme="colored"
+        />
+      </Suspense>
+      <NextUIProvider className="h-full">{children}</NextUIProvider>
+    </>
   );
 }

@@ -19,9 +19,12 @@ const Select = forwardRef<HTMLSelectElement, SelectInputProps>((props, ref) => {
     children,
     style,
   } = props;
+
+  const isInvalid = !!error;
+
   return (
-    <>
-      {label && <label className="form-label">{label}</label>}
+    <div className={`flex flex-col ${className}`}>
+      {label && <label className="font-medium mb-1">{label}</label>}
       <select
         id={id}
         ref={ref}
@@ -30,15 +33,13 @@ const Select = forwardRef<HTMLSelectElement, SelectInputProps>((props, ref) => {
         onBlur={onBlur}
         value={value}
         disabled={disabled}
-        className={`form-select ps-3 ${error ? "is-invalid" : ""} ${
-          className ?? ""
-        }`}
+        className={`${isInvalid ? "border-danger focus:border-danger focus:ring-1 focus:ring-danger" : "border-gray-300 focus:border-primary"} rounded focus:ring-0`}
         style={style}
       >
         {children}
       </select>
-      {error && <div className="invalid-feedback">{error}</div>}
-    </>
+      {error && <div className="text-danger text-small mt-1.5">{error}</div>}
+    </div>
   );
 });
 

@@ -1,7 +1,6 @@
+import { RiBookmarkLine } from "@remixicon/react";
 import Image from "next/legacy/image";
 import Link from "next/link";
-import Tooltip from "../Tooltip";
-import { RiBookmarkLine } from "@remixicon/react";
 
 function CourseListItem() {
   return (
@@ -56,9 +55,7 @@ function CourseListItem() {
                 </Link>
                 <div className="ms-auto d-flex gap-3 align-items-center">
                   <div role="button">
-                    <Tooltip title="Add to bookmarks">
                       <RiBookmarkLine size={20} className="text-muted" />
-                    </Tooltip>
                   </div>
                 </div>
               </div>

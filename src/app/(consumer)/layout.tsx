@@ -1,5 +1,4 @@
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
+import { Footer, Header } from "@/components/template/consumer";
 
 export default function ConsumerLayout({
   children,
@@ -7,16 +6,9 @@ export default function ConsumerLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="d-flex flex-column h-100">
+    <div className="flex flex-col h-full">
       <Header />
-      <main
-        className="flex-grow-1"
-        style={{
-          padding: "70px 0 0 0",
-        }}
-      >
-        {children}
-      </main>
+      <main className="flex-grow">{children}</main>
       <Footer />
     </div>
   );

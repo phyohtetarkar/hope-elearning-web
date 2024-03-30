@@ -58,10 +58,12 @@ const Input = forwardRef<HTMLInputElement, InputProps<HTMLInputElement>>(
       style,
     } = props;
 
+    const isInvalid = !!error;
+
     return (
-      <>
+      <div className={`flex flex-col ${className}`}>
         {label && (
-          <label htmlFor={id} className="form-label">
+          <label htmlFor={id} className="font-medium mb-1">
             {label}
           </label>
         )}
@@ -71,9 +73,7 @@ const Input = forwardRef<HTMLInputElement, InputProps<HTMLInputElement>>(
           type={type}
           name={name}
           autoComplete={autoComplete}
-          className={`form-control px-3 ${error ? "is-invalid" : ""} ${
-            className ?? ""
-          }`}
+          className={`${isInvalid ? "border-danger focus:border-danger focus:ring-1 focus:ring-danger" : "border-gray-300 focus:border-primary"} rounded focus:ring-0`}
           placeholder={placeholder}
           disabled={disabled}
           readOnly={readonly}
@@ -86,8 +86,8 @@ const Input = forwardRef<HTMLInputElement, InputProps<HTMLInputElement>>(
           onKeyDown={onKeyDown}
           style={style}
         />
-        {error && <div className="invalid-feedback">{error}</div>}
-      </>
+        {error && <div className="text-danger text-small mt-1.5">{error}</div>}
+      </div>
     );
   }
 );

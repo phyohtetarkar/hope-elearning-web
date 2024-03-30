@@ -36,13 +36,13 @@ export default function QuoteSwiper() {
     >
       {quotes.map((q, i) => {
         return (
-          <SwiperSlide key={i} className="py-5">
-            <figure className="text-center mb-0">
-              <blockquote className="blockquote">
+          <SwiperSlide key={i} className="py-7">
+            <figure className="text-center">
+              <blockquote className="text-lg">
                 <p>{q.quote}</p>
               </blockquote>
-              <figcaption className="blockquote-footer mb-0">
-                <cite title="Source Title">{q.author}</cite>
+              <figcaption className="text-muted">
+                <cite>~ {q.author}</cite>
               </figcaption>
             </figure>
           </SwiperSlide>

@@ -1,36 +1,24 @@
-import Image from "next/image";
-import { CSSProperties } from "react";
-import QuoteSwiper from "./quote-swiper";
 import { CourseGridItem } from "@/components/course";
-import Tooltip from "@/components/Tooltip";
+import Image from "next/image";
+import QuoteSwiper from "./quote-swiper";
+import { Input } from "@nextui-org/react";
 
 export default function Home() {
   return (
     <>
       <div className="bg-primary">
-        <div className="container py-4 py-lg-5">
-          <div className="row align-items-center py-4">
-            <div className="col-12 col-lg-6 mb-5 mb-lg-0">
-              <div className="vstack">
-                <h1 className="display-3 fw-medium text-light">
-                  Welcome to [sitename]
-                </h1>
-                <div className="text-light mb-4">
-                  Hi, Welcome to [sitename]. Start a new career in the software
-                  developing industry.
-                </div>
+        <div className="container py-5 lg:py-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2">
+            <div className="flex flex-col justify-center mb-5 lg:mb-0">
+              <h1 className="text-white mb-2">Welcome to [sitename]</h1>
+              <div className="text-white text-opacity-75 mb-4">
+                Hi, Welcome to [sitename]. Start a new career in the software
+                developing industry.
               </div>
             </div>
-            <div className="col-12 col-lg-6">
-              <div className="d-flex justify-content-center">
-                <div
-                  className="ratio ratio-16x9 ms-lg-auto"
-                  style={
-                    {
-                      width: 500,
-                    } as CSSProperties
-                  }
-                >
+            <div className="">
+              <div className="lg:ms-auto lg:max-w-[400px]">
+                <div className="aspect-w-3 aspect-h-2">
                   <Image
                     src="/images/banner.png"
                     alt=""
@@ -47,33 +35,22 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="bg-white px-3 border-bottom">
+      <div className="bg-white px-3 border-b">
         <QuoteSwiper />
       </div>
       <div className="container py-5">
         <h3 className="mb-4">Recommended</h3>
-        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mb-5">
-          <div className="col">
-            <CourseGridItem />
-          </div>
-          <div className="col">
-            <CourseGridItem />
-          </div>
-          <div className="col">
-            <CourseGridItem />
-          </div>
-          <div className="col">
-            <CourseGridItem />
-          </div>
-          <div className="col">
-            <CourseGridItem />
-          </div>
-          <div className="col">
-            <CourseGridItem />
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 bg-transparent">
+          <CourseGridItem />
+          <CourseGridItem />
+          <CourseGridItem />
+          <CourseGridItem />
+          <CourseGridItem />
+          <CourseGridItem />
         </div>
 
         <h3>Articles</h3>
+        
       </div>
     </>
   );

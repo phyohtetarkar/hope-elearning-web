@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import ClientComponentsWrapper from "@/components/ClientComponentsWrapper";
+import { Providers } from "@/components/Providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,9 +29,8 @@ export default function RootLayout({
       <head>
         <meta charSet="utf-8" />
       </head>
-      <body className={inter.className}>
-        <ClientComponentsWrapper />
-        {children}
+      <body className={"h-full"}>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
