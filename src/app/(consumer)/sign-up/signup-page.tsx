@@ -1,7 +1,7 @@
 "use client";
 import Alert from "@/components/Alert";
 import { Input, PasswordInput } from "@/components/forms";
-import { Button } from "@nextui-org/react";
+import { Button, Card, CardBody, CardFooter, Divider } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -18,184 +18,172 @@ interface SignUpInputs {
 function SignUpPage() {
   const router = useRouter();
   const [error, setError] = useState<string>();
-  const [oauthLogin, setOauthLogin] = useState<"facebook"|"google">();
+  const [oauthLogin, setOauthLogin] = useState<"facebook" | "google">();
 
   const {
     register,
     control,
     formState: { errors, isSubmitting },
-    handleSubmit
+    handleSubmit,
   } = useForm<SignUpInputs>();
 
   const processSignUp = async (values: SignUpInputs) => {
     try {
       setError(undefined);
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   return (
     <div className="container py-3">
-      <div className="row my-4 mb-5">
-        <div className=" col-lg-6 offset-lg-3">
-          <div className="card">
-            <div className="card-body p-lg-4">
-              <h4 className="card-title fw-bold mt-2 mb-4">Sign Up</h4>
+      <div className="grid grid-cols-12 mt-10 mb-5">
+        <Card
+          shadow="none"
+          className="border col-span-12 md:col-span-6 md:col-start-4 xl:col-span-6 xl:col-start-4"
+        >
+          <CardBody className="px-6 py-4">
+            <h3 className="fw-bold mt-2 mb-4">Sign Up</h3>
 
-              {error && <Alert message={error} variant="danger" />}
+            {error && <Alert message={error} variant="danger" />}
 
-              <form
-                className="row g-3"
-                onSubmit={(evt) => {
-                  evt.preventDefault();
-                  handleSubmit(async (data) => await processSignUp(data))();
-                }}
+            <form
+              className="grid grid-cols-1"
+              onSubmit={(evt) => {
+                evt.preventDefault();
+                handleSubmit(async (data) => await processSignUp(data))();
+              }}
+            >
+              <Input
+                label="Full Name"
+                id="nameInput"
+                type="text"
+                className="mb-4"
+                placeholder="Your full name"
+                {...register("fullName", {
+                  required: true,
+                })}
+                error={errors.fullName && "Please enter full name"}
+              />
+              <Input
+                label="Email"
+                id="emailInput"
+                type="email"
+                className="mb-4"
+                autoComplete="username"
+                placeholder="Enter email address"
+                {...register("email", {
+                  required: true,
+                  pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                })}
+                error={errors.email && "Please enter valid email"}
+              />
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 mb-4">
+                <PasswordInput
+                  label="Password"
+                  autoComplete="new-password"
+                  placeholder="Minimum 8 characters"
+                  {...register("password", {
+                    required: true,
+                    minLength: 8,
+                  })}
+                  error={
+                    errors.password && "Password must be at least 8 charachers"
+                  }
+                />
+                <PasswordInput
+                  label="Confirm Password"
+                  autoComplete="new-password"
+                  placeholder="Minimum 8 characters"
+                  {...register("confirmPassword", {
+                    validate: (v, fv) => v === fv.password,
+                  })}
+                  error={errors.confirmPassword && "Password does not match"}
+                />
+              </div>
+
+              <Button
+                type="submit"
+                color="primary"
+                disabled={isSubmitting || !!oauthLogin}
+                isLoading={isSubmitting}
               >
-                <div className="col-lg-6">
-                  <Input
-                    label="Full Name"
-                    id="nameInput"
-                    type="text"
-                    placeholder="Your full name"
-                    {...register("fullName", {
-                      required: true,
-                    })}
-                    error={errors.fullName && "Please enter full name"}
-                  />
-                </div>
-                <div className="col-lg-6">
-                  <Input
-                    label="Email"
-                    id="emailInput"
-                    type="email"
-                    autoComplete="username"
-                    placeholder="Enter email address"
-                    {...register("email", {
-                      required: true,
-                      pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
-                    })}
-                    error={errors.email && "Please enter valid email"}
-                  />
-                </div>
-                <div className="col-12">
-                  <PasswordInput
-                    label="Password"
-                    autoComplete="new-password"
-                    placeholder="Minimum 8 characters"
-                    {...register("password", {
-                      required: true,
-                      minLength: 8,
-                    })}
-                    error={
-                      errors.password &&
-                      "Password must be at least 8 charachers"
+                Sign up
+              </Button>
+
+              <div className="flex items-center my-4">
+                <hr className="flex-grow" />
+                <div className=" text-muted mx-2">or continue with</div>
+                <hr className="flex-grow" />
+              </div>
+
+              <div className="flex gap-2">
+                <Button
+                  className="border flex-1"
+                  variant="light"
+                  disabled={isSubmitting || !!oauthLogin}
+                  isLoading={oauthLogin === "facebook"}
+                  onClick={async () => {
+                    try {
+                      setError(undefined);
+                      setOauthLogin("facebook");
+                    } catch (error) {
+                    } finally {
+                      setOauthLogin(undefined);
                     }
-                  />
-                </div>
-                <div className="col-12">
-                  <PasswordInput
-                    label="Confirm Password"
-                    autoComplete="new-password"
-                    placeholder="Minimum 8 characters"
-                    {...register("confirmPassword", {
-                      validate: (v, fv) => v === fv.password
-                    })}
-                    error={errors.confirmPassword && "Password does not match"}
-                  />
-                </div>
+                  }}
+                  startContent={
+                    <Image
+                      src="/images/icons8-facebook-48.png"
+                      alt="facebook"
+                      width={28}
+                      height={28}
+                    />
+                  }
+                >
+                  Facebook
+                </Button>
 
-                <div className="col-md-12 mt-4">
-                  <Button
-                    type="submit"
-                    className="w-100 py-2h"
-                    disabled={isSubmitting || !!oauthLogin}
-                    isLoading={isSubmitting}
-                  >
-                    Sign up
-                  </Button>
-                </div>
-                <div className="col-md-12 mb-2">
-                  <div className="row g-2">
-                    <div className="col">
-                      <hr className="text-muted" />
-                    </div>
-                    <div className="col-auto align-self-center text-muted">
-                      or continue with
-                    </div>
-                    <div className="col">
-                      <hr className="text-muted" />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="col-md-12">
-                  <div className="hstack gap-2 align-items-center">
-                    <Button
-                      className="border w-50"
-                      variant="light"
-                      disabled={isSubmitting || !!oauthLogin}
-                      isLoading={oauthLogin === "facebook"}
-                      onClick={async () => {
-                        try {
-                          setError(undefined);
-                          setOauthLogin("facebook");
-                        } catch (error) {
-                        } finally {
-                          setOauthLogin(undefined);
-                        }
-                      }}
-                    >
-                      <Image
-                        src="/images/icons8-facebook-48.png"
-                        alt="facebook"
-                        width={28}
-                        height={28}
-                      />
-                      <span className="text-dark ms-1 text-truncate">
-                        Facebook
-                      </span>
-                    </Button>
-
-                    <Button
-                      className="border w-50"
-                      variant="light"
-                      disabled={isSubmitting || !!oauthLogin}
-                      isLoading={oauthLogin === "google"}
-                      onClick={async () => {
-                        try {
-                          setError(undefined);
-                          setOauthLogin("google");
-                        } catch (error) {
-                        } finally {
-                          setOauthLogin(undefined);
-                        }
-                      }}
-                    >
-                      <Image
-                        src="/images/icons8-google-48.png"
-                        alt="google"
-                        width={28}
-                        height={28}
-                      />
-                      <span className="text-dark ms-1 text-truncate">
-                        Google
-                      </span>
-                    </Button>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div className="text-center p-3 card-footer">
+                <Button
+                  className="border flex-1"
+                  variant="light"
+                  disabled={isSubmitting || !!oauthLogin}
+                  isLoading={oauthLogin === "google"}
+                  onClick={async () => {
+                    try {
+                      setError(undefined);
+                      setOauthLogin("google");
+                    } catch (error) {
+                    } finally {
+                      setOauthLogin(undefined);
+                    }
+                  }}
+                  startContent={
+                    <Image
+                      src="/images/icons8-google-48.png"
+                      alt="google"
+                      width={28}
+                      height={28}
+                    />
+                  }
+                >
+                  Google
+                </Button>
+              </div>
+            </form>
+          </CardBody>
+          <Divider />
+          <CardFooter className="flex justify-center">
+            <div>
               Already have an account?
               <Link
                 href="/login"
-                className="text-decoration-none fw-medium link-anchor ms-1"
+                className="ms-1 font-medium text-anchor hover:text-opacity-80"
               >
                 Login
               </Link>
             </div>
-          </div>
-        </div>
+          </CardFooter>
+        </Card>
       </div>
     </div>
   );
