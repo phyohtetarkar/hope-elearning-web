@@ -13,7 +13,7 @@ type PushStateInput = [
   url?: string | URL | null | undefined
 ];
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export default function Providers({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const handleAnchorClick = (event: MouseEvent) => {
       const targetUrl = (event.currentTarget as HTMLAnchorElement).href;

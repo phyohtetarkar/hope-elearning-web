@@ -17,13 +17,14 @@ export default function Home() {
               </div>
             </div>
             <div className="">
-              <div className="lg:ms-auto lg:max-w-[400px]">
+              <div className="lg:ms-auto lg:max-w-[450px]">
                 <div className="aspect-w-3 aspect-h-2">
                   <Image
-                    src="/images/banner.png"
+                    src="/images/undraw_teaching.svg"
                     alt=""
                     fill
                     sizes="50vh"
+                    className="drop-shadow-xl"
                     priority
                     style={{
                       objectFit: "contain",

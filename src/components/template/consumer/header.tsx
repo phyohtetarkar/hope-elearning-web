@@ -16,9 +16,9 @@ export default function Header() {
       <NavbarBrand className="flex-grow-0">
         <Link href="/" color="foreground" className="flex items-center">
           <div className="rounded bg-primary aspect-1 w-[40px]"></div>
-          <h4 className="ms-2 font-bold text-xl">
+          <h3 className="ms-3">
             {process.env.NEXT_PUBLIC_APP_NAME}
-          </h4>
+          </h3>
         </Link>
       </NavbarBrand>
       <NavbarContent className="hidden md:flex gap-4">

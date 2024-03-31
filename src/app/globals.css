@@ -9,14 +9,6 @@
 @import "../styles/codeblock.css";
 
 @layer base {
-  ul {
-    @apply list-disc list-inside;
-  }
-
-  ol {
-    @apply list-decimal list-inside;
-  }
-
   h1 {
     @apply text-4xl font-semibold;
   }
@@ -42,11 +34,25 @@
   }
 }
 
+@layer components {
+  .default-input {
+    @apply border-gray-300 focus:border-primary focus:ring-0;
+  }
+
+  .valid-input {
+    @apply border-success focus:border-success focus:ring-[4px] focus:ring-success/30;
+  }
+
+  .invalid-input {
+    @apply border-danger focus:border-danger focus:ring-[4px] focus:ring-danger/30;
+  }
+}
+
 html,
 body {
   margin: 0;
   height: 100%;
-  background-color: #fafafa;
+  background-color: #fff;
   font-family: Inter, Noto Sans Myanmar UI, -apple-system, BlinkMacSystemFont,
     Roboto, Segoe UI, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
     Helvetica Neue, sans-serif !important;

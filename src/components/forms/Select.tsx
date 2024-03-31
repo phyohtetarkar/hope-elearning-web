@@ -33,7 +33,7 @@ const Select = forwardRef<HTMLSelectElement, SelectInputProps>((props, ref) => {
         onBlur={onBlur}
         value={value}
         disabled={disabled}
-        className={`${isInvalid ? "border-danger focus:border-danger focus:ring-1 focus:ring-danger" : "border-gray-300 focus:border-primary"} rounded focus:ring-0`}
+        className={`${isInvalid ? "invalid-input" : "default-input"} rounded`}
         style={style}
       >
         {children}

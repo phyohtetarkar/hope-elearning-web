@@ -38,10 +38,8 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
             name={name}
             autoComplete={autoComplete}
             className={`flex-grow ${
-              isInvalid
-                ? "border-danger focus:border-danger focus:ring-1 focus:ring-danger"
-                : "border-gray-300 focus:border-primary"
-            } rounded-l focus:ring-0 z-10`}
+              isInvalid ? "invalid-input" : "default-input"
+            } rounded-l z-10`}
             placeholder={placeholder}
             disabled={disabled}
             value={value}
