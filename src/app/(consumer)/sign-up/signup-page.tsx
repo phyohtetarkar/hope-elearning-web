@@ -77,33 +77,35 @@ function SignUpPage() {
                 error={errors.email && "Please enter valid email"}
               />
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 mb-4">
-                <PasswordInput
-                  label="Password"
-                  autoComplete="new-password"
-                  placeholder="Minimum 8 characters"
-                  {...register("password", {
-                    required: true,
-                    minLength: 8,
-                  })}
-                  error={
-                    errors.password && "Password must be at least 8 charachers"
-                  }
-                />
-                <PasswordInput
-                  label="Confirm Password"
-                  autoComplete="new-password"
-                  placeholder="Minimum 8 characters"
-                  {...register("confirmPassword", {
-                    validate: (v, fv) => v === fv.password,
-                  })}
-                  error={errors.confirmPassword && "Password does not match"}
-                />
-              </div>
+              <PasswordInput
+                label="Password"
+                autoComplete="new-password"
+                placeholder="Minimum 8 characters"
+                {...register("password", {
+                  required: true,
+                  minLength: 8,
+                })}
+                error={
+                  errors.password && "Password must be at least 8 charachers"
+                }
+              />
+
+              <div className="mb-4"></div>
+
+              <PasswordInput
+                label="Confirm Password"
+                autoComplete="new-password"
+                placeholder="Minimum 8 characters"
+                {...register("confirmPassword", {
+                  validate: (v, fv) => v === fv.password,
+                })}
+                error={errors.confirmPassword && "Password does not match"}
+              />
 
               <Button
                 type="submit"
                 color="primary"
+                className="mt-7"
                 disabled={isSubmitting || !!oauthLogin}
                 isLoading={isSubmitting}
               >
