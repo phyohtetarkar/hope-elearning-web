@@ -1,7 +1,7 @@
 "use client";
-import { RiEyeFill, RiEyeOffFill } from "@remixicon/react";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import { forwardRef, useState } from "react";
-import { InputProps } from "./Input";
+import { InputProps } from "./input";
 
 interface PasswordInputProps extends InputProps<HTMLInputElement> {}
 
@@ -30,7 +30,7 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
     return (
       <div className={`flex flex-col ${className ?? ""}`}>
         {label && <label className="font-medium mb-1">{label}</label>}
-        <div className={`flex rounded ${className ?? ""}`}>
+        <div className={`flex rounded`}>
           <input
             ref={ref}
             id={id}
@@ -53,10 +53,10 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
             role="button"
             onClick={() => setIsPassword(!isPassword)}
           >
-            {isPassword ? <RiEyeOffFill size={20} /> : <RiEyeFill size={20} />}
+            {isPassword ? <EyeSlashIcon width={20} /> : <EyeIcon width={20} />}
           </div>
         </div>
-        {error && <div className="text-danger text-small mt-1.5">{error}</div>}
+        {error && <div className="text-danger text-sm mt-1.5">{error}</div>}
       </div>
     );
   }

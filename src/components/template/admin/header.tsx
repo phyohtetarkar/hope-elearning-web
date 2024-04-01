@@ -1,6 +1,8 @@
 "use client";
+import { DrawerContext } from "@/components";
+import { Bars3Icon } from "@heroicons/react/24/outline";
 import {
-  Avatar,
+  Button,
   Dropdown,
   DropdownItem,
   DropdownMenu,
@@ -8,15 +10,13 @@ import {
   Navbar,
   NavbarBrand,
   NavbarContent,
-  User,
+  User
 } from "@nextui-org/react";
-import { RiMenuLine } from "@remixicon/react";
 import { useContext } from "react";
-import { DrawerContext } from "./drawer-context-provider";
 
 export default function Header() {
   const { toggle } = useContext(DrawerContext);
-  
+
   return (
     <Navbar
       isBordered
@@ -28,9 +28,14 @@ export default function Header() {
       }}
     >
       <NavbarBrand className="flex-grow-0">
-        <button className="ms-auto" onClick={toggle}>
-          <RiMenuLine className="text-muted" />
-        </button>
+        <Button
+          className="border lg:hidden"
+          variant="light"
+          isIconOnly
+          onClick={toggle}
+        >
+          <Bars3Icon width={24} className="text-muted" />
+        </Button>
       </NavbarBrand>
 
       <NavbarContent as="div" justify="end">
@@ -42,6 +47,9 @@ export default function Header() {
                 name: "User",
                 src: "/images/profile.png",
                 as: "button",
+                isBordered: true,
+                color: "primary",
+                size: "sm",
                 className: "transition-transform",
               }}
             />

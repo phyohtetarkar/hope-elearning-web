@@ -1,9 +1,6 @@
-import {
-  DrawerBackdrop,
-  DrawerContextProvider,
-  Header,
-  SideMenu,
-} from "@/components/template/admin";
+import { DrawerContextProvider } from "@/components";
+import DrawerBackdrop from "@/components/drawer";
+import { Header, SideMenu } from "@/components/template/admin";
 
 export default function AdminLayout({
   children,
@@ -14,9 +11,9 @@ export default function AdminLayout({
     <DrawerContextProvider>
       <div className="flex h-full static">
         <SideMenu />
-        <div className="flex-grow">
+        <div className="grow flex flex-col overflow-y-auto">
           <Header />
-          {children}
+          <main>{children}</main>
           <DrawerBackdrop />
         </div>
       </div>

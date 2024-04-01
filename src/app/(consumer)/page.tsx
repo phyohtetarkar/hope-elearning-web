@@ -1,7 +1,7 @@
 import { CourseGridItem } from "@/components/course";
+import { Button, Link } from "@nextui-org/react";
 import Image from "next/image";
 import QuoteSwiper from "./quote-swiper";
-import { Input } from "@nextui-org/react";
 
 export default function Home() {
   return (
@@ -11,9 +11,19 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-2">
             <div className="flex flex-col justify-center mb-5 lg:mb-0">
               <h1 className="text-white mb-2">Welcome to [sitename]</h1>
-              <div className="text-white text-opacity-75 mb-4">
+              <div className="text-white text-opacity-75 mb-6">
                 Hi, Welcome to [sitename]. Start a new career in the software
                 developing industry.
+              </div>
+              <div className="mb-4">
+                <Button
+                  as={Link}
+                  href="/courses"
+                  color="secondary"
+                  className="w-full lg:w-auto"
+                >
+                  Browse courses
+                </Button>
               </div>
             </div>
             <div className="">
@@ -39,8 +49,8 @@ export default function Home() {
       <div className="bg-white px-3 border-b">
         <QuoteSwiper />
       </div>
-      <div className="container py-5">
-        <h3 className="mb-4">Recommended</h3>
+      <div className="container py-7">
+        <h3 className="mb-5">Recommended</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 bg-transparent">
           <CourseGridItem />
           <CourseGridItem />
@@ -51,7 +61,6 @@ export default function Home() {
         </div>
 
         <h3>Articles</h3>
-        
       </div>
     </>
   );

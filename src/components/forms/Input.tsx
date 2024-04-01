@@ -86,7 +86,7 @@ const Input = forwardRef<HTMLInputElement, InputProps<HTMLInputElement>>(
           onKeyDown={onKeyDown}
           style={style}
         />
-        {error && <div className="text-danger text-small mt-1.5">{error}</div>}
+        {error && <div className="text-danger text-sm mt-1.5">{error}</div>}
       </div>
     );
   }

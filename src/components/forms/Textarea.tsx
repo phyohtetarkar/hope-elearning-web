@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { InputProps } from "./Input";
+import { InputProps } from "./input";
 
 interface TextareaInputProps extends InputProps<HTMLTextAreaElement> {}
 
@@ -45,7 +45,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaInputProps>(
             ...style,
           }}
         />
-        {error && <div className="text-danger text-small mt-1.5">{error}</div>}
+        {error && <div className="text-danger text-sm mt-1.5">{error}</div>}
       </div>
     );
   }

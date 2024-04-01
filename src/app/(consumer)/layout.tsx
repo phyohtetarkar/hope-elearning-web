@@ -6,9 +6,9 @@ export default function ConsumerLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full overflow-y-auto">
       <Header />
-      <main className="flex-grow">{children}</main>
+      <main className="grow">{children}</main>
       <Footer />
     </div>
   );

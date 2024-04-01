@@ -9,6 +9,32 @@
 @import "../styles/codeblock.css";
 
 @layer base {
+  @font-face {
+    font-family: Inter;
+    font-weight: 300;
+    src: url(../../public/fonts/Inter-Light.ttf) format("truetype");
+  }
+  @font-face {
+    font-family: Inter;
+    font-weight: 400;
+    src: url(../../public/fonts/Inter-Regular.ttf) format("truetype");
+  }
+  @font-face {
+    font-family: Inter;
+    font-weight: 500;
+    src: url(../../public/fonts/Inter-Medium.ttf) format("truetype");
+  }
+  @font-face {
+    font-family: Inter;
+    font-weight: 600;
+    src: url(../../public/fonts/Inter-SemiBold.ttf) format("truetype");
+  }
+  @font-face {
+    font-family: Inter;
+    font-weight: 700;
+    src: url(../../public/fonts/Inter-Bold.ttf) format("truetype");
+  }
+
   h1 {
     @apply text-4xl font-semibold;
   }
@@ -48,15 +74,14 @@
   }
 }
 
-html,
+/* html,
 body {
   margin: 0;
-  height: 100%;
-  background-color: #fff;
+  background-color: #ff0000;
   font-family: Inter, Noto Sans Myanmar UI, -apple-system, BlinkMacSystemFont,
     Roboto, Segoe UI, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
     Helvetica Neue, sans-serif !important;
-}
+} */
 
 svg {
   display: block;

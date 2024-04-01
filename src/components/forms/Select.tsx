@@ -1,5 +1,5 @@
 import { forwardRef, ReactNode } from "react";
-import { InputProps } from "./Input";
+import { InputProps } from "./input";
 
 interface SelectInputProps extends InputProps<HTMLSelectElement> {
   children: ReactNode;
@@ -38,7 +38,7 @@ const Select = forwardRef<HTMLSelectElement, SelectInputProps>((props, ref) => {
       >
         {children}
       </select>
-      {error && <div className="text-danger text-small mt-1.5">{error}</div>}
+      {error && <div className="text-danger text-sm mt-1.5">{error}</div>}
     </div>
   );
 });

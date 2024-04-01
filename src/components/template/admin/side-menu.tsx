@@ -1,41 +1,53 @@
 "use client";
 
-import { Listbox, ListboxItem, ListboxSection } from "@nextui-org/react";
+import { DrawerContext } from "@/components";
 import {
-  RiBloggerLine,
-  RiExternalLinkLine,
-  RiFolder2Line,
-  RiGlobalLine,
-  RiGraduationCapLine,
-  RiHashtag,
-  RiHome4Line,
-  RiSettings3Line,
-} from "@remixicon/react";
-import { useContext } from "react";
-import { DrawerContext } from ".";
+  AcademicCapIcon,
+  ArrowTopRightOnSquareIcon,
+  Cog6ToothIcon,
+  FolderIcon,
+  GlobeAltIcon,
+  HashtagIcon,
+  HomeIcon,
+  PencilSquareIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+import { Listbox, ListboxItem, ListboxSection } from "@nextui-org/react";
+import { usePathname } from "next/navigation";
+import { useContext, useState } from "react";
+
+const iconSize = 24;
 
 export default function SideMenu() {
-  const { isMenuOpen } = useContext(DrawerContext);
+  const { isMenuOpen, toggle } = useContext(DrawerContext);
+  const pathname = usePathname();
+  const [selectedKeys, setSelectedKeys] = useState(
+    new Set([pathname.replace("/admin/", "")])
+  );
 
   return (
     <div
       className={`${
         isMenuOpen ? "translate-x-0" : "-translate-x-[300px]"
-      } transition-transform absolute w-[300px] border-r z-50 flex flex-col h-full bg-white lg:translate-x-0 lg:static`}
+      } transition-transform ease-out absolute min-w-[200px] max-w-[300px] w-full border-r z-50 flex flex-col h-full bg-white lg:translate-x-0 lg:static`}
     >
       <div className="h-[65px] px-5 flex items-center gap-3">
         <div className="bg-primary rounded w-[30px] h-[30px]"></div>
         <h3 className="">Brand</h3>
+        <button className="ms-auto lg:hidden" onClick={toggle}>
+          <XMarkIcon width={iconSize} className="text-muted" />
+        </button>
       </div>
       {/* <Divider /> */}
-      <div className="flex flex-grow p-2 pb-0 overflow-y-auto scrollbar-custom">
+      <div className="flex grow p-2 pb-0 overflow-y-auto scrollbar-custom">
         <Listbox
           aria-label="Admin menus"
           selectionMode="single"
-          // selectedKeys={["dashboard"]}
+          selectedKeys={selectedKeys}
           hideSelectedIcon
           itemClasses={{
-            base: "py-2 mb-1 h-auto rounded-md data-[selected=true]:text-primary data-[selected=true]:bg-primary/20",
+            base: "py-2 mb-1 h-auto rounded-md text-default-600 data-[selected=true]:text-primary data-[selected=true]:bg-primary/20",
+            title: "font-medium",
           }}
           classNames={{
             list: "flex-grow",
@@ -45,7 +57,7 @@ export default function SideMenu() {
             key="dashboard"
             variant="flat"
             href="/admin"
-            startContent={<RiHome4Line />}
+            startContent={<HomeIcon width={iconSize} />}
             color="primary"
           >
             Dashboard
@@ -54,8 +66,8 @@ export default function SideMenu() {
             key="view-site"
             variant="flat"
             href="/"
-            startContent={<RiGlobalLine />}
-            endContent={<RiExternalLinkLine />}
+            startContent={<GlobeAltIcon width={iconSize} />}
+            endContent={<ArrowTopRightOnSquareIcon width={iconSize} />}
             color="primary"
             target="_blank"
           >
@@ -65,14 +77,14 @@ export default function SideMenu() {
             title="BLOG"
             className="mt-3"
             classNames={{
-              heading: "px-3 font-medium",
+              heading: "px-[0.65rem]",
             }}
           >
             <ListboxItem
               key="posts"
               variant="flat"
               href="/admin/posts"
-              startContent={<RiBloggerLine />}
+              startContent={<PencilSquareIcon width={iconSize} />}
               color="primary"
             >
               Posts
@@ -81,7 +93,7 @@ export default function SideMenu() {
               key="tags"
               variant="flat"
               href="/admin/tags"
-              startContent={<RiHashtag />}
+              startContent={<HashtagIcon width={iconSize} />}
               color="primary"
             >
               Tags
@@ -91,14 +103,14 @@ export default function SideMenu() {
             title="COURSE"
             className="mt-3"
             classNames={{
-              heading: "px-3 font-medium",
+              heading: "px-[0.65rem]",
             }}
           >
             <ListboxItem
               key="courses"
               variant="flat"
               href="/admin/courses"
-              startContent={<RiGraduationCapLine />}
+              startContent={<AcademicCapIcon width={iconSize} />}
               color="primary"
             >
               Courses
@@ -107,7 +119,7 @@ export default function SideMenu() {
               key="categories"
               variant="flat"
               href="/admin/categories"
-              startContent={<RiFolder2Line />}
+              startContent={<FolderIcon width={iconSize} />}
               color="primary"
             >
               Categories
@@ -116,7 +128,7 @@ export default function SideMenu() {
               key="skills"
               variant="flat"
               href="/admin/skills"
-              startContent={<RiHashtag />}
+              startContent={<HashtagIcon width={iconSize} />}
               color="primary"
             >
               Skills
@@ -127,7 +139,7 @@ export default function SideMenu() {
             key="settings"
             variant="flat"
             href="/admin/settings"
-            startContent={<RiSettings3Line />}
+            startContent={<Cog6ToothIcon width={iconSize} />}
             color="primary"
             className="mt-auto mb-2"
           >

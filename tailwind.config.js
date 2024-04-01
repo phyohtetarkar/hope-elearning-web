@@ -1,4 +1,5 @@
 import colors from "tailwindcss/colors";
+import defaultTheme from "tailwindcss/defaultTheme";
 import { nextui } from "@nextui-org/react";
 
 /** @type {import('tailwindcss').Config} */
@@ -8,6 +9,9 @@ const config = {
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    fontFamily: {
+      sans: ["Inter", ...defaultTheme.fontFamily.sans],
+    },
     container: {
       center: true,
       padding: "1rem",
@@ -23,7 +27,7 @@ const config = {
         white: colors.white,
         gray: colors.slate,
         anchor: "#2110D6",
-        muted: colors.slate["500"],
+        muted: colors.slate["400"],
       },
     },
   },
@@ -52,6 +56,10 @@ const config = {
               foreground: "#FFFFFF",
               DEFAULT: colors.indigo[600],
             },
+            secondary: {
+              foreground: "#222",
+              DEFAULT: "#F9A826",
+            },
             success: {
               foreground: "#FFFFFF",
               DEFAULT: "#00a524",
@@ -59,6 +67,10 @@ const config = {
             danger: {
               foreground: "#FFFFFF",
               DEFAULT: "#d50002",
+            },
+            warning: {
+              foreground: "#FFFFFF",
+              DEFAULT: "#ff9017",
             },
           },
         },
@@ -69,6 +81,10 @@ const config = {
               foreground: "#FFFFFF",
               DEFAULT: colors.indigo[600],
             },
+            secondary: {
+              foreground: "#222",
+              DEFAULT: "#F9A826",
+            },
             success: {
               foreground: "#FFFFFF",
               DEFAULT: "#00a524",
@@ -76,6 +92,10 @@ const config = {
             danger: {
               foreground: "#FFFFFF",
               DEFAULT: "#d50002",
+            },
+            warning: {
+              foreground: "#FFFFFF",
+              DEFAULT: "#ff9017",
             },
           },
         },

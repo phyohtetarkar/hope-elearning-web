@@ -104,7 +104,7 @@ function LoginPage() {
 
               <div className="flex gap-2">
                 <Button
-                  className="border flex-1"
+                  className="border flex-1 justify-start"
                   variant="light"
                   disabled={isSubmitting || !!oauthLogin}
                   isLoading={oauthLogin === "facebook"}
@@ -130,7 +130,7 @@ function LoginPage() {
                 </Button>
 
                 <Button
-                  className="border flex-1"
+                  className="border flex-1 justify-start"
                   variant="light"
                   disabled={isSubmitting || !!oauthLogin}
                   isLoading={oauthLogin === "google"}

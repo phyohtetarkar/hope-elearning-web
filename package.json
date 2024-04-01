@@ -22,6 +22,7 @@
     "@editorjs/marker": "^1.4.0",
     "@editorjs/nested-list": "^1.4.2",
     "@editorjs/table": "^2.3.0",
+    "@heroicons/react": "^2.1.3",
     "@nextui-org/react": "^2.2.10",
     "@remixicon/react": "^4.2.0",
     "codemirror": "^6.0.1",

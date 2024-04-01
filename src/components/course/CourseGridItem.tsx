@@ -1,3 +1,4 @@
+import { BookmarkIcon } from "@heroicons/react/24/outline";
 import {
   Card,
   CardBody,
@@ -5,7 +6,6 @@ import {
   Divider,
   Tooltip
 } from "@nextui-org/react";
-import { RiBookmarkLine } from "@remixicon/react";
 import Image from "next/image";
 import Link from "next/link";
 import Rating from "../rating";
@@ -47,7 +47,7 @@ function CourseGridItem() {
           <Rating rating={4} />
           <Tooltip content="Add to bookmark" color="foreground">
             <button className="ms-auto">
-              <RiBookmarkLine size={20} className="text-muted" />
+              <BookmarkIcon width={20} className="text-muted" />
             </button>
           </Tooltip>
         </div>

@@ -1,4 +1,4 @@
-import { RiStarFill, RiStarHalfFill, RiStarLine } from "@remixicon/react";
+import { StarIcon } from "@heroicons/react/24/solid";
 
 interface RatingProps {
   rating: number;
@@ -11,28 +11,28 @@ function Rating({ rating }: RatingProps) {
     <div className="flex">
       {stars.map((e, i) => {
         if (rating >= e) {
-          return <RiStarFill key={i} size={18} className="text-warning" />;
+          return <StarIcon key={i} width={18} className="text-warning" />;
         }
 
         if (rating >= e - 0.5 && rating < e) {
-          return <RiStarHalfFill key={i} size={18} className="text-warning" />;
-          // return (
-          //   <div
-          //     key={i}
-          //     className="hstack position-relative"
-          //     style={{ width: 18 }}
-          //   >
-          //     <div className="position-absolute start-0">
-          //       <RiStarLine key={i} size={18} className="text-default" />
-          //     </div>
-          //     <div className="overflow-hidden" style={{ width: 9, zIndex: 9 }}>
-          //       <RiStarFill key={i} size={18} className="text-warning" />
-          //     </div>
-          //   </div>
-          // );
+          // return <RiStarHalfFill key={i} size={18} className="text-warning" />;
+          return (
+            <div
+              key={i}
+              className="flex relative"
+              style={{ width: 18 }}
+            >
+              <div className="absolute left-0">
+                <StarIcon key={i} width={18} className="text-gray-300" />
+              </div>
+              <div className="overflow-hidden z-10 w-[9px]">
+                <StarIcon key={i} width={18} className="text-warning" />
+              </div>
+            </div>
+          );
         }
 
-        return <RiStarLine key={i} size={18} className="text-muted" />;
+        return <StarIcon key={i} width={18} className="text-gray-300" />;
       })}
     </div>
   );
