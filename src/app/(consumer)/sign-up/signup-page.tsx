@@ -38,7 +38,7 @@ function SignUpPage() {
       <div className="grid grid-cols-12 mt-10 mb-5">
         <Card
           shadow="none"
-          className="border col-span-12 md:col-span-6 md:col-start-4 xl:col-span-6 xl:col-start-4"
+          className="border col-span-12 md:col-span-6 md:col-start-4 xl:col-span-4 xl:col-start-5"
         >
           <CardBody className="px-6 py-4">
             <h3 className="fw-bold mt-2 mb-4">Sign Up</h3>
@@ -120,7 +120,7 @@ function SignUpPage() {
 
               <div className="flex gap-2">
                 <Button
-                  className="border flex-1"
+                  className="border flex-1 justify-start"
                   variant="light"
                   disabled={isSubmitting || !!oauthLogin}
                   isLoading={oauthLogin === "facebook"}
@@ -146,7 +146,7 @@ function SignUpPage() {
                 </Button>
 
                 <Button
-                  className="border flex-1"
+                  className="border flex-1 justify-start"
                   variant="light"
                   disabled={isSubmitting || !!oauthLogin}
                   isLoading={oauthLogin === "google"}
