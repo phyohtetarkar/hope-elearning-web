@@ -16,17 +16,28 @@ function TagEdit({ onClose, title }: TagEditProps) {
   return (
     <ModalContent>
       <ModalHeader>
-        <h3 className="fw-bold mt-2">{title}</h3>
+        <h3 className="fw-bold mt-3">{title}</h3>
       </ModalHeader>
       <ModalBody>
-        <form>
-          <Input label="Tag" id="tag" type="text" placeholder="Enter tag" />
+        <form className="gird grid-cols-1">
+          <Input
+            label="Tag"
+            id="tag"
+            type="text"
+            className="mb-4"
+            placeholder="Enter tag"
+          />
+          <Input
+            label="Slug"
+            id="slug"
+            type="text"
+            className="mb-4"
+            placeholder="Enter slug"
+          />
         </form>
       </ModalBody>
       <ModalFooter>
-        <Button color="danger" onClick={onClose}>
-          Cancel
-        </Button>
+        <Button onClick={onClose}>Cancel</Button>
         <Button color="primary" onClick={onClose}>
           Save
         </Button>
