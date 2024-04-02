@@ -5,7 +5,7 @@ import { Button, Link, Tooltip } from "@nextui-org/react";
 
 export default function Posts() {
   return (
-    <div className="p-4 lg:p-5">
+    <div className="">
       <div className="flex justify-between mb-4">
         <h2>Posts</h2>
         <Button as={Link} href="/admin/posts/new" color="primary">

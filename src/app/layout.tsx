@@ -29,7 +29,7 @@ export default function RootLayout({
       <head>
         <meta charSet="utf-8" />
       </head>
-      <body className="h-full">
+      <body className="h-full m-0">
         <Providers>{children}</Providers>
       </body>
     </html>

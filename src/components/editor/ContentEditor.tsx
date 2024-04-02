@@ -100,13 +100,13 @@ function ContentEditor({ holderId, placeholder, onReady }: ContentEditorProps) {
 
   return (
     <div>
-      {!isReady && <div className="text-muted p-2 text-center">Loading editor...</div>}
-      <div id={holderId} spellCheck="false"></div>
+      {!isReady && <div className="text-muted">Loading editor...</div>}
+      <div id={holderId} spellCheck="false" className="text-gray-800"></div>
     </div>
   );
 }
 
 export default dynamic(() => Promise.resolve(ContentEditor), {
   ssr: false,
-  loading: () => <div className="text-muted p-2 text-center">Loading editor...</div>,
+  loading: () => <div className="text-muted">Loading editor...</div>,
 });

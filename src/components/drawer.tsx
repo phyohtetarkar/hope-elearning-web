@@ -32,7 +32,7 @@ export function DrawerContextProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const handleResize = () => {
       const { innerWidth } = window;
-      if (innerWidth >= 1024) {
+      if (innerWidth >= 992) {
         setDrawerState({
           isMenuOpen: false,
           toggle: toggle,
@@ -53,7 +53,26 @@ export function DrawerContextProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export default function DrawerBackdrop() {
+export function DrawerContent({
+  className,
+  children,
+}: {
+  className?: string;
+  children: ReactNode;
+}) {
+
+  return (
+    <div
+      className={`absolute inset-y-0 right-0 left-0 ${
+        className ?? ""
+      }`}
+    >
+      {children}
+    </div>
+  );
+}
+
+export function DrawerBackdrop() {
   const { isMenuOpen, toggle } = useContext(DrawerContext);
   if (!isMenuOpen) {
     return null;
@@ -61,7 +80,7 @@ export default function DrawerBackdrop() {
   return (
     <div
       onClick={toggle}
-      className="bg-black/40 absolute start-0 top-0 right-0 bottom-0 z-40"
+      className="bg-black/40 fixed start-0 top-0 right-0 bottom-0 z-40"
     ></div>
   );
 }

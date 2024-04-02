@@ -12,10 +12,16 @@ import {
   NavbarContent,
   User
 } from "@nextui-org/react";
+import { usePathname } from "next/navigation";
 import { useContext } from "react";
 
 export default function Header() {
   const { toggle } = useContext(DrawerContext);
+  const pathname = usePathname();
+
+  if (pathname.startsWith("/admin/posts/")) {
+    return null;
+  }
 
   return (
     <Navbar
@@ -23,6 +29,7 @@ export default function Header() {
       isBlurred={false}
       maxWidth="full"
       height="65px"
+      className="fixed top-0"
       classNames={{
         wrapper: "px-4",
       }}

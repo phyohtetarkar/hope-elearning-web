@@ -58,6 +58,10 @@
   h6 {
     @apply font-semibold;
   }
+
+  a {
+    @apply text-anchor;
+  }
 }
 
 @layer components {
@@ -162,7 +166,7 @@ svg {
 .ce-block__content,
 .ce-toolbar__content {
   max-width: calc(100% - 0px) !important;
-  margin-left: 40px;
+  margin-left: 0px;
 }
 
 .cdx-block {

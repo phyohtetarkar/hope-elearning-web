@@ -25,13 +25,17 @@ export default function SideMenu() {
     new Set([pathname.replace("/admin/", "")])
   );
 
+  if (pathname.startsWith("/admin/posts/")) {
+    return null;
+  }
+
   return (
     <div
       className={`${
-        isMenuOpen ? "translate-x-0" : "-translate-x-[300px]"
-      } transition-transform ease-out absolute min-w-[200px] max-w-[300px] w-full border-r z-50 flex flex-col h-full bg-white lg:translate-x-0 lg:static`}
+        isMenuOpen ? "translate-x-0" : `-translate-x-[300px]`
+      } transition-transform ease-out min-w-[200px] max-w-[300px] fixed inset-y-0 w-full border-r z-50 flex flex-col bg-white lg:translate-x-0`}
     >
-      <div className="h-[65px] px-5 flex items-center gap-3">
+      <div className="h-[65px] min-h-[65px] px-5 flex items-center gap-3">
         <div className="bg-primary rounded w-[30px] h-[30px]"></div>
         <h3 className="">Brand</h3>
         <button className="ms-auto lg:hidden" onClick={toggle}>

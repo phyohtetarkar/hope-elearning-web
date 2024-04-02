@@ -2,6 +2,7 @@ import { CourseGridItem } from "@/components/course";
 import { Button, Link } from "@nextui-org/react";
 import Image from "next/image";
 import QuoteSwiper from "./quote-swiper";
+import { ContentEditor } from "@/components/editor";
 
 export default function Home() {
   return (

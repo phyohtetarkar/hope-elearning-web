@@ -18,6 +18,8 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     const handleAnchorClick = (event: MouseEvent) => {
       const targetUrl = (event.currentTarget as HTMLAnchorElement).href;
       const currentUrl = location.href;
+      console.log(targetUrl);
+      console.log(currentUrl);
       if (targetUrl !== currentUrl) {
         NProgress.start();
       }
@@ -26,7 +28,8 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     const handleMutation: MutationCallback = () => {
       const anchorElements = document.querySelectorAll("a");
       anchorElements.forEach((anchor) => {
-        if (anchor.target !== "_blank") {
+        const isExternalLink = !anchor.href.startsWith(location.origin);
+        if (anchor.target !== "_blank" && !isExternalLink) {
           anchor.addEventListener("click", handleAnchorClick);
         }
       });
