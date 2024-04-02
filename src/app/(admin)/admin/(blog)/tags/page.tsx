@@ -1,3 +1,5 @@
+import TagsPage from "./tags-page";
+
 export default function Tags() {
-    return <div></div>
+  return <TagsPage />;
 }
