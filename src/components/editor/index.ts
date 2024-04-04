@@ -1,2 +1,1 @@
-export { default as ContentEditor } from "./ContentEditor";
-
+export { default as NovelEditor } from "./novel-editor";

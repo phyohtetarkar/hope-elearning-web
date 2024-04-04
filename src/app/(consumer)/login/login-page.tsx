@@ -2,13 +2,10 @@
 
 import Alert from "@/components/Alert";
 import { Input, PasswordInput } from "@/components/forms";
-import {
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  Divider,
-} from "@nextui-org/react";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { Card, CardBody, CardFooter } from "@nextui-org/card";
+import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -60,16 +57,14 @@ function LoginPage() {
                 label="Email"
                 id="emailInput"
                 type="email"
-                className="mb-4"
+                wrapperClass="mb-4"
                 autoComplete="username"
                 placeholder="Enter email address"
                 {...register("username", {
                   required: true,
                   pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
                 })}
-                error={
-                  errors.username && "Please enter valid email address"
-                }
+                error={errors.username && "Please enter valid email address"}
               />
               <PasswordInput
                 label="Password"
@@ -82,7 +77,7 @@ function LoginPage() {
               />
               <Link
                 href="/forgot-password"
-                className="mt-1 underline mb-4 text-anchor hover:text-opacity-80"
+                className="mt-1 underline mb-5 text-anchor hover:text-opacity-80"
               >
                 Forgot password?
               </Link>
@@ -91,23 +86,24 @@ function LoginPage() {
                 type="submit"
                 color="primary"
                 disabled={isSubmitting || !!oauthLogin}
-                isLoading={isSubmitting}
               >
+                {isSubmitting && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
                 Login
               </Button>
 
               <div className="flex items-center my-4">
                 <hr className="flex-grow" />
-                <div className=" text-muted mx-2">or continue with</div>
+                <div className=" text-sliver mx-2">or continue with</div>
                 <hr className="flex-grow" />
               </div>
 
               <div className="flex gap-2">
                 <Button
                   className="border flex-1 justify-start"
-                  variant="light"
+                  variant="outline"
                   disabled={isSubmitting || !!oauthLogin}
-                  isLoading={oauthLogin === "facebook"}
                   onClick={async () => {
                     try {
                       setError(undefined);
@@ -117,23 +113,24 @@ function LoginPage() {
                       setOauthLogin(undefined);
                     }
                   }}
-                  startContent={
-                    <Image
-                      src="/images/icons8-facebook-48.png"
-                      alt="facebook"
-                      width={28}
-                      height={28}
-                    />
-                  }
                 >
+                  {oauthLogin === "facebook" && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  <Image
+                    src="/images/icons8-facebook-48.png"
+                    alt="facebook"
+                    width={28}
+                    height={28}
+                    className="mr-2"
+                  />
                   Facebook
                 </Button>
 
                 <Button
                   className="border flex-1 justify-start"
-                  variant="light"
+                  variant="outline"
                   disabled={isSubmitting || !!oauthLogin}
-                  isLoading={oauthLogin === "google"}
                   onClick={async () => {
                     try {
                       setError(undefined);
@@ -143,21 +140,23 @@ function LoginPage() {
                       setOauthLogin(undefined);
                     }
                   }}
-                  startContent={
-                    <Image
-                      src="/images/icons8-google-48.png"
-                      alt="google"
-                      width={28}
-                      height={28}
-                    />
-                  }
                 >
+                  {oauthLogin === "google" && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  <Image
+                    src="/images/icons8-google-48.png"
+                    alt="google"
+                    width={28}
+                    height={28}
+                    className="mr-2"
+                  />
                   Google
                 </Button>
               </div>
             </form>
           </CardBody>
-          <Divider />
+          <Separator />
           <CardFooter className="flex justify-center">
             <div>
               Don&apos;t have an account?

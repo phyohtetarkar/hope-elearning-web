@@ -1,8 +1,8 @@
 import { CourseGridItem } from "@/components/course";
-import { Button, Link } from "@nextui-org/react";
 import Image from "next/image";
 import QuoteSwiper from "./quote-swiper";
-import { ContentEditor } from "@/components/editor";
+import { Link } from "@nextui-org/link";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
@@ -18,12 +18,11 @@ export default function Home() {
               </div>
               <div className="mb-4">
                 <Button
-                  as={Link}
-                  href="/courses"
-                  color="secondary"
+                  variant="secondary"
                   className="w-full lg:w-auto"
+                  asChild
                 >
-                  Browse courses
+                  <Link href="/courses">Browse courses</Link>
                 </Button>
               </div>
             </div>

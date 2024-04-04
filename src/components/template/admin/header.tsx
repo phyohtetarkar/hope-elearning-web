@@ -1,19 +1,17 @@
 "use client";
-import { DrawerContext } from "@/components";
+import { DrawerContext } from "@/components/ui/drawer";
 import { Bars3Icon } from "@heroicons/react/24/outline";
+import { Navbar, NavbarBrand, NavbarContent } from "@nextui-org/navbar";
 import {
-  Button,
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-  Navbar,
-  NavbarBrand,
-  NavbarContent,
-  User
-} from "@nextui-org/react";
+} from "@nextui-org/dropdown";
 import { usePathname } from "next/navigation";
 import { useContext } from "react";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
 export default function Header() {
   const { toggle } = useContext(DrawerContext);
@@ -37,29 +35,26 @@ export default function Header() {
       <NavbarBrand className="flex-grow-0">
         <Button
           className="border lg:hidden"
-          variant="light"
-          isIconOnly
+          variant="outline"
+          size="icon"
           onClick={toggle}
         >
-          <Bars3Icon width={24} className="text-muted" />
+          <Bars3Icon width={24} className="text-sliver" />
         </Button>
       </NavbarBrand>
 
       <NavbarContent as="div" justify="end">
         <Dropdown placement="bottom-end">
           <DropdownTrigger>
-            <User
-              name=""
-              avatarProps={{
-                name: "User",
-                src: "/images/profile.png",
-                as: "button",
-                isBordered: true,
-                color: "primary",
-                size: "sm",
-                className: "transition-transform",
-              }}
-            />
+            <button className="bg-transparent ring-0 outline-none">
+              <Image
+                src="/images/profile.png"
+                alt="Avatar"
+                width={36}
+                height={36}
+                className="rounded-full border-1 border-transparent ring-2 ring-primary"
+              />
+            </button>
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
             <DropdownItem key="profile" className="h-14 gap-2">

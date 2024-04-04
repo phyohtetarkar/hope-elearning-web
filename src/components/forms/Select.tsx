@@ -1,47 +1,36 @@
+import { cn } from "@/lib/utils";
 import { forwardRef, ReactNode } from "react";
-import { InputProps } from "./input";
 
-interface SelectInputProps extends InputProps<HTMLSelectElement> {
-  children: ReactNode;
+export interface InputProps
+  extends React.SelectHTMLAttributes<HTMLSelectElement> {
+  label?: ReactNode;
+  error?: string;
+  wrapperClass?: string;
+  children?: ReactNode;
 }
 
-const Select = forwardRef<HTMLSelectElement, SelectInputProps>((props, ref) => {
-  const {
-    label,
-    id,
-    name,
-    value,
-    onChange,
-    onBlur,
-    error,
-    disabled,
-    className,
-    children,
-    style,
-  } = props;
+const Select = forwardRef<HTMLSelectElement, InputProps>(
+  ({ label, className, wrapperClass, error, children, ...props }, ref) => {
+    const isInvalid = !!error;
 
-  const isInvalid = !!error;
-
-  return (
-    <div className={`flex flex-col ${className}`}>
-      {label && <label className="font-medium mb-1">{label}</label>}
-      <select
-        id={id}
-        ref={ref}
-        name={name}
-        onChange={onChange}
-        onBlur={onBlur}
-        value={value}
-        disabled={disabled}
-        className={`${isInvalid ? "invalid-input" : "default-input"} rounded`}
-        style={style}
-      >
-        {children}
-      </select>
-      {error && <div className="text-danger text-sm mt-1.5">{error}</div>}
-    </div>
-  );
-});
+    return (
+      <div className={cn(`flex flex-col`, wrapperClass)}>
+        {label && <label htmlFor={props.id} className="font-medium mb-1">{label}</label>}
+        <select
+          ref={ref}
+          className={cn(
+            `${isInvalid ? "invalid-input" : "default-input"} rounded`,
+            className
+          )}
+          {...props}
+        >
+          {children}
+        </select>
+        {error && <div className="text-danger text-sm mt-1.5">{error}</div>}
+      </div>
+    );
+  }
+);
 
 Select.displayName = "Select";
 

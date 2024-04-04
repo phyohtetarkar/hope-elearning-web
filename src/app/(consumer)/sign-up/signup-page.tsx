@@ -1,7 +1,10 @@
 "use client";
 import Alert from "@/components/Alert";
 import { Input, PasswordInput } from "@/components/forms";
-import { Button, Card, CardBody, CardFooter, Divider } from "@nextui-org/react";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { Card, CardBody, CardFooter } from "@nextui-org/card";
+import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -56,7 +59,7 @@ function SignUpPage() {
                 label="Full Name"
                 id="nameInput"
                 type="text"
-                className="mb-4"
+                wrapperClass="mb-4"
                 placeholder="Your full name"
                 {...register("fullName", {
                   required: true,
@@ -67,7 +70,7 @@ function SignUpPage() {
                 label="Email"
                 id="emailInput"
                 type="email"
-                className="mb-4"
+                wrapperClass="mb-4"
                 autoComplete="username"
                 placeholder="Enter email address"
                 {...register("email", {
@@ -81,6 +84,7 @@ function SignUpPage() {
                 label="Password"
                 autoComplete="new-password"
                 placeholder="Minimum 8 characters"
+                wrapperClass="mb-4"
                 {...register("password", {
                   required: true,
                   minLength: 8,
@@ -89,8 +93,6 @@ function SignUpPage() {
                   errors.password && "Password must be at least 8 charachers"
                 }
               />
-
-              <div className="mb-4"></div>
 
               <PasswordInput
                 label="Confirm Password"
@@ -107,23 +109,24 @@ function SignUpPage() {
                 color="primary"
                 className="mt-7"
                 disabled={isSubmitting || !!oauthLogin}
-                isLoading={isSubmitting}
               >
+                {isSubmitting && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
                 Sign up
               </Button>
 
               <div className="flex items-center my-4">
                 <hr className="flex-grow" />
-                <div className=" text-muted mx-2">or continue with</div>
+                <div className=" text-sliver mx-2">or continue with</div>
                 <hr className="flex-grow" />
               </div>
 
               <div className="flex gap-2">
                 <Button
                   className="border flex-1 justify-start"
-                  variant="light"
+                  variant="outline"
                   disabled={isSubmitting || !!oauthLogin}
-                  isLoading={oauthLogin === "facebook"}
                   onClick={async () => {
                     try {
                       setError(undefined);
@@ -133,23 +136,24 @@ function SignUpPage() {
                       setOauthLogin(undefined);
                     }
                   }}
-                  startContent={
-                    <Image
-                      src="/images/icons8-facebook-48.png"
-                      alt="facebook"
-                      width={28}
-                      height={28}
-                    />
-                  }
                 >
+                  {oauthLogin === "facebook" && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  <Image
+                    src="/images/icons8-facebook-48.png"
+                    alt="facebook"
+                    width={28}
+                    height={28}
+                    className="mr-2"
+                  />
                   Facebook
                 </Button>
 
                 <Button
                   className="border flex-1 justify-start"
-                  variant="light"
+                  variant="outline"
                   disabled={isSubmitting || !!oauthLogin}
-                  isLoading={oauthLogin === "google"}
                   onClick={async () => {
                     try {
                       setError(undefined);
@@ -159,21 +163,23 @@ function SignUpPage() {
                       setOauthLogin(undefined);
                     }
                   }}
-                  startContent={
-                    <Image
-                      src="/images/icons8-google-48.png"
-                      alt="google"
-                      width={28}
-                      height={28}
-                    />
-                  }
                 >
+                  {oauthLogin === "google" && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  <Image
+                    src="/images/icons8-google-48.png"
+                    alt="google"
+                    width={28}
+                    height={28}
+                    className="mr-2"
+                  />
                   Google
                 </Button>
               </div>
             </form>
           </CardBody>
-          <Divider />
+          <Separator />
           <CardFooter className="flex justify-center">
             <div>
               Already have an account?

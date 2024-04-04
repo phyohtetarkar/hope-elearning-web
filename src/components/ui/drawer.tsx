@@ -1,4 +1,5 @@
 "use client";
+import { cn } from "@/lib/utils";
 import {
   ReactNode,
   createContext,
@@ -13,11 +14,11 @@ interface DrawerContextProps {
   toggle?: () => void;
 }
 
-export const DrawerContext = createContext<DrawerContextProps>({
+const DrawerContext = createContext<DrawerContextProps>({
   isMenuOpen: false,
 });
 
-export function DrawerContextProvider({ children }: { children: ReactNode }) {
+const DrawerContextProvider = ({ children }: { children: ReactNode }) => {
   const toggle = useCallback(() => {
     setDrawerState((old) => {
       return { ...old, isMenuOpen: !old.isMenuOpen };
@@ -53,17 +54,17 @@ export function DrawerContextProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function DrawerContent({
+const DrawerContent = ({
   className,
   children,
 }: {
   className?: string;
   children: ReactNode;
-}) {
+}) => {
 
   return (
     <div
-      className={`absolute inset-y-0 right-0 left-0 ${
+      className={`grow w-full ${
         className ?? ""
       }`}
     >
@@ -72,15 +73,31 @@ export function DrawerContent({
   );
 }
 
-export function DrawerBackdrop() {
+const DrawerBackdrop = () => {
   const { isMenuOpen, toggle } = useContext(DrawerContext);
-  if (!isMenuOpen) {
-    return null;
-  }
+  // if (!isMenuOpen) {
+  //   return null;
+  // }
   return (
     <div
       onClick={toggle}
-      className="bg-black/40 fixed start-0 top-0 right-0 bottom-0 z-40"
+      // className="bg-black/70 fixed inset-0 z-40"
+      className={cn(
+        "bg-black fixed inset-0 z-40",
+        `transition-opacity ease-out`,
+        `${
+          isMenuOpen
+            ? "opacity-70 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        }`
+      )}
     ></div>
   );
+}
+
+export {
+  DrawerContext,
+  DrawerContextProvider,
+  DrawerContent,
+  DrawerBackdrop,
 }

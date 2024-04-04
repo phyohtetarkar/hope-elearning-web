@@ -1,22 +1,23 @@
 "use client";
 
-import { DrawerContext } from "@/components";
+import { DrawerContext } from "@/components/ui/drawer";
+import { Listbox, ListboxItem, ListboxSection } from "@nextui-org/listbox";
 import {
-  AcademicCapIcon,
-  ArrowTopRightOnSquareIcon,
-  Cog6ToothIcon,
-  FolderIcon,
-  GlobeAltIcon,
-  HashtagIcon,
-  HomeIcon,
-  PencilSquareIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
-import { Listbox, ListboxItem, ListboxSection } from "@nextui-org/react";
+  Edit,
+  FolderClosed,
+  Globe,
+  GraduationCap,
+  Hash,
+  Home,
+  Settings,
+  SquareArrowOutUpRight,
+  X,
+} from "lucide-react";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useContext, useState } from "react";
 
-const iconSize = 24;
+const iconSize = 20;
 
 export default function SideMenu() {
   const { isMenuOpen, toggle } = useContext(DrawerContext);
@@ -33,13 +34,20 @@ export default function SideMenu() {
     <div
       className={`${
         isMenuOpen ? "translate-x-0" : `-translate-x-[300px]`
-      } transition-transform ease-out min-w-[200px] max-w-[300px] fixed inset-y-0 w-full border-r z-50 flex flex-col bg-white lg:translate-x-0`}
+      } transition-transform ease-out min-w-[200px] max-w-[300px] fixed lg:static inset-y-0 w-full border-r z-50 flex flex-col bg-white lg:translate-x-0`}
     >
       <div className="h-[65px] min-h-[65px] px-5 flex items-center gap-3">
-        <div className="bg-primary rounded w-[30px] h-[30px]"></div>
+        <div className="size-[30px] relative">
+          <Image
+            src="/images/logo.svg"
+            alt="Logo"
+            fill
+            className="rounded object-fill"
+          />
+        </div>
         <h3 className="">Brand</h3>
         <button className="ms-auto lg:hidden" onClick={toggle}>
-          <XMarkIcon width={iconSize} className="text-muted" />
+          <X className="text-sliver" />
         </button>
       </div>
       {/* <Divider /> */}
@@ -61,7 +69,7 @@ export default function SideMenu() {
             key="dashboard"
             variant="flat"
             href="/admin"
-            startContent={<HomeIcon width={iconSize} />}
+            startContent={<Home size={iconSize} />}
             color="primary"
           >
             Dashboard
@@ -70,8 +78,8 @@ export default function SideMenu() {
             key="view-site"
             variant="flat"
             href="/"
-            startContent={<GlobeAltIcon width={iconSize} />}
-            endContent={<ArrowTopRightOnSquareIcon width={iconSize} />}
+            startContent={<Globe size={iconSize} />}
+            endContent={<SquareArrowOutUpRight size={iconSize} />}
             color="primary"
             target="_blank"
           >
@@ -88,7 +96,7 @@ export default function SideMenu() {
               key="posts"
               variant="flat"
               href="/admin/posts"
-              startContent={<PencilSquareIcon width={iconSize} />}
+              startContent={<Edit size={iconSize} />}
               color="primary"
             >
               Posts
@@ -97,7 +105,7 @@ export default function SideMenu() {
               key="tags"
               variant="flat"
               href="/admin/tags"
-              startContent={<HashtagIcon width={iconSize} />}
+              startContent={<Hash size={iconSize} />}
               color="primary"
             >
               Tags
@@ -114,7 +122,7 @@ export default function SideMenu() {
               key="courses"
               variant="flat"
               href="/admin/courses"
-              startContent={<AcademicCapIcon width={iconSize} />}
+              startContent={<GraduationCap size={iconSize} />}
               color="primary"
             >
               Courses
@@ -123,7 +131,7 @@ export default function SideMenu() {
               key="categories"
               variant="flat"
               href="/admin/categories"
-              startContent={<FolderIcon width={iconSize} />}
+              startContent={<FolderClosed size={iconSize} />}
               color="primary"
             >
               Categories
@@ -132,7 +140,7 @@ export default function SideMenu() {
               key="skills"
               variant="flat"
               href="/admin/skills"
-              startContent={<HashtagIcon width={iconSize} />}
+              startContent={<Hash size={iconSize} />}
               color="primary"
             >
               Skills
@@ -143,7 +151,7 @@ export default function SideMenu() {
             key="settings"
             variant="flat"
             href="/admin/settings"
-            startContent={<Cog6ToothIcon width={iconSize} />}
+            startContent={<Settings size={iconSize} />}
             color="primary"
             className="mt-auto mb-2"
           >

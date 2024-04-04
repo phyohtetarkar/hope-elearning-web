@@ -1,9 +1,17 @@
 "use client";
-import { Pagination, Table } from "@/components";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
-import { Button, Modal, Tooltip, useDisclosure } from "@nextui-org/react";
 import TagEdit from "./tag-edit";
 import { useState } from "react";
+import { Modal, useDisclosure } from "@nextui-org/modal";
+import Table from "@/components/table";
+import Pagination from "@/components/ui/pagination";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
 
 function TagsPage() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -20,7 +28,7 @@ function TagsPage() {
   };
 
   return (
-    <div>
+    <>
       <div className="flex justify-between mb-4">
         <h2>Tags</h2>
         <Button color="primary" onClick={handleNewTag}>
@@ -46,23 +54,46 @@ function TagsPage() {
               <h6>News</h6>
             </Table.Cell>
             <Table.Cell>
-              <span className="text-muted text-sm">news</span>
+              <span className="text-sliver text-sm">news</span>
             </Table.Cell>
             <Table.Cell>
-              <span className="text-muted text-sm">1 post</span>
+              <span className="text-sliver text-sm">1 post</span>
             </Table.Cell>
             <Table.Cell>
               <div className="flex justify-start gap-2">
-                <Tooltip content="Edit tag" color="foreground">
-                  <Button onClick={handleEditTag} isIconOnly>
-                    <PencilSquareIcon width={20} />
-                  </Button>
-                </Tooltip>
-                <Tooltip content="delete tag" color="danger">
-                  <Button color="danger" isIconOnly>
-                    <TrashIcon width={20} />
-                  </Button>
-                </Tooltip>
+                <TooltipProvider>
+                  <Tooltip delayDuration={300}>
+                    <TooltipTrigger>
+                      <Button
+                        variant="default"
+                        size="icon"
+                        onClick={handleEditTag}
+                        asChild
+                      >
+                        <span>
+                          <PencilSquareIcon width={20} />
+                        </span>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Edit tag</TooltipContent>
+                  </Tooltip>
+
+                  <Tooltip delayDuration={300}>
+                    <TooltipTrigger>
+                      <Button
+                        variant="destructive"
+                        size="icon"
+                        onClick={handleEditTag}
+                        asChild
+                      >
+                        <span>
+                          <TrashIcon width={20} />
+                        </span>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Delete tag</TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
             </Table.Cell>
           </Table.Row>
@@ -72,23 +103,21 @@ function TagsPage() {
         <Pagination totalPage={10} currentPage={1} />
       </div>
 
-      <>
-        <Modal
-          size="lg"
-          placement="top"
-          isOpen={isOpen}
-          onClose={onClose}
-          isDismissable={false}
-          classNames={{
-            body: "py-5 px-6",
-            header: "border-b",
-            footer: "border-t py-5",
-          }}
-        >
-          <TagEdit onClose={onClose} title={modalTitle} />
-        </Modal>
-      </>
-    </div>
+      <Modal
+        size="lg"
+        placement="top"
+        isOpen={isOpen}
+        onClose={onClose}
+        isDismissable={false}
+        classNames={{
+          body: "py-5 px-6",
+          header: "border-b",
+          footer: "border-t py-5",
+        }}
+      >
+        <TagEdit onClose={onClose} title={modalTitle} />
+      </Modal>
+    </>
   );
 }
 

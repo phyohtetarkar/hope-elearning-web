@@ -1,4 +1,3 @@
-import { RiShareFill } from "@remixicon/react";
 import Image from "next/legacy/image";
 import Link from "next/link";
 
@@ -43,7 +42,6 @@ function LearningCourseGridItem() {
             </Link>
             <div className="ms-auto d-flex gap-3 align-items-center">
               <div role="button">
-                <RiShareFill size={18} className="text-muted" />
               </div>
             </div>
           </div>

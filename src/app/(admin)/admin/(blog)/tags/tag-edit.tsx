@@ -1,11 +1,11 @@
 import { Input } from "@/components/forms";
+import { Button } from "@/components/ui/button";
 import {
-  Button,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
-} from "@nextui-org/react";
+} from "@nextui-org/modal";
 
 interface TagEditProps {
   onClose: () => void;
@@ -37,8 +37,8 @@ function TagEdit({ onClose, title }: TagEditProps) {
         </form>
       </ModalBody>
       <ModalFooter>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button color="primary" onClick={onClose}>
+        <Button variant="default" onClick={onClose}>Cancel</Button>
+        <Button onClick={onClose}>
           Save
         </Button>
       </ModalFooter>

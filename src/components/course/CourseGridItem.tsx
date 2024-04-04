@@ -1,14 +1,15 @@
-import { BookmarkIcon } from "@heroicons/react/24/outline";
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  Divider,
-  Tooltip
-} from "@nextui-org/react";
+import { Card, CardBody, CardFooter } from "@nextui-org/card";
 import Image from "next/image";
 import Link from "next/link";
-import Rating from "../rating";
+import Rating from "../ui/rating";
+import { Bookmark } from "lucide-react";
+import { Separator } from "../ui/separator";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 
 function CourseGridItem() {
   return (
@@ -28,28 +29,28 @@ function CourseGridItem() {
           />
         </div>
         <div className="flex flex-col p-4">
-          <Link
-            href="/course/100"
-            className="h5 text-decoration-none link-dark"
-          >
+          <Link href="/course/100" className="text-black font-medium text-lg">
             Introduction to docker
           </Link>
           <div className="flex items-center text-small mb-2 mt-1">
-            <div className="text-muted">10 Sections</div>
-            <div className="mx-2 text-muted">&bull;</div>
+            <div className="text-sliver">10 Sections</div>
+            <div className="mx-2 text-sliver">&bull;</div>
             <div className="text-primary">Beginner</div>
           </div>
         </div>
       </CardBody>
-      <Divider />
+      <Separator />
       <CardFooter>
         <div className="flex items-center w-full">
           <Rating rating={4} />
-          <Tooltip content="Add to bookmark" color="foreground">
-            <button className="ms-auto">
-              <BookmarkIcon width={20} className="text-muted" />
-            </button>
-          </Tooltip>
+          <TooltipProvider>
+            <Tooltip delayDuration={300}>
+              <TooltipTrigger className="ms-auto">
+                <Bookmark size={20} className="text-sliver" />
+              </TooltipTrigger>
+              <TooltipContent>Add to bookmark</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </CardFooter>
     </Card>

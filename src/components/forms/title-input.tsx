@@ -1,18 +1,15 @@
 "use client";
 
-import { ChangeEvent, useEffect, useRef } from "react";
+import { cn } from "@/lib/utils";
+import { useEffect, useRef } from "react";
 
-interface TitleInputProps {
-  value?: string;
-  className?: string;
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLTextAreaElement> {
   maxLength?: number;
-  placeholder?: string;
-  onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+  wrapperClass?: string;
 }
 
-function TitleInput(props: TitleInputProps) {
-  const { value, className, maxLength, placeholder, onChange } = props;
-
+function TitleInput({ className, wrapperClass, onChange, ...props }: InputProps) {
   const ref = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -30,26 +27,25 @@ function TitleInput(props: TitleInputProps) {
   }, []);
 
   return (
-    <div className="flex">
+    <div className={cn("flex", wrapperClass)}>
       <textarea
         ref={ref}
-        maxLength={maxLength}
-        placeholder={placeholder}
-        rows={1}
-        className={`focus:ring-transparent border-0 outline-0 font-semibold p-0 text-4xl lg:text-5xl placeholder:text-muted resize-none appearance-none h-auto scrollbar-hide w-full overflow-hidden ${
-          className ?? ""
-        }`}
+        className={cn(
+          `focus:ring-transparent border-0 outline-0 font-semibold p-0 text-4xl lg:text-5xl placeholder:text-sliver resize-none appearance-none h-auto scrollbar-hide w-full overflow-hidden`,
+          className
+        )}
         onKeyDown={(evt) => {
           if (evt.key === "Enter") {
             evt.preventDefault();
           }
         }}
-        value={value}
         onChange={(evt) => {
           evt.target.style.height = "auto";
           evt.target.style.height = `${evt.target.scrollHeight}px`;
           onChange?.(evt);
         }}
+        {...props}
+        rows={1}
       />
     </div>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { NextUIProvider } from "@nextui-org/react";
+import { NextUIProvider } from "@nextui-org/system";
 import NextNProgress from "nextjs-progressbar";
 import NProgress from "nprogress";
 import { Suspense, useEffect } from "react";

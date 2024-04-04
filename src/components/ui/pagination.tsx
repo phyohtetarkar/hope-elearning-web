@@ -1,10 +1,10 @@
 "use client";
 
 import {
-  Link,
   Pagination as NextUIPagination,
   PaginationItem,
-} from "@nextui-org/react";
+} from "@nextui-org/pagination";
+import { Link } from "@nextui-org/link";
 
 interface PaginationProps {
   totalPage: number;

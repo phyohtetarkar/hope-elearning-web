@@ -41,7 +41,7 @@ export default function QuoteSwiper() {
               <blockquote className="text-lg">
                 <p>{q.quote}</p>
               </blockquote>
-              <figcaption className="text-muted">
+              <figcaption className="text-sliver">
                 <cite>~ {q.author}</cite>
               </figcaption>
             </figure>

@@ -1,4 +1,4 @@
-import { StarIcon } from "@heroicons/react/24/solid";
+import { Star } from "lucide-react";
 
 interface RatingProps {
   rating: number;
@@ -6,12 +6,18 @@ interface RatingProps {
 
 const stars = [1, 2, 3, 4, 5];
 
+const size = 18;
+
+const activeColor = "#ff9017"
+
+const defaultColor = "#cbd5e1";
+
 function Rating({ rating }: RatingProps) {
   return (
     <div className="flex">
       {stars.map((e, i) => {
         if (rating >= e) {
-          return <StarIcon key={i} width={18} className="text-warning" />;
+          return <Star key={i} size={size} fill={activeColor} stroke={activeColor} />;
         }
 
         if (rating >= e - 0.5 && rating < e) {
@@ -23,16 +29,16 @@ function Rating({ rating }: RatingProps) {
               style={{ width: 18 }}
             >
               <div className="absolute left-0">
-                <StarIcon key={i} width={18} className="text-gray-300" />
+                <Star key={i} size={size} fill={defaultColor} stroke={defaultColor} />
               </div>
               <div className="overflow-hidden z-10 w-[9px]">
-                <StarIcon key={i} width={18} className="text-warning" />
+                <Star key={i} size={size} fill={activeColor} stroke={activeColor} />
               </div>
             </div>
           );
         }
 
-        return <StarIcon key={i} width={18} className="text-gray-300" />;
+        return <Star key={i} size={size} fill={defaultColor} stroke={defaultColor} />;
       })}
     </div>
   );

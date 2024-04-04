@@ -1,11 +1,12 @@
+import { Button } from "@/components/ui/button";
+import { Link } from "@nextui-org/link";
 import {
-  Button,
-  Link,
   Navbar,
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-} from "@nextui-org/react";
+} from "@nextui-org/navbar";
+import Image from "next/image";
 
 export default function Header() {
   return (
@@ -20,7 +21,14 @@ export default function Header() {
     >
       <NavbarBrand className="flex-grow-0">
         <Link href="/" color="foreground" className="flex items-center">
-          <div className="rounded bg-primary aspect-1 w-[40px]"></div>
+          <div className="size-[40px] relative">
+            <Image
+              src="/images/logo.svg"
+              alt="Logo"
+              fill
+              className="rounded object-fill"
+            />
+            </div>
           <h3 className="ms-3">{process.env.NEXT_PUBLIC_APP_NAME}</h3>
         </Link>
       </NavbarBrand>
@@ -65,8 +73,8 @@ export default function Header() {
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Button as={Link} color="primary" href="/sign-up">
-            Sign Up
+          <Button asChild>
+            <Link href="/sign-up">Sign Up</Link>
           </Button>
         </NavbarItem>
       </NavbarContent>

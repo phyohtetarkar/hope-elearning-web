@@ -1,4 +1,3 @@
-import { RiBookmarkLine } from "@remixicon/react";
 import Image from "next/legacy/image";
 import Link from "next/link";
 
@@ -55,7 +54,7 @@ function CourseListItem() {
                 </Link>
                 <div className="ms-auto d-flex gap-3 align-items-center">
                   <div role="button">
-                      <RiBookmarkLine size={20} className="text-muted" />
+                     
                   </div>
                 </div>
               </div>

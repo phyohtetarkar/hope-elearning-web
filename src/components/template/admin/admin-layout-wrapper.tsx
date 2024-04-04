@@ -4,7 +4,7 @@ import {
   DrawerBackdrop,
   DrawerContent,
   DrawerContextProvider,
-} from "@/components";
+} from "@/components/ui/drawer";
 import { ReactNode } from "react";
 import SideMenu from "./side-menu";
 import Header from "./header";
@@ -18,16 +18,16 @@ export default function AdminLayoutWrapper({
   const pathname = usePathname();
 
   if (pathname.startsWith("/admin/posts/")) {
-    return <div className="h-full p-4 lg:p-5">{children}</div>;
+    return <div className="p-4 lg:p-5">{children}</div>;
   }
 
   return (
     <DrawerContextProvider>
       <div className="flex h-full relative">
         <SideMenu />
-        <DrawerContent className="lg:left-[300px] flex flex-col">
+        <DrawerContent className="mt-[65px]">
           <Header />
-          <div className="mt-[65px] p-4 lg:p-5">{children}</div>
+          <div className="p-4 lg:p-5">{children}</div>
         </DrawerContent>
         <DrawerBackdrop />
       </div>

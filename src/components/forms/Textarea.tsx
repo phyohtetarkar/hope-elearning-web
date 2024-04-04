@@ -1,49 +1,31 @@
-import { forwardRef } from "react";
-import { InputProps } from "./input";
+import { cn } from "@/lib/utils";
+import { ReactNode, forwardRef } from "react";
 
-interface TextareaInputProps extends InputProps<HTMLTextAreaElement> {}
+export interface InputProps
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  label?: ReactNode;
+  error?: string;
+  wrapperClass?: string;
+}
 
-const Textarea = forwardRef<HTMLTextAreaElement, TextareaInputProps>(
-  (props, ref) => {
-    const {
-      label,
-      id,
-      name,
-      placeholder,
-      disabled,
-      value,
-      defaultValue,
-      onChange,
-      onBlur,
-      error,
-      style,
-      className,
-    } = props;
-
+const Textarea = forwardRef<HTMLTextAreaElement, InputProps>(
+  ({ label, className, wrapperClass, error, children, ...props }, ref) => {
     const isInvalid = !!error;
 
     return (
-      <div className={`flex flex-col ${className}`}>
+      <div className={cn(`flex flex-col`, wrapperClass)}>
         {label && (
-          <label htmlFor={id} className="font-medium mb-1">
+          <label htmlFor={props.id} className="font-medium mb-1">
             {label}
           </label>
         )}
         <textarea
-          id={id}
           ref={ref}
-          name={name}
-          className={`${isInvalid ? "invalid-input" : "default-input"} rounded`}
-          placeholder={placeholder}
-          disabled={disabled}
-          value={value}
-          defaultValue={defaultValue}
-          onChange={onChange}
-          onBlur={onBlur}
-          style={{
-            height: 120,
-            ...style,
-          }}
+          className={cn(
+            `${isInvalid ? "invalid-input" : "default-input"} rounded`,
+            className
+          )}
+          {...props}
         />
         {error && <div className="text-danger text-sm mt-1.5">{error}</div>}
       </div>
