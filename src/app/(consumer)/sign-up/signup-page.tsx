@@ -1,70 +1,110 @@
 "use client";
-import Alert from "@/components/Alert";
+
 import { Input, PasswordInput } from "@/components/forms";
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Card, CardBody, CardFooter } from "@nextui-org/card";
+import { applyAuthCookies } from "@/lib/actions";
+import { firebaseAuth } from "@/lib/firebase.config";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  createUserWithEmailAndPassword,
+  inMemoryPersistence,
+  sendEmailVerification,
+  updateProfile,
+} from "firebase/auth";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-interface SignUpInputs {
-  fullName?: string;
-  email?: string;
-  password?: string;
-  confirmPassword?: string;
-}
+const schema = z
+  .object({
+    nickname: z.string().min(2, {
+      message: "Please your enter nick name",
+    }),
+    email: z.string().email({
+      message: "Please enter valid email address",
+    }),
+    password: z.string().min(8, {
+      message: "Password must be at least 8 characters",
+    }),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
+type SignUpForm = z.infer<typeof schema>;
 
 function SignUpPage() {
-  const router = useRouter();
   const [error, setError] = useState<string>();
   const [oauthLogin, setOauthLogin] = useState<"facebook" | "google">();
 
   const {
     register,
-    control,
     formState: { errors, isSubmitting },
     handleSubmit,
-  } = useForm<SignUpInputs>();
+  } = useForm<SignUpForm>({
+    resolver: zodResolver(schema),
+  });
 
-  const processSignUp = async (values: SignUpInputs) => {
+  const handleSignUp = async (values: SignUpForm) => {
     try {
       setError(undefined);
-    } catch (error) {}
+      const auth = firebaseAuth;
+      auth.setPersistence(inMemoryPersistence);
+      const result = await createUserWithEmailAndPassword(
+        auth,
+        values.email,
+        values.password
+      );
+      sendEmailVerification(result.user);
+      await updateProfile(result.user, {
+        displayName: values.nickname,
+      });
+
+      const idToken = await result.user.getIdToken();
+      const refreshToken = result.user.refreshToken;
+
+      await auth.signOut();
+      await applyAuthCookies({
+        accessToken: idToken,
+        refreshToken: refreshToken,
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <div className="container py-3">
       <div className="grid grid-cols-12 mt-10 mb-5">
-        <Card
-          shadow="none"
-          className="border col-span-12 md:col-span-6 md:col-start-4 xl:col-span-4 xl:col-start-5"
-        >
-          <CardBody className="px-6 py-4">
+        <Card className="shadow-none col-span-12 md:col-span-6 md:col-start-4 xl:col-span-4 xl:col-start-5">
+          <CardContent className="px-6 py-4">
             <h3 className="fw-bold mt-2 mb-4">Sign Up</h3>
 
-            {error && <Alert message={error} variant="danger" />}
+            {error && <Alert variant="destructive">{error}</Alert>}
 
             <form
               className="grid grid-cols-1"
               onSubmit={(evt) => {
                 evt.preventDefault();
-                handleSubmit(async (data) => await processSignUp(data))();
+                handleSubmit(handleSignUp)();
               }}
             >
               <Input
-                label="Full Name"
+                label="Nick Name"
                 id="nameInput"
                 type="text"
                 wrapperClass="mb-4"
-                placeholder="Your full name"
-                {...register("fullName", {
-                  required: true,
-                })}
-                error={errors.fullName && "Please enter full name"}
+                placeholder="Enter nick name"
+                {...register("nickname")}
+                error={errors.nickname?.message}
               />
               <Input
                 label="Email"
@@ -73,11 +113,8 @@ function SignUpPage() {
                 wrapperClass="mb-4"
                 autoComplete="username"
                 placeholder="Enter email address"
-                {...register("email", {
-                  required: true,
-                  pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
-                })}
-                error={errors.email && "Please enter valid email"}
+                {...register("email")}
+                error={errors.email?.message}
               />
 
               <PasswordInput
@@ -85,23 +122,16 @@ function SignUpPage() {
                 autoComplete="new-password"
                 placeholder="Minimum 8 characters"
                 wrapperClass="mb-4"
-                {...register("password", {
-                  required: true,
-                  minLength: 8,
-                })}
-                error={
-                  errors.password && "Password must be at least 8 charachers"
-                }
+                {...register("password")}
+                error={errors.password?.message}
               />
 
               <PasswordInput
                 label="Confirm Password"
                 autoComplete="new-password"
                 placeholder="Minimum 8 characters"
-                {...register("confirmPassword", {
-                  validate: (v, fv) => v === fv.password,
-                })}
-                error={errors.confirmPassword && "Password does not match"}
+                {...register("confirmPassword")}
+                error={errors.confirmPassword?.message}
               />
 
               <Button
@@ -118,12 +148,12 @@ function SignUpPage() {
 
               <div className="flex items-center my-4">
                 <hr className="flex-grow" />
-                <div className=" text-sliver mx-2">or continue with</div>
+                <div className=" text-sliver mx-4">OR</div>
                 <hr className="flex-grow" />
               </div>
 
               <div className="flex gap-2">
-                <Button
+                {/* <Button
                   className="border flex-1 justify-start"
                   variant="outline"
                   disabled={isSubmitting || !!oauthLogin}
@@ -148,10 +178,10 @@ function SignUpPage() {
                     className="mr-2"
                   />
                   Facebook
-                </Button>
+                </Button> */}
 
                 <Button
-                  className="border flex-1 justify-start"
+                  className="border flex-1"
                   variant="outline"
                   disabled={isSubmitting || !!oauthLogin}
                   onClick={async () => {
@@ -174,22 +204,20 @@ function SignUpPage() {
                     height={28}
                     className="mr-2"
                   />
-                  Google
+                  Continue with Google
                 </Button>
               </div>
             </form>
-          </CardBody>
+          </CardContent>
           <Separator />
-          <CardFooter className="flex justify-center">
-            <div>
-              Already have an account?
-              <Link
-                href="/login"
-                className="ms-1 font-medium text-anchor hover:text-opacity-80"
-              >
-                Login
-              </Link>
-            </div>
+          <CardFooter className="justify-center py-3.5">
+            Already have an account?
+            <Link
+              href="/login"
+              className="ms-1 font-medium text-anchor hover:text-opacity-80"
+            >
+              Login
+            </Link>
           </CardFooter>
         </Card>
       </div>

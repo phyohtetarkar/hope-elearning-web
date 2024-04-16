@@ -7,7 +7,6 @@
 @import "swiper/css/pagination";
 @import "swiper/css/zoom";
 @import "react-toastify/dist/ReactToastify.css";
-@import "../styles/codeblock.css";
 @import "../styles/prosemirror.css";
 
 /* @layer base {

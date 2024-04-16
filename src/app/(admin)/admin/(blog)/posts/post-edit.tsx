@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { ImagePlus, PanelRight, X } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 export default function PostEdit() {
@@ -25,12 +26,14 @@ export default function PostEdit() {
 
   return (
     <>
-      <div className="flex flex-col fixed inset-0 overflow-y-auto mt-[65px]">
+      <div className="flex flex-col">
         <div className="flex gap-3 items-center fixed top-0 inset-x-0 bg-white px-4 h-[65px] border-b z-10">
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/admin/posts">Posts</BreadcrumbLink>
+                <BreadcrumbLink asChild>
+                  <Link href="/admin/posts">Posts</Link>
+                </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
@@ -60,15 +63,17 @@ export default function PostEdit() {
             </Tooltip>
           </TooltipProvider>
         </div>
-        <div className="container max-w-3xl mt-7 mb-10">
-          <Button variant="outline" size="sm" className="mb-8 rounded-full">
-            <ImagePlus size={20} className="mr-2" />
-            Add Cover
-          </Button>
-          <div className="mb-6">
-            <TitleInput placeholder="Post title" className="text-gray-800" />
+        <div className="grow fixed inset-0 overflow-y-auto mt-[65px]">
+          <div className="container max-w-3xl mt-7 mb-10">
+            <Button variant="outline" size="sm" className="mb-8 rounded-full">
+              <ImagePlus size={20} className="mr-2" />
+              Add Cover
+            </Button>
+            <div className="mb-6">
+              <TitleInput placeholder="Post title" className="text-gray-800" />
+            </div>
+            <NovelEditor />
           </div>
-          <NovelEditor />
         </div>
         <div
           onClick={(evt) => {
@@ -119,7 +124,9 @@ export default function PostEdit() {
               rows={4}
             />
             <div className="grow"></div>
-            <Button variant="destructive" className="mt-auto">Delete post</Button>
+            <Button variant="destructive" className="mt-auto">
+              Delete post
+            </Button>
             <div className="pb-4"></div>
           </div>
         </div>

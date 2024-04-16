@@ -9,12 +9,12 @@ import {
   useState,
 } from "react";
 
-interface DrawerContextProps {
+interface DrawerContextType {
   isMenuOpen: boolean;
   toggle?: () => void;
 }
 
-const DrawerContext = createContext<DrawerContextProps>({
+const DrawerContext = createContext<DrawerContextType>({
   isMenuOpen: false,
 });
 
@@ -25,7 +25,7 @@ const DrawerContextProvider = ({ children }: { children: ReactNode }) => {
     });
   }, []);
 
-  const [drawerState, setDrawerState] = useState<DrawerContextProps>({
+  const [drawerState, setDrawerState] = useState<DrawerContextType>({
     isMenuOpen: false,
     toggle: toggle,
   });
@@ -54,34 +54,12 @@ const DrawerContextProvider = ({ children }: { children: ReactNode }) => {
   );
 }
 
-const DrawerContent = ({
-  className,
-  children,
-}: {
-  className?: string;
-  children: ReactNode;
-}) => {
-
-  return (
-    <div
-      className={`grow w-full ${
-        className ?? ""
-      }`}
-    >
-      {children}
-    </div>
-  );
-}
-
 const DrawerBackdrop = () => {
   const { isMenuOpen, toggle } = useContext(DrawerContext);
-  // if (!isMenuOpen) {
-  //   return null;
-  // }
+
   return (
     <div
       onClick={toggle}
-      // className="bg-black/70 fixed inset-0 z-40"
       className={cn(
         "bg-black fixed inset-0 z-40",
         `transition-opacity ease-out`,
@@ -98,6 +76,5 @@ const DrawerBackdrop = () => {
 export {
   DrawerContext,
   DrawerContextProvider,
-  DrawerContent,
   DrawerBackdrop,
 }

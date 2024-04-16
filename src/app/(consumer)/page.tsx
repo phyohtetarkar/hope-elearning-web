@@ -1,8 +1,8 @@
 import { CourseGridItem } from "@/components/course";
 import Image from "next/image";
 import QuoteSwiper from "./quote-swiper";
-import { Link } from "@nextui-org/link";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -22,7 +22,7 @@ export default function Home() {
                   className="w-full lg:w-auto"
                   asChild
                 >
-                  <Link href="/courses">Browse courses</Link>
+                  <Link href="/admin">Browse courses</Link>
                 </Button>
               </div>
             </div>
@@ -49,7 +49,7 @@ export default function Home() {
       <div className="bg-white px-3 border-b">
         <QuoteSwiper />
       </div>
-      <div className="container py-7">
+      <div className="container py-10">
         <h3 className="mb-5">Recommended</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 bg-transparent">
           <CourseGridItem />

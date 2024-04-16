@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Link } from "@nextui-org/link";
 import {
   Navbar,
   NavbarBrand,
@@ -7,6 +6,7 @@ import {
   NavbarItem,
 } from "@nextui-org/navbar";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Header() {
   return (

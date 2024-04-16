@@ -1,6 +1,5 @@
 import { Select } from "@/components/forms";
 import { Edit } from "lucide-react";
-import Table from "@/components/table";
 import Pagination from "@/components/ui/pagination";
 import {
   Tooltip,
@@ -10,6 +9,14 @@ import {
 } from "@/components/ui/tooltip";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export default function Posts() {
   return (
@@ -34,17 +41,17 @@ export default function Posts() {
         </Select>
       </div>
       <Table>
-        <Table.Header>
-          <Table.Column className="uppercase min-w-[300px] w-full">
-            Post
-          </Table.Column>
-          <Table.Column className="uppercase min-w-[100px]">
-            Action
-          </Table.Column>
-        </Table.Header>
-        <Table.Body>
-          <Table.Row>
-            <Table.Cell>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="uppercase min-w-[300px] w-full">
+              Post
+            </TableHead>
+            <TableHead className="uppercase min-w-[100px]">Action</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody className="border-b">
+          <TableRow>
+            <TableCell>
               <div className="flex flex-col">
                 <h6 className="mb-0.5">Introduction to NestJS</h6>
                 <span className="text-sliver text-sm mb-1">
@@ -52,8 +59,8 @@ export default function Posts() {
                 </span>
                 <span className="text-primary text-sm">Draft</span>
               </div>
-            </Table.Cell>
-            <Table.Cell>
+            </TableCell>
+            <TableCell>
               <TooltipProvider>
                 <Tooltip delayDuration={300}>
                   <TooltipTrigger className="ms-auto">
@@ -63,14 +70,12 @@ export default function Posts() {
                       </Link>
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent>
-                    Edit post
-                  </TooltipContent>
+                  <TooltipContent>Edit post</TooltipContent>
                 </Tooltip>
               </TooltipProvider>
-            </Table.Cell>
-          </Table.Row>
-        </Table.Body>
+            </TableCell>
+          </TableRow>
+        </TableBody>
       </Table>
 
       <div className="mt-8 flex justify-end">

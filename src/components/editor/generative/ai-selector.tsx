@@ -68,7 +68,7 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
               value={inputValue}
               onValueChange={setInputValue}
               autoFocus
-              className="p-0 ring-0 focus:ring-0 border-0"
+              className="p-0 pr-7 ring-0 focus:ring-0 border-0"
               placeholder={
                 hasCompletion
                   ? "Tell AI what to do next"

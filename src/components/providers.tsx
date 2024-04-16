@@ -18,8 +18,6 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     const handleAnchorClick = (event: MouseEvent) => {
       const targetUrl = (event.currentTarget as HTMLAnchorElement).href;
       const currentUrl = location.href;
-      console.log(targetUrl);
-      console.log(currentUrl);
       if (targetUrl !== currentUrl) {
         NProgress.start();
       }

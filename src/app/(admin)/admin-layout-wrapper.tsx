@@ -2,7 +2,6 @@
 
 import {
   DrawerBackdrop,
-  DrawerContent,
   DrawerContextProvider,
 } from "@/components/ui/drawer";
 import { ReactNode } from "react";
@@ -17,18 +16,18 @@ export default function AdminLayoutWrapper({
 }) {
   const pathname = usePathname();
 
-  if (pathname.startsWith("/admin/posts/")) {
-    return <div className="p-4 lg:p-5">{children}</div>;
+  if (pathname.match(/^\/admin\/posts\/.+/)) {
+    return <>{children}</>;
   }
 
   return (
     <DrawerContextProvider>
       <div className="flex h-full relative">
         <SideMenu />
-        <DrawerContent className="mt-[65px]">
+        <div className="grow w-full mt-[65px]">
           <Header />
           <div className="p-4 lg:p-5">{children}</div>
-        </DrawerContent>
+        </div>
         <DrawerBackdrop />
       </div>
     </DrawerContextProvider>

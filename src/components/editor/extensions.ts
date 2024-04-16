@@ -40,7 +40,7 @@ import {
   
   const horizontalRule = HorizontalRule.configure({
     HTMLAttributes: {
-      class: cn("mt-4 mb-6 border-t"),
+      class: cn("mt-10 mb-10 border-t"),
     },
   });
   
@@ -62,7 +62,7 @@ import {
     },
     blockquote: {
       HTMLAttributes: {
-        class: cn("border-l-4 border-gray-700"),
+        class: cn("border-l-4 border-gray-600"),
       },
     },
     codeBlock: {
@@ -76,7 +76,11 @@ import {
         spellcheck: "false",
       },
     },
-    horizontalRule: false,
+    horizontalRule: {
+      HTMLAttributes: {
+        class: cn("my-4"),
+      }
+    },
     dropcursor: {
       color: "#DBEAFE",
       width: 4,
@@ -91,7 +95,6 @@ import {
     TiptapImage,
     taskList,
     taskItem,
-    horizontalRule,
     aiHighlight,
   ];
   

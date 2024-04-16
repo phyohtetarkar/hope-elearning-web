@@ -8,7 +8,7 @@ const config = {
   content: [
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
     // "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
-    "./node_modules/@nextui-org/theme/dist/components/(card|navbar|pagination|link|modal|dropdown|listbox).js",
+    "./node_modules/@nextui-org/theme/dist/components/(navbar|pagination|modal|listbox).js",
   ],
   prefix: "",
   theme: {

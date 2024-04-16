@@ -1,4 +1,5 @@
-import { Footer, Header } from "@/components/template/consumer";
+import Footer from "./footer";
+import Header from "./header";
 
 export default function ConsumerLayout({
   children,

@@ -1,10 +1,10 @@
-import { GoogleGenerativeAIStream, Message, StreamingTextResponse } from "ai";
-import { match } from "ts-pattern";
 import {
   Content,
   GenerateContentRequest,
   GoogleGenerativeAI,
 } from "@google/generative-ai";
+import { GoogleGenerativeAIStream, Message, StreamingTextResponse } from "ai";
+import { match } from "ts-pattern";
 
 // IMPORTANT! Set the runtime to edge: https://vercel.com/docs/functions/edge-functions/edge-runtime
 export const runtime = "edge";

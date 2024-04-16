@@ -1,4 +1,3 @@
-import { Card, CardBody, CardFooter } from "@nextui-org/card";
 import Image from "next/image";
 import Link from "next/link";
 import Rating from "../ui/rating";
@@ -10,11 +9,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
+import { Card, CardContent, CardFooter } from "../ui/card";
 
 function CourseGridItem() {
   return (
-    <Card shadow="none" className="border">
-      <CardBody className="p-0">
+    <Card className="overflow-hidden shadow-none">
+      <CardContent className="p-0">
         <div className="aspect-w-4 aspect-h-3">
           <Image
             src="/images/course.jpg"
@@ -29,7 +29,10 @@ function CourseGridItem() {
           />
         </div>
         <div className="flex flex-col p-4">
-          <Link href="/course/100" className="text-black font-medium text-lg">
+          <Link
+            href="/course/100"
+            className="text-black font-medium text-lg text-nowrap"
+          >
             Introduction to docker
           </Link>
           <div className="flex items-center text-small mb-2 mt-1">
@@ -38,20 +41,18 @@ function CourseGridItem() {
             <div className="text-primary">Beginner</div>
           </div>
         </div>
-      </CardBody>
+      </CardContent>
       <Separator />
-      <CardFooter>
-        <div className="flex items-center w-full">
-          <Rating rating={4} />
-          <TooltipProvider>
-            <Tooltip delayDuration={300}>
-              <TooltipTrigger className="ms-auto">
-                <Bookmark size={20} className="text-sliver" />
-              </TooltipTrigger>
-              <TooltipContent>Add to bookmark</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
+      <CardFooter className="px-4 py-3.5">
+        <Rating rating={4} />
+        <TooltipProvider>
+          <Tooltip delayDuration={300}>
+            <TooltipTrigger className="ms-auto">
+              <Bookmark size={20} className="text-sliver" />
+            </TooltipTrigger>
+            <TooltipContent>Add to bookmark</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </CardFooter>
     </Card>
   );

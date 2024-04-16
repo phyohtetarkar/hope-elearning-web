@@ -4,7 +4,7 @@ import {
   Pagination as NextUIPagination,
   PaginationItem,
 } from "@nextui-org/pagination";
-import { Link } from "@nextui-org/link";
+import Link from "next/link";
 
 interface PaginationProps {
   totalPage: number;

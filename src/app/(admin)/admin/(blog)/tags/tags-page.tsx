@@ -1,9 +1,5 @@
 "use client";
-import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
-import TagEdit from "./tag-edit";
-import { useState } from "react";
-import { Modal, useDisclosure } from "@nextui-org/modal";
-import Table from "@/components/table";
+import { Button } from "@/components/ui/button";
 import Pagination from "@/components/ui/pagination";
 import {
   Tooltip,
@@ -11,7 +7,11 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Button } from "@/components/ui/button";
+import { Modal, useDisclosure } from "@nextui-org/modal";
+import { Edit, Trash2 } from "lucide-react";
+import { useState } from "react";
+import TagEdit from "./tag-edit";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 function TagsPage() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -36,30 +36,32 @@ function TagsPage() {
         </Button>
       </div>
       <Table>
-        <Table.Header>
-          <Table.Column className="uppercase min-w-[300px] w-full">
+        <TableHeader>
+          <TableRow>
+          <TableHead className="uppercase min-w-[300px] w-full">
             Tag
-          </Table.Column>
-          <Table.Column className="uppercase min-w-[150px]">Slug</Table.Column>
-          <Table.Column className="uppercase min-w-[150px]">
+          </TableHead>
+          <TableHead className="uppercase min-w-[150px]">Slug</TableHead>
+          <TableHead className="uppercase min-w-[150px]">
             No.of posts
-          </Table.Column>
-          <Table.Column className="uppercase min-w-[150px]">
+          </TableHead>
+          <TableHead className="uppercase min-w-[150px]">
             Action
-          </Table.Column>
-        </Table.Header>
-        <Table.Body>
-          <Table.Row>
-            <Table.Cell>
+          </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody className="border-b">
+          <TableRow>
+            <TableCell>
               <h6>News</h6>
-            </Table.Cell>
-            <Table.Cell>
-              <span className="text-sliver text-sm">news</span>
-            </Table.Cell>
-            <Table.Cell>
-              <span className="text-sliver text-sm">1 post</span>
-            </Table.Cell>
-            <Table.Cell>
+            </TableCell>
+            <TableCell className="text-sliver text-sm">
+              news
+            </TableCell>
+            <TableCell className="text-sliver text-sm">
+              10 post
+            </TableCell>
+            <TableCell>
               <div className="flex justify-start gap-2">
                 <TooltipProvider>
                   <Tooltip delayDuration={300}>
@@ -71,7 +73,7 @@ function TagsPage() {
                         asChild
                       >
                         <span>
-                          <PencilSquareIcon width={20} />
+                          <Edit size={20} />
                         </span>
                       </Button>
                     </TooltipTrigger>
@@ -87,7 +89,7 @@ function TagsPage() {
                         asChild
                       >
                         <span>
-                          <TrashIcon width={20} />
+                          <Trash2 size={20} />
                         </span>
                       </Button>
                     </TooltipTrigger>
@@ -95,9 +97,9 @@ function TagsPage() {
                   </Tooltip>
                 </TooltipProvider>
               </div>
-            </Table.Cell>
-          </Table.Row>
-        </Table.Body>
+            </TableCell>
+          </TableRow>
+        </TableBody>
       </Table>
       <div className="mt-8 flex justify-end">
         <Pagination totalPage={10} currentPage={1} />

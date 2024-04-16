@@ -52,10 +52,10 @@ export function Cell({ className, children }: Props) {
   return <td className={`py-3.5 text-left pr-4 last:pr-0 ${className ?? ""}`}>{children}</td>;
 }
 
-Table.Header = Header;
-Table.Body = Body;
-Table.Column = Column;
-Table.Row = Row;
-Table.Cell = Cell;
+// Table.Header = Header;
+// Table.Body = Body;
+// Table.Column = Column;
+// Table.Row = Row;
+// Table.Cell = Cell;
 
-export default Table;
+// export default Table;

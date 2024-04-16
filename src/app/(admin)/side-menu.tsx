@@ -14,21 +14,20 @@ import {
   X,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 const iconSize = 20;
 
 export default function SideMenu() {
   const { isMenuOpen, toggle } = useContext(DrawerContext);
   const pathname = usePathname();
-  const [selectedKeys, setSelectedKeys] = useState(
-    new Set([pathname.replace("/admin/", "")])
-  );
+  const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set());
 
-  if (pathname.startsWith("/admin/posts/")) {
-    return null;
-  }
+  useEffect(() => {
+    setSelectedKeys(new Set([pathname.replace("/admin/", "")]));
+  }, [pathname]);
 
   return (
     <div
@@ -64,10 +63,16 @@ export default function SideMenu() {
           classNames={{
             list: "flex-grow",
           }}
+          onAction={(key) => {
+            if (isMenuOpen) {
+              toggle?.();
+            }
+          }}
         >
           <ListboxItem
             key="dashboard"
             variant="flat"
+            as={Link}
             href="/admin"
             startContent={<Home size={iconSize} />}
             color="primary"
@@ -95,6 +100,7 @@ export default function SideMenu() {
             <ListboxItem
               key="posts"
               variant="flat"
+              as={Link}
               href="/admin/posts"
               startContent={<Edit size={iconSize} />}
               color="primary"
@@ -104,6 +110,7 @@ export default function SideMenu() {
             <ListboxItem
               key="tags"
               variant="flat"
+              as={Link}
               href="/admin/tags"
               startContent={<Hash size={iconSize} />}
               color="primary"
