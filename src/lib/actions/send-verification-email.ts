@@ -1,32 +1,22 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
-import { getSession } from "../auth";
-import { redirect } from "next/navigation";
 import * as jose from "jose";
+import { redirect } from "next/navigation";
+import { getSession } from "../auth";
 
 export async function sendVerificationEmail() {
+  const session = await getSession();
+
+  const { accessToken } = session;
+
+  const payload = jose.decodeJwt(accessToken);
+  const emailVerified = payload["email_verified"];
+
+  if (emailVerified) {
+    redirect("/");
+  }
+
   try {
-    const session = await getSession();
-
-    if (!session) {
-      revalidatePath("/", "layout");
-      redirect("/");
-    }
-
-    const { accessToken } = session;
-
-    try {
-      const payload = jose.decodeJwt(accessToken);
-      const emailVerified = payload["email_verified"];
-
-      if (emailVerified) {
-        redirect("/");
-      }
-    } catch (error) {
-      redirect("/");
-    }
-
     const url = `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${process.env.NEXT_PUBLIC_FIREBASE_API_KEY}`;
     const body = {
       requestType: "VERIFY_EMAIL",
@@ -41,10 +31,10 @@ export async function sendVerificationEmail() {
       },
     });
 
-    // if (!resp.ok) {
-    //   const json = await resp.json();
-    //   throw new Error(json["message"]);
-    // }
+    if (!resp.ok) {
+      const json = await resp.json();
+      throw new Error(json["error"]["message"]);
+    }
 
     return resp.ok;
   } catch (e) {

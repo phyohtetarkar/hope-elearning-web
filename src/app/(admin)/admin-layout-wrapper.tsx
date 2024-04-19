@@ -4,7 +4,7 @@ import {
   DrawerBackdrop,
   DrawerContextProvider,
 } from "@/components/ui/drawer";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import SideMenu from "./side-menu";
 import Header from "./header";
 import { usePathname } from "next/navigation";
@@ -22,9 +22,9 @@ export default function AdminLayoutWrapper({
 
   return (
     <DrawerContextProvider>
-      <div className="flex h-full relative">
+      <div className="flex h-full">
         <SideMenu />
-        <div className="grow w-full mt-[65px]">
+        <div className="grow overflow-y-auto mt-[65px]">
           <Header />
           <div className="p-4 lg:p-5">{children}</div>
         </div>

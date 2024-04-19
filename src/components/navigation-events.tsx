@@ -1,8 +1,8 @@
 "use client";
 
-import { startTransition, useEffect } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import NProgress from "nprogress";
+import { startTransition, useEffect } from "react";
 
 export function NavigationEvents() {
   const pathname = usePathname();

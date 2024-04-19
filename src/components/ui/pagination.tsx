@@ -5,16 +5,26 @@ import {
   PaginationItem,
 } from "@nextui-org/pagination";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 interface PaginationProps {
+  basePath?: string;
   totalPage: number;
   currentPage: number;
 }
 
 export default function Pagination({
+  basePath = "",
   totalPage,
   currentPage,
 }: PaginationProps) {
+
+  const params = useSearchParams();
+
+  if (totalPage <= 1) {
+    return null;
+  }
+
   return (
     <NextUIPagination
       showControls
@@ -27,7 +37,7 @@ export default function Pagination({
           <PaginationItem
             key={key}
             as={Link}
-            href={`/admin/posts?page=${value}`}
+            href={`${basePath}?page=${value}`}
             {...props}
           />
         );

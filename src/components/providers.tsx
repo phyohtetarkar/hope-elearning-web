@@ -45,7 +45,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   }, []);
   return (
     <>
-      <Suspense>
+      <Suspense fallback={null}>
         <NavigationEvents />
         <NextNProgress
           color="#5863f8"

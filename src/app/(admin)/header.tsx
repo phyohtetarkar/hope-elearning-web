@@ -1,4 +1,5 @@
 "use client";
+import { AuthenticationContext } from "@/components/authentication-context-porvider";
 import { Button } from "@/components/ui/button";
 import { DrawerContext } from "@/components/ui/drawer";
 import {
@@ -9,13 +10,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { clearAuthCookies } from "@/lib/actions";
 import { Navbar, NavbarBrand, NavbarContent } from "@nextui-org/navbar";
 import { Menu } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useContext } from "react";
 
 export default function Header() {
   const { toggle } = useContext(DrawerContext);
+  const { user } = useContext(AuthenticationContext);
+
   return (
     <Navbar
       isBordered
@@ -24,7 +29,7 @@ export default function Header() {
       height="65px"
       className="fixed top-0"
       classNames={{
-        wrapper: "px-4",
+        wrapper: "px-4 lg:px-5",
       }}
     >
       <NavbarBrand className="flex-grow-0">
@@ -39,26 +44,38 @@ export default function Header() {
       </NavbarBrand>
 
       <NavbarContent as="div" justify="end">
-        <DropdownMenu>
-          <DropdownMenuTrigger className="outline-none">
-              <Image
-                src="/images/profile.png"
-                alt="Avatar"
-                width={36}
-                height={36}
-                className="rounded-full border-1 border-transparent ring-1 ring-primary"
-              />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="shadow-xl">
-            <DropdownMenuLabel className="gap-2">
-              <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold">Name</p>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>My Profile</DropdownMenuItem>
-            <DropdownMenuItem>Log Out</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {user && (
+          <DropdownMenu>
+            <DropdownMenuTrigger className="outline-none">
+              <div className="aspect-1 w-[32px] relative">
+                <Image
+                  src={user.image ?? "/images/profile.png"}
+                  alt="Avatar"
+                  fill
+                  sizes="50vh"
+                  className="rounded-full border-1 border-transparent ring-1 ring-primary object-cover"
+                />
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="shadow-xl">
+              <DropdownMenuLabel className="gap-2">
+                <p className="font-normal">Signed in as</p>
+                <p className="font-semibold">{user.nickname}</p>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link href="/profile">My Profile</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={async () => {
+                  await clearAuthCookies();
+                }}
+              >
+                Log Out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </NavbarContent>
     </Navbar>
   );

@@ -29,3 +29,5 @@ const AuthenticationContextProvider = ({
     </AuthenticationContext.Provider>
   );
 };
+
+export { AuthenticationContext, AuthenticationContextProvider };

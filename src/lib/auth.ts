@@ -1,7 +1,10 @@
 "use server";
 
 import * as jose from "jose";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { exchangeAccessToken } from "./exchange-access-token";
 
 interface SessionType {
   cookie: string;
@@ -9,7 +12,7 @@ interface SessionType {
   refreshToken: string | null | undefined;
 }
 
-export async function getSession(): Promise<SessionType | undefined> {
+export async function getSession(): Promise<SessionType> {
   const cookieStore = cookies();
   const accessToken = cookieStore.get("access_token")?.value;
   const refreshToken = cookieStore.get("refresh_token")?.value;
@@ -17,7 +20,8 @@ export async function getSession(): Promise<SessionType | undefined> {
   if (!accessToken) {
     cookieStore.delete("access_token");
     cookieStore.delete("refresh_token");
-    return undefined;
+    revalidatePath("/", "layout");
+    redirect("/login");
   }
 
   let payload: jose.JWTPayload | undefined = undefined;
@@ -29,7 +33,8 @@ export async function getSession(): Promise<SessionType | undefined> {
   if (!payload) {
     cookieStore.delete("access_token");
     cookieStore.delete("refresh_token");
-    return undefined;
+    revalidatePath("/", "layout");
+    redirect("/login");
   }
 
   console.log(new Date((payload.iat ?? 0) * 1000).toLocaleString());
@@ -41,43 +46,40 @@ export async function getSession(): Promise<SessionType | undefined> {
   console.log(timeLeft);
 
   if (timeLeft <= 300) {
-    const resp = await fetch(new URL("/api/auth/refresh", process.env.NEXT_PUBLIC_BASE_URL), {
-      method: "POST",
-      headers: {
-        Cookie: cookieStore.toString(),
-      },
-    });
+    const rt = cookieStore.get("refresh_token")?.value;
+    const refreshResult = await exchangeAccessToken(rt);
 
-    if (!resp.ok) {
+    if (!refreshResult) {
       cookieStore.delete("access_token");
       cookieStore.delete("refresh_token");
-      return undefined;
+      revalidatePath("/", "layout");
+      redirect("/login");
     }
 
-    const { newAccessToken, newRefreshToken } = await resp.json();
+    const { accessToken, refreshToken } = refreshResult;
 
     cookieStore.set({
       name: "access_token",
-      value: newAccessToken,
+      value: accessToken,
       httpOnly: true,
       maxAge: 2592000,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "lax",
     });
 
     cookieStore.set({
       name: "refresh_token",
-      value: newRefreshToken,
+      value: refreshToken,
       httpOnly: true,
       maxAge: 2592000,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "lax",
     });
 
     return {
-      cookie: `access_token=${newAccessToken};refresh_token=${newRefreshToken}`,
-      accessToken: newAccessToken,
-      refreshToken: newRefreshToken,
+      cookie: `access_token=${accessToken};refresh_token=${refreshToken}`,
+      accessToken: accessToken,
+      refreshToken: refreshToken,
     };
   }
 

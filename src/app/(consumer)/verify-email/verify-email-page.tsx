@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { sendVerificationEmail } from "@/lib/actions";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function VerifyEmailPage() {
   const [resend, setResend] = useState(true);
@@ -62,8 +63,8 @@ export default function VerifyEmailPage() {
                   try {
                     setResend(false);
                     await sendVerificationEmail();
-                  } catch (error) {
-                    console.log(error);
+                  } catch (error: any) {
+                    toast.error(error.message);
                   }
                 }}
               >

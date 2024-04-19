@@ -21,7 +21,7 @@ import { ImagePlus, PanelRight, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
-export default function PostEdit() {
+export default function PostEditPage() {
   const [isOpenSettings, setOpenSettings] = useState(false);
 
   return (

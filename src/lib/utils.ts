@@ -1,6 +1,6 @@
-import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { clsx, type ClassValue } from "clsx";
 import dayjs from "dayjs";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -87,4 +87,29 @@ export function setStringToSlug(v?: string) {
     .replaceAll(/[^\w-\s]*/g, "")
     .replaceAll(/\s+/g, "-")
     .toLowerCase();
+}
+
+export function buildQueryParams(params: any) {
+  if (typeof params !== "object" || params instanceof Array) {
+    return "";
+  }
+
+  let query = "";
+
+  for (const p in params) {
+    const value = params[p];
+    if (value === undefined || value === null) {
+      continue;
+    }
+
+    const delimiter = query.length > 0 ? "&" : "?";
+
+    if (value instanceof Array) {
+      query += delimiter + value.map((v) => `${p}=${v}`).join("&");
+    } else {
+      query += delimiter + `${p}=${value}`;
+    }
+  }
+
+  return query;
 }

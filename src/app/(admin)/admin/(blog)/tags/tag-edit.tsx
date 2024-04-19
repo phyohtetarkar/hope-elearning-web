@@ -1,48 +1,36 @@
 import { Input } from "@/components/forms";
 import { Button } from "@/components/ui/button";
-import {
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-} from "@nextui-org/modal";
+import { DialogFooter } from "@/components/ui/dialog";
+import { Tag } from "@/lib/models";
 
 interface TagEditProps {
-  onClose: () => void;
-  title: string;
+  tag?: Tag;
 }
 
-function TagEdit({ onClose, title }: TagEditProps) {
+function TagEdit({ tag }: TagEditProps) {
   return (
-    <ModalContent>
-      <ModalHeader>
-        <h3 className="fw-bold mt-3">{title}</h3>
-      </ModalHeader>
-      <ModalBody>
-        <form className="gird grid-cols-1">
-          <Input
-            label="Tag"
-            id="tag"
-            type="text"
-            className="mb-4"
-            placeholder="Enter tag"
-          />
-          <Input
-            label="Slug"
-            id="slug"
-            type="text"
-            className="mb-4"
-            placeholder="Enter slug"
-          />
-        </form>
-      </ModalBody>
-      <ModalFooter>
-        <Button variant="default" onClick={onClose}>Cancel</Button>
-        <Button onClick={onClose}>
-          Save
-        </Button>
-      </ModalFooter>
-    </ModalContent>
+    <form>
+      <div className="gird grid-cols-1">
+        <Input
+          label="Tag"
+          id="tag"
+          type="text"
+          className="mb-4"
+          placeholder="Enter tag"
+        />
+        <Input
+          label="Slug"
+          id="slug"
+          type="text"
+          className="mb-4"
+          placeholder="Enter slug"
+        />
+      </div>
+
+      <DialogFooter>
+        <Button type="submit">Save</Button>
+      </DialogFooter>
+    </form>
   );
 }
 

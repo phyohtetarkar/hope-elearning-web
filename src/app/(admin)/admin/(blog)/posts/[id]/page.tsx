@@ -1,5 +1,5 @@
 import PostEditPage from "../post-edit-page";
 
-export default function PostCreate() {
+export default function PostEdit() {
   return <PostEditPage />;
 }
