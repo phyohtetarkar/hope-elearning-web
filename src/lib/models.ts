@@ -44,3 +44,17 @@ export interface Tag {
   name: string;
   audit?: Audit;
 }
+
+export interface Category {
+  id: number;
+  slug: string;
+  name: string;
+  audit?: Audit;
+}
+
+export interface Skill {
+  id: number;
+  slug: string;
+  name: string;
+  audit?: Audit;
+}
