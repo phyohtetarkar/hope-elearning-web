@@ -24,10 +24,10 @@ function SkillEdit({ skill }: { skill?: Skill }) {
       </div>
 
       <DialogFooter>
-        <Button variant="default" className="m-2">
+        <Button variant="default" className="mt-2">
           Cancel
         </Button>
-        <Button type="submit" className="m-2">
+        <Button type="submit" className="mt-2">
           Save
         </Button>
       </DialogFooter>

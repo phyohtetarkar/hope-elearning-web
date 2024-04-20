@@ -3,11 +3,7 @@ import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
 import { Tag } from "@/lib/models";
 
-interface TagEditProps {
-  tag?: Tag;
-}
-
-function TagEdit({ tag }: TagEditProps) {
+function TagEdit({ tag }: { tag?: Tag }) {
   return (
     <form>
       <div className="gird grid-cols-1">
@@ -17,6 +13,7 @@ function TagEdit({ tag }: TagEditProps) {
           type="text"
           className="mb-4"
           placeholder="Enter tag"
+          value={tag?.name}
         />
         <Input
           label="Slug"
@@ -24,11 +21,17 @@ function TagEdit({ tag }: TagEditProps) {
           type="text"
           className="mb-4"
           placeholder="Enter slug"
+          value={tag?.slug}
         />
       </div>
 
       <DialogFooter>
-        <Button type="submit">Save</Button>
+        <Button variant="default" className="mt-2">
+          Cancel
+        </Button>
+        <Button type="submit" className="mt-2">
+          Save
+        </Button>
       </DialogFooter>
     </form>
   );
