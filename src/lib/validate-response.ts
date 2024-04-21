@@ -13,9 +13,9 @@ export async function validateResponse(resp: Response) {
     throw Error("FORBIDDEN: Permission denied");
   }
 
-  if (resp.status === 500) {
-    throw Error("Internal server error");
-  }
+  // if (resp.status === 500) {
+  //   throw Error("Internal server error");
+  // }
 
   if (!resp.ok) {
     const json = await resp.json();

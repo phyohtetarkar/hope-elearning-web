@@ -17,12 +17,15 @@ import {
 import { Tag } from "@/lib/models";
 import { Edit, Trash2 } from "lucide-react";
 import TagEdit from "./tag-edit";
+import { useState } from "react";
 
 export default function TagActionButtons({ tag }: { tag: Tag }) {
+  const [isOpen, setOpen] = useState(false);
+
   return (
     <div className="flex justify-start gap-2">
       <TooltipProvider>
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={setOpen}>
           <Tooltip delayDuration={300}>
             <TooltipTrigger>
               <DialogTrigger asChild>
@@ -43,7 +46,7 @@ export default function TagActionButtons({ tag }: { tag: Tag }) {
             <DialogHeader>
               <DialogTitle>Edit Tag</DialogTitle>
             </DialogHeader>
-            <TagEdit tag={tag} />
+            <TagEdit data={tag} close={() => setOpen(false)} />
           </DialogContent>
         </Dialog>
 

@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
       value: result.accessToken,
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "lax",
       maxAge: 2592000,
     });
 
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
       value: result.refreshToken,
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "lax",
       maxAge: 2592000,
     });
 

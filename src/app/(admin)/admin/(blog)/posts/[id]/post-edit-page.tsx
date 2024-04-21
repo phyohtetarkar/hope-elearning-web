@@ -16,13 +16,84 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
-import { ImagePlus, PanelRight, X } from "lucide-react";
+import { PostAccess, Tag, User } from "@/lib/models";
+import { cn, debounce, setStringToSlug } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  CloudUpload,
+  FileCheck2,
+  ImagePlus,
+  LoaderCircle,
+  PanelRight,
+  X,
+} from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { z } from "zod";
+
+const schema = z.object({
+  id: z.number(),
+  cover: z.string().optional(),
+  title: z.string().optional(),
+  slug: z.string().min(1, {
+    message: "Please enter post slug",
+  }),
+  excerpt: z.string().optional(),
+  access: z.custom<PostAccess>((v) => {
+    return typeof v === "string" ? /public|member|paid_member/.test(v) : false;
+  }),
+  lexical: z.string().optional(),
+  updatedAt: z.string().datetime(),
+  authors: z.custom<User>().array().nonempty({
+    message: "Required at least one author",
+  }),
+  tags: z.custom<Tag>().array(),
+});
+
+type PostUpdateForm = z.infer<typeof schema>;
 
 export default function PostEditPage() {
   const [isOpenSettings, setOpenSettings] = useState(false);
+  const [isStale, setStale] = useState(false);
+  const [isSaving, setSaving] = useState(false);
+
+  const {
+    control,
+    register,
+    formState: { errors, isSubmitting },
+    handleSubmit,
+    setValue,
+    getValues,
+  } = useForm<PostUpdateForm>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      authors: [],
+    },
+  });
+
+  const handleUpdatePost = (values: PostUpdateForm) => {
+    console.log(values);
+    setStale(false);
+  };
+
+  const debouncedUpdate = useMemo(() => {
+    return debounce(handleUpdatePost, 1000);
+  }, []);
+
+  const saveStateView = () => {
+    if (isSaving) {
+      return (
+        <LoaderCircle className="flex-shrink-0 animate-spin text-sliver" />
+      );
+    }
+
+    if (isStale) {
+      return <CloudUpload className="flex-shrink-0 text-sliver" />;
+    }
+
+    return <FileCheck2 className="flex-shrink-0 text-success" />;
+  };
 
   return (
     <>
@@ -44,6 +115,7 @@ export default function PostEditPage() {
             </BreadcrumbList>
           </Breadcrumb>
           <div className="flex-1"></div>
+          {saveStateView()}
           <Button>Publish</Button>
           <TooltipProvider>
             <Tooltip delayDuration={300}>
@@ -70,9 +142,40 @@ export default function PostEditPage() {
               Add Cover
             </Button>
             <div className="mb-6">
-              <TitleInput placeholder="Post title" className="text-gray-800" />
+              <Controller
+                control={control}
+                name="title"
+                render={({ field }) => {
+                  return (
+                    <TitleInput
+                      placeholder="Post title"
+                      className="text-gray-800"
+                      onChange={(evt) => {
+                        const value = evt.target.value;
+                        setValue("title", value);
+                        const slug = setStringToSlug(value);
+                        if (slug) {
+                          setValue("slug", slug);
+                        }
+                        if (!isStale) {
+                          setStale(true);
+                        }
+                        debouncedUpdate(getValues());
+                      }}
+                    />
+                  );
+                }}
+              />
             </div>
-            <NovelEditor />
+            <NovelEditor
+              onChange={(json) => {
+                setValue("lexical", JSON.stringify(json));
+                if (!isStale) {
+                  setStale(true);
+                }
+                debouncedUpdate(getValues());
+              }}
+            />
           </div>
         </div>
         <div
@@ -110,11 +213,18 @@ export default function PostEditPage() {
               type="text"
               wrapperClass="mb-4"
               placeholder="Enter post slug"
+              {...register("slug")}
+              error={errors.slug?.message}
             />
-            <Select label="Access" wrapperClass="mb-4">
-              <option>Public</option>
-              <option>Member only</option>
-              <option>Paid member only</option>
+            <Select
+              label="Access"
+              wrapperClass="mb-4"
+              {...register("access")}
+              error={errors.access?.message}
+            >
+              <option value="public">Public</option>
+              <option value="member">Member only</option>
+              <option value="paid_member">Paid member only</option>
             </Select>
             <Textarea
               label="Excerpt"
@@ -122,6 +232,7 @@ export default function PostEditPage() {
               className="resize-none"
               placeholder=""
               rows={4}
+              {...register("excerpt")}
             />
             <div className="grow"></div>
             <Button variant="destructive" className="mt-auto">

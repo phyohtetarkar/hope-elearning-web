@@ -3,14 +3,14 @@ import dayjs from "dayjs";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 export function formatNumber(value?: number) {
   if (typeof value !== "number" && typeof value !== "bigint") {
     return "";
   }
-  
+
   if (isNaN(value)) {
     return "";
   }
@@ -38,19 +38,16 @@ export function formatTimestamp(timestamp?: number | string, withTime = false) {
   return date.format("MMM DD, YYYY");
 }
 
-export function debounce(
-  callback: (...args: any[]) => void | Promise<any>,
-  timeout = 2000
-) {
+export function debounce<I, R>(callback: (input: I) => R | Promise<R>, timeout = 2000) {
   if (typeof window === "undefined") {
     return () => {};
   }
   let timer: NodeJS.Timeout;
 
-  return (...args: any[]) => {
+  return (input: I) => {
     timer && clearTimeout(timer);
     timer = setTimeout(() => {
-      callback && callback.apply(null, args);
+      callback && callback(input);
     }, timeout);
   };
 }
@@ -83,8 +80,7 @@ export function setZeroOrNumber(v: any) {
 
 export function setStringToSlug(v?: string) {
   return v
-    ?.trim()
-    .replaceAll(/[^\w-\s]*/g, "")
+    ?.replaceAll(/[^\w-\s]*/g, "")
     .replaceAll(/\s+/g, "-")
     .toLowerCase();
 }

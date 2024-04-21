@@ -26,9 +26,9 @@ export interface User {
 export interface Post {
   id: number;
   cover?: string;
-  title: string;
+  title?: string;
   slug: string;
-  excerpt: string;
+  excerpt?: string;
   lexical?: string;
   status: PostStatus;
   access: PostAccess;

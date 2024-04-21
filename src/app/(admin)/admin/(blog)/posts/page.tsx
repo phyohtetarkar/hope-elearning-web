@@ -25,6 +25,7 @@ import { Edit } from "lucide-react";
 import Link from "next/link";
 import PostFilter from "./posts-filter";
 import { cookies } from "next/headers";
+import PostCreateButton from "./post-create-button";
 
 interface Props {
   searchParams: { [key: string]: string | undefined };
@@ -43,7 +44,7 @@ const getPosts = async ({ searchParams }: Props) => {
     headers: {
       Cookie: cookies().toString(),
     },
-    cache: 'no-store',
+    cache: "no-store",
   });
 
   await validateResponse(resp);
@@ -71,11 +72,9 @@ export default async function Posts(props: Props) {
     <>
       <div className="flex justify-between mb-4">
         <h2>Posts</h2>
-        <Button color="primary" asChild>
-          <Link href="/admin/posts/new">New post</Link>
-        </Button>
+        <PostCreateButton />
       </div>
-      <PostFilter/>
+      <PostFilter />
       <Table>
         {data.contents.length === 0 && (
           <TableCaption className="text-start">No posts found</TableCaption>
@@ -94,7 +93,7 @@ export default async function Posts(props: Props) {
               <TableRow key={p.id}>
                 <TableCell>
                   <div className="flex flex-col">
-                    <h6 className="mb-0.5">{p.title}</h6>
+                    <h6 className="mb-0.5">{p.title ?? "(Untitled)"}</h6>
                     <span className="text-sliver text-sm mb-1">
                       By&nbsp;{p.authors.map((u) => u.nickname).join(", ")}
                       &nbsp;-&nbsp;
@@ -108,7 +107,7 @@ export default async function Posts(props: Props) {
                     <Tooltip delayDuration={300}>
                       <TooltipTrigger className="ms-auto">
                         <Button variant="default" asChild size="icon">
-                          <Link href={`/admin/posts/1`}>
+                          <Link href={`/admin/posts/${p.id}`}>
                             <Edit size={20} />
                           </Link>
                         </Button>

@@ -53,7 +53,7 @@ export async function middleware(request: NextRequest) {
   }
 
   const emailVerified = payload["email_verified"];
-  if (!emailVerified && !pathname.startsWith("/verify-email") && !pathname.startsWith("/usermgmt")) {
+  if (!emailVerified && !pathname.startsWith("/verify-email") && privatePath) {
     return NextResponse.redirect(new URL("/verify-email", request.url));
   }
 

@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 import { exchangeAccessToken } from "./exchange-access-token";
 
 interface SessionType {
+  userId: string;
   cookie: string;
   accessToken: string;
   refreshToken: string | null | undefined;
@@ -77,6 +78,7 @@ export async function getSession(): Promise<SessionType> {
     });
 
     return {
+      userId: payload.sub ?? "",
       cookie: `access_token=${accessToken};refresh_token=${refreshToken}`,
       accessToken: accessToken,
       refreshToken: refreshToken,
@@ -84,6 +86,7 @@ export async function getSession(): Promise<SessionType> {
   }
 
   return {
+    userId: payload.sub ?? "",
     cookie: `access_token=${accessToken};refresh_token=${refreshToken}`,
     accessToken: accessToken,
     refreshToken: refreshToken,

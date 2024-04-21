@@ -19,6 +19,7 @@ import {
 } from "@nextui-org/navbar";
 import Image from "next/image";
 import Link from "next/link";
+import NProgress from "nprogress";
 
 export default function Header({ user }: { user?: User }) {
   const accountView = () => {
@@ -43,11 +44,18 @@ export default function Header({ user }: { user?: User }) {
                 <p className="font-semibold">{user.nickname}</p>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
+              {user.role !== "user" && (
+                <DropdownMenuItem asChild>
+                  <Link href="/admin">Dashboard</Link>
+                </DropdownMenuItem>
+              )}
               <DropdownMenuItem asChild>
                 <Link href="/profile">My Profile</Link>
               </DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={async () => {
+                  NProgress.start();
                   await clearAuthCookies();
                 }}
               >

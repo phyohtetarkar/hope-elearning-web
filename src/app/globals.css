@@ -183,9 +183,9 @@ body {
   display: block;
 } */
 
-.lucide {
-  stroke-width: 1.5px;
-}
+/* .lucide {
+  stroke-width: 2px;
+} */
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 .scrollbar-none::-webkit-scrollbar {

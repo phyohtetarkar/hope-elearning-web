@@ -1,41 +1,45 @@
 "use client";
+import { cn, debounce } from "@/lib/utils";
 import {
-  EditorBubble,
   EditorCommand,
   EditorCommandEmpty,
   EditorCommandItem,
   EditorCommandList,
   EditorContent,
+  EditorInstance,
   EditorRoot,
   JSONContent,
 } from "novel";
-import { useState } from "react";
-import { defaultExtensions } from "./extensions";
 import { ImageResizer, handleCommandNavigation } from "novel/extensions";
-import { slashCommand, suggestionItems } from "./slash-command";
-import { NodeSelector } from "./selectors/node-selector";
-import { LinkSelector } from "./selectors/link-selector";
-import { TextButtons } from "./selectors/text-buttons";
-import { ColorSelector } from "./selectors/color-selector";
-import GenerativeMenuSwitch from "./generative/generative-menu-switch";
+import { useMemo, useState } from "react";
 import { Separator } from "../ui/separator";
-import { cn } from "@/lib/utils";
+import { defaultExtensions } from "./extensions";
+import GenerativeMenuSwitch from "./generative/generative-menu-switch";
+import { ColorSelector } from "./selectors/color-selector";
+import { LinkSelector } from "./selectors/link-selector";
+import { NodeSelector } from "./selectors/node-selector";
+import { TextButtons } from "./selectors/text-buttons";
+import { slashCommand, suggestionItems } from "./slash-command";
 
 const extensions = [...defaultExtensions, slashCommand];
 
-export default function NovelEditor() {
-  const [content, setContent] = useState<JSONContent>();
+interface NovelEditorProps {
+  content?: JSONContent;
+  onChange?: (content: JSONContent) => void;
+}
 
+export default function NovelEditor({ content, onChange }: NovelEditorProps) {
   const [openNode, setOpenNode] = useState(false);
   const [openColor, setOpenColor] = useState(false);
   const [openLink, setOpenLink] = useState(false);
   const [openAI, setOpenAI] = useState(false);
 
-  //   const debouncedUpdates = useDebouncedCallback(async (editor: EditorInstance) => {
-  //     const json = editor.getJSON();
-  //     setContent(json);
-  //     setSaveStatus("Saved");
-  //   }, 500);
+  const debouncedUpdates = useMemo(() => {
+    return debounce((editor: EditorInstance) => {
+      const json = editor.getJSON();
+      onChange?.(json);
+    }, 1000);
+  }, [onChange]);
 
   return (
     <EditorRoot>
@@ -43,7 +47,7 @@ export default function NovelEditor() {
         initialContent={content}
         extensions={extensions}
         onUpdate={({ editor }) => {
-          // console.log(editor.getHTML());
+          onChange?.(editor.getJSON());
         }}
         slotAfter={<ImageResizer />}
         editorProps={{
