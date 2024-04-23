@@ -17,6 +17,4 @@ export async function deleteCategory(id: number) {
   });
 
   await validateResponse(resp);
-
-  return true;
 }

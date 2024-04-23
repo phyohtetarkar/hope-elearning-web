@@ -15,36 +15,48 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Tag } from "@/lib/models";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, LoaderCircle, Trash2 } from "lucide-react";
 import TagEdit from "./tag-edit";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { deleteTag } from "@/lib/actions";
 import { toast } from "react-toastify";
 import { parseErrorResponse } from "@/lib/parse-error-response";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function TagActionButtons({ tag }: { tag: Tag }) {
-  const [isOpen, setOpen] = useState(false);
+  const [isEditOpen, setEditOpen] = useState(false);
+  const [isAlertOpen, setAlertOpen] = useState(false);
+  const [isDeleting, setDeleting] = useState(false);
+
   const router = useRouter();
 
   const handleDelete = async () => {
     try {
-      const success = await deleteTag(tag.id);
-      if (success) {
-        router.refresh();
-        toast.success("Tag deleted successfully");
-      } else {
-        toast.error("Failed to delete tag");
-      }
+      setDeleting(true);
+      await deleteTag(tag.id);
+      toast.success("Tag deleted successfully");
+      router.refresh();
     } catch (error) {
       toast.error(parseErrorResponse(error));
+    } finally {
+      setDeleting(false);
     }
   };
 
   return (
     <div className="flex justify-start gap-2">
       <TooltipProvider>
-        <Dialog open={isOpen} onOpenChange={setOpen}>
+        <Dialog open={isEditOpen} onOpenChange={setEditOpen}>
           <Tooltip delayDuration={300}>
             <TooltipTrigger>
               <DialogTrigger asChild>
@@ -58,32 +70,47 @@ export default function TagActionButtons({ tag }: { tag: Tag }) {
             <TooltipContent>Edit tag</TooltipContent>
           </Tooltip>
 
-          <DialogContent
-            className="top-[25%]"
-            onInteractOutside={(evt) => evt.preventDefault()}
-          >
+          <DialogContent onInteractOutside={(evt) => evt.preventDefault()}>
             <DialogHeader>
               <DialogTitle>Edit Tag</DialogTitle>
             </DialogHeader>
-            <TagEdit data={tag} close={() => setOpen(false)} />
+            <TagEdit data={tag} close={() => setEditOpen(false)} />
           </DialogContent>
         </Dialog>
 
-        <Tooltip delayDuration={300}>
-          <TooltipTrigger>
-            <Button
-              variant="destructive"
-              size="icon"
-              asChild
-              onClick={handleDelete}
-            >
-              <span>
-                <Trash2 size={20} />
-              </span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Delete tag</TooltipContent>
-        </Tooltip>
+        <AlertDialog open={isAlertOpen} onOpenChange={setAlertOpen}>
+          <Tooltip delayDuration={300}>
+            <TooltipTrigger>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" size="icon" asChild>
+                  <span>
+                    <Trash2 size={20} />
+                  </span>
+                </Button>
+              </AlertDialogTrigger>
+            </TooltipTrigger>
+            <TooltipContent>Delete tag</TooltipContent>
+          </Tooltip>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Confirm Delete</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure to delete tag: &ldquo;{tag.name}&ldquo;?
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel disabled={isDeleting}>
+                Cancel
+              </AlertDialogCancel>
+              <Button onClick={handleDelete} disabled={isDeleting}>
+                {isDeleting && (
+                  <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                Continue
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </TooltipProvider>
     </div>
   );

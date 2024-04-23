@@ -15,40 +15,51 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Category } from "@/lib/models";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, LoaderCircle, Trash2 } from "lucide-react";
 import CategoryEdit from "./category-edit";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { deleteCategory } from "@/lib/actions";
 import { toast } from "react-toastify";
 import { parseErrorResponse } from "@/lib/parse-error-response";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function CategoryActionButtons({
   category,
 }: {
   category: Category;
 }) {
-  const [isOpen, setOpen] = useState(false);
+  const [isEditOpen, setEditOpen] = useState(false);
+  const [isAlertOpen, setAlertOpen] = useState(false);
+  const [isDeleting, setDeleting] = useState(false);
   const router = useRouter();
 
   const handleDelete = async () => {
     try {
-      const success = await deleteCategory(category.id);
-      if (success) {
-        router.refresh();
-        toast.success("Category deleted successfully");
-      } else {
-        toast.error("Failed to delete category");
-      }
+      setDeleting(true);
+      await deleteCategory(category.id);
+      toast.success("Category deleted successfully");
+      router.refresh();
     } catch (error) {
       toast.error(parseErrorResponse(error));
+    } finally {
+      setDeleting(false);
     }
   };
 
   return (
     <div className="flex justify-start gap-2">
       <TooltipProvider>
-        <Dialog open={isOpen} onOpenChange={setOpen}>
+        <Dialog open={isEditOpen} onOpenChange={setEditOpen}>
           <Tooltip delayDuration={300}>
             <TooltipTrigger>
               <DialogTrigger asChild>
@@ -62,32 +73,47 @@ export default function CategoryActionButtons({
             <TooltipContent>Edit category</TooltipContent>
           </Tooltip>
 
-          <DialogContent
-            className="top-[25%]"
-            onInteractOutside={(evt) => evt.preventDefault()}
-          >
+          <DialogContent onInteractOutside={(evt) => evt.preventDefault()}>
             <DialogHeader>
               <DialogTitle>Edit Category</DialogTitle>
             </DialogHeader>
-            <CategoryEdit data={category} close={() => setOpen(false)} />
+            <CategoryEdit data={category} close={() => setEditOpen(false)} />
           </DialogContent>
         </Dialog>
 
-        <Tooltip delayDuration={300}>
-          <TooltipTrigger>
-            <Button
-              variant="destructive"
-              size="icon"
-              asChild
-              onClick={handleDelete}
-            >
-              <span>
-                <Trash2 size={20} />
-              </span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Delete category</TooltipContent>
-        </Tooltip>
+        <AlertDialog open={isAlertOpen} onOpenChange={setAlertOpen}>
+          <Tooltip delayDuration={300}>
+            <TooltipTrigger>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" size="icon" asChild>
+                  <span>
+                    <Trash2 size={20} />
+                  </span>
+                </Button>
+              </AlertDialogTrigger>
+            </TooltipTrigger>
+            <TooltipContent>Delete category</TooltipContent>
+          </Tooltip>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Confirm Delete</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure to delete category: &ldquo;{category.name}&ldquo;?
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel disabled={isDeleting}>
+                Cancel
+              </AlertDialogCancel>
+              <Button onClick={handleDelete} disabled={isDeleting}>
+                {isDeleting && (
+                  <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                Continue
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </TooltipProvider>
     </div>
   );

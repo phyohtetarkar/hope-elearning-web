@@ -19,10 +19,7 @@ export default function SkillCreateButton() {
         <Button color="primary">New skill</Button>
       </DialogTrigger>
 
-      <DialogContent
-        className="top-[25%]"
-        onInteractOutside={(evt) => evt.preventDefault()}
-      >
+      <DialogContent onInteractOutside={(evt) => evt.preventDefault()}>
         <DialogHeader>
           <DialogTitle>Create Skill</DialogTitle>
         </DialogHeader>

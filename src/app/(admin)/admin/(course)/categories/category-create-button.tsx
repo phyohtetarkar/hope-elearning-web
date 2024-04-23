@@ -19,10 +19,7 @@ export default function CategoryCreateButton() {
         <Button color="primary">New category</Button>
       </DialogTrigger>
 
-      <DialogContent
-        className="top-[25%]"
-        onInteractOutside={(evt) => evt.preventDefault()}
-      >
+      <DialogContent onInteractOutside={(evt) => evt.preventDefault()}>
         <DialogHeader>
           <DialogTitle>Create Category</DialogTitle>
         </DialogHeader>

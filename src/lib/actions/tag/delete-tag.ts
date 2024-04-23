@@ -17,6 +17,4 @@ export async function deleteTag(id: number) {
   });
 
   await validateResponse(resp);
-
-  return true;
 }

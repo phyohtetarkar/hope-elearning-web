@@ -72,7 +72,6 @@ export default function SkillActionButtons({ skill }: { skill: Skill }) {
           </Tooltip>
 
           <DialogContent
-            className="top-[25%]"
             onInteractOutside={(evt) => evt.preventDefault()}
           >
             <DialogHeader>
