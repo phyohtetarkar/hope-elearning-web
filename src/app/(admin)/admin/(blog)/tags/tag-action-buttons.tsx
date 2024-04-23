@@ -18,9 +18,28 @@ import { Tag } from "@/lib/models";
 import { Edit, Trash2 } from "lucide-react";
 import TagEdit from "./tag-edit";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { deleteTag } from "@/lib/actions";
+import { toast } from "react-toastify";
+import { parseErrorResponse } from "@/lib/parse-error-response";
 
 export default function TagActionButtons({ tag }: { tag: Tag }) {
   const [isOpen, setOpen] = useState(false);
+  const router = useRouter();
+
+  const handleDelete = async () => {
+    try {
+      const success = await deleteTag(tag.id);
+      if (success) {
+        router.refresh();
+        toast.success("Tag deleted successfully");
+      } else {
+        toast.error("Failed to delete tag");
+      }
+    } catch (error) {
+      toast.error(parseErrorResponse(error));
+    }
+  };
 
   return (
     <div className="flex justify-start gap-2">
@@ -52,7 +71,12 @@ export default function TagActionButtons({ tag }: { tag: Tag }) {
 
         <Tooltip delayDuration={300}>
           <TooltipTrigger>
-            <Button variant="destructive" size="icon" asChild>
+            <Button
+              variant="destructive"
+              size="icon"
+              asChild
+              onClick={handleDelete}
+            >
               <span>
                 <Trash2 size={20} />
               </span>

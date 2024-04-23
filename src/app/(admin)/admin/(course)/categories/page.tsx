@@ -2,6 +2,7 @@ import Pagination from "@/components/ui/pagination";
 import {
   Table,
   TableBody,
+  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -9,8 +10,29 @@ import {
 } from "@/components/ui/table";
 import CategoryActionButtons from "./category-action-buttons";
 import CategoryCreateButton from "./category-create-button";
+import { API_URL } from "@/lib/constants";
+import { cookies } from "next/headers";
+import { validateResponse } from "@/lib/validate-response";
+import { Category, Page } from "@/lib/models";
 
-export default function Categories() {
+const getCategories = async () => {
+  const url = `${API_URL}/admin/categories`;
+
+  const resp = await fetch(url, {
+    headers: {
+      Cookie: cookies().toString(),
+    },
+    cache: "no-store",
+  });
+
+  await validateResponse(resp);
+
+  return (await resp.json()) as Page<Category>;
+};
+
+export default async function Categories() {
+  const data = await getCategories();
+
   return (
     <>
       <div className="flex justify-between mb-4">
@@ -18,6 +40,11 @@ export default function Categories() {
         <CategoryCreateButton />
       </div>
       <Table>
+        {data.contents.length === 0 && (
+          <TableCaption className="text-start">
+            No categories found
+          </TableCaption>
+        )}
         <TableHeader>
           <TableRow>
             <TableHead className="uppercase min-w-[300px] w-full">
@@ -28,19 +55,27 @@ export default function Categories() {
           </TableRow>
         </TableHeader>
         <TableBody className="border-b">
-          <TableRow>
-            <TableCell>
-              <h6>Data Analysis</h6>
-            </TableCell>
-            <TableCell className="text-sliver text-sm">data-analysis</TableCell>
-            <TableCell>
-              <CategoryActionButtons />
-            </TableCell>
-          </TableRow>
+          {data.contents.map((c, i) => {
+            return (
+              <TableRow key={c.id}>
+                <TableCell>
+                  <h6>{c.name}</h6>
+                </TableCell>
+                <TableCell className="text-sliver text-sm">{c.slug}</TableCell>
+                <TableCell>
+                  <CategoryActionButtons category={c} />
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
+
       <div className="mt-8 flex justify-end">
-        <Pagination totalPage={10} currentPage={1} />
+        <Pagination
+          totalPage={data.currentPage}
+          currentPage={data.currentPage}
+        />
       </div>
     </>
   );

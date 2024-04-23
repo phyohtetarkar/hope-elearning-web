@@ -9,10 +9,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import CategoryEdit from "./category-edit";
+import { useState } from "react";
 
 export default function CategoryCreateButton() {
+  const [isOpen, setOpen] = useState(false);
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button color="primary">New category</Button>
       </DialogTrigger>
@@ -24,7 +26,7 @@ export default function CategoryCreateButton() {
         <DialogHeader>
           <DialogTitle>Create Category</DialogTitle>
         </DialogHeader>
-        <CategoryEdit />
+        <CategoryEdit close={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
   );

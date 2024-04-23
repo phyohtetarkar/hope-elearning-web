@@ -9,10 +9,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import SkillEdit from "./skill-edit";
+import { useState } from "react";
 
 export default function SkillCreateButton() {
+  const [isOpen, setOpen] = useState(false);
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button color="primary">New skill</Button>
       </DialogTrigger>
@@ -24,7 +26,7 @@ export default function SkillCreateButton() {
         <DialogHeader>
           <DialogTitle>Create Skill</DialogTitle>
         </DialogHeader>
-        <SkillEdit />
+        <SkillEdit close={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
   );
