@@ -17,6 +17,4 @@ export async function deleteSkill(id: number) {
   });
 
   await validateResponse(resp);
-
-  return true;
 }

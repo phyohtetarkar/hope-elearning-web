@@ -47,19 +47,24 @@ function SkillEdit({ data, close }: { data?: Skill; close?: () => void }) {
     <form
       onSubmit={(evt) => {
         evt.preventDefault();
-        handleSubmit(async (values) => {
-          try {
-            if (!values.id) {
-              await createSkill(values);
-            } else {
-              await updateSkill(values);
+        handleSubmit(
+          async (values) => {
+            try {
+              if (!values.id) {
+                await createSkill(values);
+              } else {
+                await updateSkill(values);
+              }
+              close?.();
+              router.refresh();
+            } catch (error) {
+              toast.error(parseErrorResponse(error));
             }
-            close?.();
-            router.refresh();
-          } catch (error) {
-            toast.error(parseErrorResponse(error));
+          },
+          (e) => {
+            console.log(e);
           }
-        })();
+        )();
       }}
     >
       <div className="gird grid-cols-1">

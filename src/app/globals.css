@@ -148,7 +148,7 @@
   }
 
   h6 {
-    @apply font-semibold;
+    @apply text-base font-semibold;
   }
 
   /* a {
