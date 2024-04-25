@@ -18,7 +18,7 @@ export default function Settings() {
     variant = "default",
   }: {
     icon: ReactNode;
-    title: ReactNode;
+    title: string;
     description?: string;
     variant?:
       | "default"
