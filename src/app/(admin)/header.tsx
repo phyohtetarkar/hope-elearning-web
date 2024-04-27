@@ -48,7 +48,7 @@ export default function Header() {
         {user && (
           <DropdownMenu>
             <DropdownMenuTrigger className="outline-none">
-              <div className="aspect-1 w-[32px] relative">
+              <div className="aspect-w-1 aspect-h-1 w-[32px]">
                 <Image
                   src={user.image ?? "/images/profile.png"}
                   alt="Avatar"

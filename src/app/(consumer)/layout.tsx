@@ -11,7 +11,6 @@ const getUser = async () => {
     headers: {
       Cookie: cookies().toString(),
     },
-    cache: "no-store",
   });
 
   return resp.ok ? ((await resp.json()) as User) : undefined;
@@ -27,7 +26,7 @@ export default async function ConsumerLayout({
   return (
     <AuthenticationContextProvider user={user}>
       <div className="flex h-full">
-        <Header  user={user}/>
+        <Header user={user} />
         <div className="flex flex-col grow overflow-y-auto mt-[65px]">
           <main className="grow">{children}</main>
           <Footer />

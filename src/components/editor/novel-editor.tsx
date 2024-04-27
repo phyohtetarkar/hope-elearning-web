@@ -1,4 +1,6 @@
 "use client";
+import "../../styles/codeblock.scss";
+
 import { cn, debounce } from "@/lib/utils";
 import {
   EditorCommand,
@@ -34,12 +36,10 @@ export default function NovelEditor({ content, onChange }: NovelEditorProps) {
   const [openLink, setOpenLink] = useState(false);
   const [openAI, setOpenAI] = useState(false);
 
-  const debouncedUpdates = useMemo(() => {
-    return debounce((editor: EditorInstance) => {
-      const json = editor.getJSON();
-      onChange?.(json);
-    }, 1000);
-  }, [onChange]);
+  const debouncedUpdate = debounce((editor: EditorInstance) => {
+    const json = editor.getJSON();
+    onChange?.(json);
+  }, 2000);
 
   return (
     <EditorRoot>
@@ -47,7 +47,7 @@ export default function NovelEditor({ content, onChange }: NovelEditorProps) {
         initialContent={content}
         extensions={extensions}
         onUpdate={({ editor }) => {
-          onChange?.(editor.getJSON());
+          debouncedUpdate(editor);
         }}
         slotAfter={<ImageResizer />}
         editorProps={{

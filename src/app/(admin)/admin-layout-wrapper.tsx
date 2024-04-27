@@ -20,6 +20,10 @@ export default function AdminLayoutWrapper({
     return <>{children}</>;
   }
 
+  if (pathname.match(/^\/admin\/courses\/.+/)) {
+    return <>{children}</>;
+  }
+
   return (
     <DrawerContextProvider>
       <div className="flex h-full">

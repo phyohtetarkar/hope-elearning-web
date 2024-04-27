@@ -1,8 +1,8 @@
 "use server";
 
+import { getSession } from "@/lib/auth";
 import * as jose from "jose";
 import { redirect } from "next/navigation";
-import { getSession } from "../auth";
 
 export async function sendVerificationEmail() {
   const session = await getSession();

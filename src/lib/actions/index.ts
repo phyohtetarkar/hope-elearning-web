@@ -1,6 +1,6 @@
-export * from "./apply-auth-cookies";
-export * from "./clear-auth-cookies";
-export * from "./send-verification-email";
+export * from "./auth/apply-auth-cookies";
+export * from "./auth/clear-auth-cookies";
+export * from "./auth/send-verification-email";
 
 export * from "./post/create-post";
 export * from "./post/update-post";

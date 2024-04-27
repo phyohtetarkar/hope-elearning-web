@@ -15,17 +15,14 @@ function CourseGridItem() {
   return (
     <Card className="overflow-hidden shadow-none">
       <CardContent className="p-0">
-        <div className="aspect-w-4 aspect-h-3">
+        <div className="aspect-w-16 aspect-h-9">
           <Image
             src="/images/course.jpg"
-            className="bg-primary"
+            className="bg-primary object-cover"
             alt=""
             priority
             fill
             sizes="33vh"
-            style={{
-              objectFit: "cover",
-            }}
           />
         </div>
         <div className="flex flex-col p-4">

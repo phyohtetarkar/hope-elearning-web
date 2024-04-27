@@ -34,11 +34,8 @@ export default function Home() {
                     alt=""
                     fill
                     sizes="50vh"
-                    className="drop-shadow-xl"
+                    className="drop-shadow-xl object-contain"
                     priority
-                    style={{
-                      objectFit: "contain",
-                    }}
                   />
                 </div>
               </div>

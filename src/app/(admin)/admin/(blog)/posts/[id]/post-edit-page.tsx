@@ -1,6 +1,13 @@
 "use client";
+import { AuthenticationContext } from "@/components/authentication-context-porvider";
 import { NovelEditor } from "@/components/editor";
-import { Input, Select, Textarea, TitleInput } from "@/components/forms";
+import {
+  Input,
+  ReactSelect,
+  Select,
+  Textarea,
+  TitleInput,
+} from "@/components/forms";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -16,20 +23,24 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { PostAccess, Tag, User } from "@/lib/models";
+import { Audit, Post, PostVisibility, Tag, User } from "@/lib/models";
+import { parseErrorResponse } from "@/lib/parse-error-response";
 import { cn, debounce, setStringToSlug } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  Cloud,
   CloudUpload,
-  FileCheck2,
   ImagePlus,
   LoaderCircle,
   PanelRight,
+  Trash2,
   X,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useContext, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import { z } from "zod";
 
 const schema = z.object({
@@ -40,20 +51,33 @@ const schema = z.object({
     message: "Please enter post slug",
   }),
   excerpt: z.string().optional(),
-  access: z.custom<PostAccess>((v) => {
+  visibility: z.custom<PostVisibility>((v) => {
     return typeof v === "string" ? /public|member|paid_member/.test(v) : false;
   }),
   lexical: z.string().optional(),
-  updatedAt: z.string().datetime(),
-  authors: z.custom<User>().array().nonempty({
+  authors: z.custom<User>().array().min(1, {
     message: "Required at least one author",
   }),
   tags: z.custom<Tag>().array(),
+  audit: z.custom<Audit>().optional(),
 });
 
 type PostUpdateForm = z.infer<typeof schema>;
 
-export default function PostEditPage() {
+interface PostEditPageProps {
+  post: Post;
+  authors: User[];
+  tags: Tag[];
+}
+
+export default function PostEditPage({
+  post,
+  authors,
+  tags,
+}: PostEditPageProps) {
+  const { user } = useContext(AuthenticationContext);
+  const [data, setData] = useState(post);
+
   const [isOpenSettings, setOpenSettings] = useState(false);
   const [isStale, setStale] = useState(false);
   const [isSaving, setSaving] = useState(false);
@@ -67,19 +91,39 @@ export default function PostEditPage() {
     getValues,
   } = useForm<PostUpdateForm>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      authors: [],
-    },
+    values: data,
   });
 
-  const handleUpdatePost = (values: PostUpdateForm) => {
-    console.log(values);
-    setStale(false);
+  const handleUpdate = async () => {
+    if (isSaving) {
+      setStale(true);
+      return;
+    }
+    
+    try {
+      setSaving(true);
+      setStale(false);
+      const { slug, authors, tags, audit, ...body } = getValues();
+      
+      // const result = await updatePost({
+      //   ...body,
+      //   slug: !slug ? data.slug : slug,
+      //   authors: authors.length > 0 ? authors.map((v) => v.id) : undefined,
+      //   tags: tags.map((v) => v.id),
+      //   updatedAt: audit?.updatedAt,
+      // });
+      // setData(result);
+      console.log("update post");
+      await new Promise((resolve) => setTimeout(() => resolve(true), 3000));
+    } catch (error) {
+      toast.error(parseErrorResponse(error));
+      setStale(true);
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const debouncedUpdate = useMemo(() => {
-    return debounce(handleUpdatePost, 1000);
-  }, []);
+  const debouncedUpdate = debounce(handleUpdate, 2000);
 
   const saveStateView = () => {
     if (isSaving) {
@@ -92,13 +136,51 @@ export default function PostEditPage() {
       return <CloudUpload className="flex-shrink-0 text-sliver" />;
     }
 
-    return <FileCheck2 className="flex-shrink-0 text-success" />;
+    return <Cloud className="flex-shrink-0 text-success" />;
   };
+
+  const coverImageView = () => {
+    if (!data.cover) {
+      return (
+        <Button variant="outline" size="sm" className="mb-8 rounded-full">
+          <ImagePlus size={20} className="mr-2" />
+          Add Cover
+        </Button>
+      );
+    }
+    return (
+      <div className="relative mb-8">
+        <Image
+          src={data.cover ?? "/images/course.jpg"}
+          alt="Cover"
+          width={0}
+          height={0}
+          sizes="100vw"
+          priority
+          style={{
+            objectFit: "cover",
+            width: "100%",
+            height: "auto",
+          }}
+        />
+        <Button variant="light" size="icon" className="absolute top-4 right-4">
+          <Trash2 size={20} />
+        </Button>
+      </div>
+    );
+  };
+
+  if (!user) {
+    return null;
+  }
+
+  const isAdminOrOwner = user.role === "admin" || user.role === "owner";
+  const isContributor = user.role === "contributor";
 
   return (
     <>
       <div className="flex flex-col">
-        <div className="flex gap-3 items-center fixed top-0 inset-x-0 bg-white px-4 h-[65px] border-b z-10">
+        <nav className="flex gap-3 items-center fixed top-0 inset-x-0 bg-white px-4 h-[65px] border-b z-10">
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
@@ -108,15 +190,15 @@ export default function PostEditPage() {
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbPage className="text-nowrap">
-                  Post Edit
+                <BreadcrumbPage className="text-nowrap font-medium">
+                  {`${post.status[0].toUpperCase()}${post.status.substring(1)}`}
                 </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
           <div className="flex-1"></div>
           {saveStateView()}
-          <Button>Publish</Button>
+          <Button disabled={isSaving}>Publish</Button>
           <TooltipProvider>
             <Tooltip delayDuration={300}>
               <TooltipTrigger className="ms-auto">
@@ -134,13 +216,10 @@ export default function PostEditPage() {
               <TooltipContent>Post settings</TooltipContent>
             </Tooltip>
           </TooltipProvider>
-        </div>
+        </nav>
         <div className="grow fixed inset-0 overflow-y-auto mt-[65px]">
           <div className="container max-w-3xl mt-7 mb-10">
-            <Button variant="outline" size="sm" className="mb-8 rounded-full">
-              <ImagePlus size={20} className="mr-2" />
-              Add Cover
-            </Button>
+            {coverImageView()}
             <div className="mb-6">
               <Controller
                 control={control}
@@ -150,17 +229,17 @@ export default function PostEditPage() {
                     <TitleInput
                       placeholder="Post title"
                       className="text-gray-800"
+                      value={field.value ?? ""}
+                      spellCheck={false}
+                      maxLength={2000}
                       onChange={(evt) => {
+                        field.onChange(evt);
                         const value = evt.target.value;
-                        setValue("title", value);
                         const slug = setStringToSlug(value);
-                        if (slug) {
-                          setValue("slug", slug);
+                        setValue("slug", slug);
+                        if (data.status === "draft") {
+                          debouncedUpdate(undefined);
                         }
-                        if (!isStale) {
-                          setStale(true);
-                        }
-                        debouncedUpdate(getValues());
                       }}
                     />
                   );
@@ -168,12 +247,12 @@ export default function PostEditPage() {
               />
             </div>
             <NovelEditor
+              content={data.lexical ? JSON.parse(data.lexical) : undefined}
               onChange={(json) => {
                 setValue("lexical", JSON.stringify(json));
-                if (!isStale) {
-                  setStale(true);
+                if (data.status === "draft") {
+                  handleUpdate();
                 }
-                debouncedUpdate(getValues());
               }}
             />
           </div>
@@ -181,6 +260,9 @@ export default function PostEditPage() {
         <div
           onClick={(evt) => {
             setOpenSettings(false);
+            if (isStale && data.status === "draft") {
+              handleUpdate();
+            }
           }}
           className={cn(
             "bg-black fixed inset-0 z-40",
@@ -202,42 +284,134 @@ export default function PostEditPage() {
       >
         <div className="flex items-center gap-2 px-4 h-[65px] border-b">
           <h4 className="text-nowrap">Post settings</h4>
-          <button className="ms-auto" onClick={() => setOpenSettings(false)}>
+          <button
+            className="ms-auto"
+            onClick={() => {
+              setOpenSettings(false);
+              if (isStale && data.status === "draft") {
+                handleUpdate();
+              }
+            }}
+          >
             <X className="text-sliver" />
           </button>
         </div>
         <div className="grow overflow-y-auto scrollbar-custom">
           <div className="flex flex-col h-full p-4 pb-0">
-            <Input
-              label="Slug"
-              type="text"
-              wrapperClass="mb-4"
-              placeholder="Enter post slug"
-              {...register("slug")}
-              error={errors.slug?.message}
+            <Controller
+              control={control}
+              name="slug"
+              render={({ field, fieldState: { error } }) => {
+                return (
+                  <Input
+                    label="Slug"
+                    type="text"
+                    wrapperClass="mb-4"
+                    placeholder="Enter post slug"
+                    value={field.value}
+                    onChange={(evt) => {
+                      const slug = setStringToSlug(evt.target.value);
+                      setValue("slug", slug, {
+                        shouldValidate: true,
+                      });
+                      setStale(true);
+                    }}
+                    error={error?.message}
+                  />
+                );
+              }}
             />
-            <Select
-              label="Access"
-              wrapperClass="mb-4"
-              {...register("access")}
-              error={errors.access?.message}
-            >
-              <option value="public">Public</option>
-              <option value="member">Member only</option>
-              <option value="paid_member">Paid member only</option>
-            </Select>
+            {isAdminOrOwner && (
+              <Select
+                label="Visibility"
+                wrapperClass="mb-4"
+                {...register("visibility", {
+                  onChange: (evt) => {
+                    setStale(true);
+                  },
+                })}
+                error={errors.visibility?.message}
+              >
+                <option value="public">Public</option>
+                <option value="member">Member only</option>
+                <option value="paid_member">Paid member only</option>
+              </Select>
+            )}
             <Textarea
               label="Excerpt"
               wrapperClass="mb-4"
               className="resize-none"
               placeholder=""
-              rows={4}
-              {...register("excerpt")}
+              rows={3}
+              {...register("excerpt", {
+                onChange: (evt) => {
+                  setStale(true);
+                },
+              })}
             />
-            <div className="grow"></div>
-            <Button variant="destructive" className="mt-auto">
-              Delete post
-            </Button>
+            <Controller
+              control={control}
+              name="tags"
+              render={({ field, fieldState: { error } }) => {
+                return (
+                  <ReactSelect<Tag, true>
+                    label="Tags"
+                    wrapperClass="mb-4"
+                    value={field.value}
+                    options={tags}
+                    getOptionLabel={(op) => op.name}
+                    getOptionValue={(op) => `${op.id}`}
+                    onChange={(newValue, action) => {
+                      if (newValue instanceof Array) {
+                        setValue("tags", [...newValue]);
+                      } else {
+                        setValue("tags", []);
+                      }
+                      setStale(true);
+                    }}
+                    isMulti
+                    error={error?.message}
+                    isClearable={false}
+                  />
+                );
+              }}
+            />
+
+            {isAdminOrOwner && (
+              <Controller
+                control={control}
+                name="authors"
+                render={({ field, fieldState: { error } }) => {
+                  return (
+                    <ReactSelect<User, true>
+                      label="Authors"
+                      value={field.value}
+                      options={authors}
+                      getOptionLabel={(op) => op.nickname}
+                      getOptionValue={(op) => `${op.id}`}
+                      onChange={(newValue, action) => {
+                        if (newValue instanceof Array) {
+                          setValue("authors", [...newValue], {
+                            shouldValidate: true,
+                          });
+                          newValue.length > 0 && setStale(true);
+                        } else {
+                          setValue("authors", [], {
+                            shouldValidate: true,
+                          });
+                        }
+                      }}
+                      isMulti
+                      error={error?.message}
+                      isClearable={false}
+                    />
+                  );
+                }}
+              />
+            )}
+
+            <div className="grow mt-6"></div>
+            <Button variant="destructive">Delete post</Button>
             <div className="pb-4"></div>
           </div>
         </div>

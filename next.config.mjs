@@ -5,6 +5,12 @@ const nextConfig = {
       fullUrl: true,
     },
   },
+  experimental: {
+    staleTimes: {
+      dynamic: 1,
+      static: 180,
+    },
+  },
   images: {
     remotePatterns: [
       {
@@ -16,6 +22,15 @@ const nextConfig = {
         hostname: "**",
       },
     ],
+  },
+  async redirects() {
+    return [
+      {
+        source: "/admin/courses/:id/lessons",
+        destination: "/admin/courses/:id",
+        permanent: true,
+      },
+    ];
   },
 };
 

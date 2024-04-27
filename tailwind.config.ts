@@ -11,6 +11,9 @@ const config = {
     "./node_modules/@nextui-org/theme/dist/components/(navbar|pagination|listbox).js",
   ],
   prefix: "",
+  corePlugins: {
+    aspectRatio: false,
+  },
   theme: {
     fontFamily: {
       sans: ["Inter", ...defaultTheme.fontFamily.sans],

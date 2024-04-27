@@ -2,6 +2,7 @@
 
 import { getSession } from "@/lib/auth";
 import { API_URL } from "@/lib/constants";
+import { Post } from "@/lib/models";
 import { validateResponse } from "@/lib/validate-response";
 
 export async function updatePost(body: object) {
@@ -20,5 +21,5 @@ export async function updatePost(body: object) {
 
   await validateResponse(resp);
 
-  return (await resp.json()) as number;
+  return (await resp.json()) as Post;
 }

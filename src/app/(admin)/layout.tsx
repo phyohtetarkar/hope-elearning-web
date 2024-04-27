@@ -12,16 +12,15 @@ const getUser = async () => {
     headers: {
       Cookie: cookies().toString(),
     },
-    cache: "no-store",
   });
 
   if (resp.status === 401) {
-    revalidatePath("/", 'layout');
+    revalidatePath("/", "layout");
     redirect("/login");
   }
 
   if (!resp.ok) {
-    revalidatePath("/admin", 'layout');
+    revalidatePath("/admin", "layout");
     redirect("/");
   }
 
@@ -36,6 +35,8 @@ export default async function AdminLayout({
   const user = await getUser();
 
   if (user.role === "user") {
+    revalidatePath("/admin", 'layout')
+    redirect("/");
   }
 
   return (

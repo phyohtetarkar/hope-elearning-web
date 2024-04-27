@@ -22,21 +22,17 @@ import { validateResponse } from "@/lib/validate-response";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Edit } from "lucide-react";
-import Link from "next/link";
-import PostFilter from "./posts-filter";
 import { cookies } from "next/headers";
+import Link from "next/link";
 import PostCreateButton from "./post-create-button";
+import PostFilter from "./posts-filter";
 
 interface Props {
   searchParams: { [key: string]: string | undefined };
 }
 
 const getPosts = async ({ searchParams }: Props) => {
-  const { status, access } = searchParams;
-  const query = buildQueryParams({
-    status: status,
-    access: access,
-  });
+  const query = buildQueryParams({ ...searchParams, limit: 10 });
 
   const url = `${API_URL}/admin/posts${query}`;
 
@@ -124,7 +120,7 @@ export default async function Posts(props: Props) {
 
       <div className="mt-8 flex justify-end">
         <Pagination
-          totalPage={data.currentPage}
+          totalPage={data.totalPage}
           currentPage={data.currentPage}
         />
       </div>

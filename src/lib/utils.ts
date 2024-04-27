@@ -38,7 +38,10 @@ export function formatTimestamp(timestamp?: number | string, withTime = false) {
   return date.format("MMM DD, YYYY");
 }
 
-export function debounce<I, R>(callback: (input: I) => R | Promise<R>, timeout = 2000) {
+export function debounce<I, R>(
+  callback: (input: I) => R | Promise<R>,
+  timeout = 2000
+) {
   if (typeof window === "undefined") {
     return () => {};
   }
@@ -79,10 +82,12 @@ export function setZeroOrNumber(v: any) {
 }
 
 export function setStringToSlug(v?: string) {
-  return v
-    ?.replaceAll(/[^\w-\s]*/g, "")
-    .replaceAll(/\s+/g, "-")
-    .toLowerCase();
+  return (
+    v
+      ?.replaceAll(/[^\w-\s]*/g, "")
+      .replaceAll(/\s+/g, "-")
+      .toLowerCase() ?? ""
+  );
 }
 
 export function buildQueryParams(params: any) {

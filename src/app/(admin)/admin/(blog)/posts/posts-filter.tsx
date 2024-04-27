@@ -10,7 +10,9 @@ export default function PostFilter() {
   const sp = useSearchParams();
 
   const [status, setStatus] = useState<string>(sp.get("status") ?? "");
-  const [access, setAccess] = useState<string>(sp.get("access") ?? "");
+  const [visibility, setVisibility] = useState<string>(
+    sp.get("visibility") ?? ""
+  );
 
   return (
     <div className="flex flex-wrap gap-3 mb-4">
@@ -28,25 +30,25 @@ export default function PostFilter() {
           router.push(`?${params.toString()}`);
         }}
       >
-        <option value="">All posts</option>
+        <option value="">All status</option>
         <option value="draft">Draft posts</option>
         <option value="published">Published posts</option>
       </Select>
       <Select
-        value={access}
+        value={visibility}
         onChange={(evt) => {
           const params = new URLSearchParams(sp.toString());
           if (evt.target.value) {
-            params.set("access", evt.target.value);
+            params.set("visibility", evt.target.value);
           } else {
-            params.delete("access");
+            params.delete("visibility");
           }
-          setAccess(evt.target.value);
+          setVisibility(evt.target.value);
           NProgress.start();
           router.push(`?${params.toString()}`);
         }}
       >
-        <option value="">All access</option>
+        <option value="">All visibility</option>
         <option value="public">Public</option>
         <option value="member">Member only</option>
         <option value="paid_member">Paid member only</option>

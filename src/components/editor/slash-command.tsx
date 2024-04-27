@@ -119,7 +119,12 @@ export const suggestionItems = createSuggestionItems([
     searchTerms: ["codeblock"],
     icon: <Code size={18} />,
     command: ({ editor, range }) =>
-      editor.chain().focus().deleteRange(range).toggleCodeBlock().run(),
+      editor
+        .chain()
+        .focus()
+        .deleteRange(range)
+        .toggleCodeBlock({ language: "plaintext" })
+        .run(),
   },
   {
     title: "Divider",

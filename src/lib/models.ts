@@ -1,6 +1,6 @@
 export type UserRole = "user" | "contributor" | "author" | "admin" | "owner";
 export type PostStatus = "draft" | "published" | "disabled";
-export type PostAccess = "public" | "member" | "paid_member";
+export type PostVisibility = "public" | "member" | "paid_member";
 
 export interface Page<T> {
   contents: T[];
@@ -31,10 +31,10 @@ export interface Post {
   excerpt?: string;
   lexical?: string;
   status: PostStatus;
-  access: PostAccess;
+  visibility: PostVisibility;
   featured: boolean;
   authors: User[];
-  tags?: Tag[];
+  tags: Tag[];
   audit?: Audit;
 }
 

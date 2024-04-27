@@ -128,6 +128,7 @@ export default function SideMenu() {
             <ListboxItem
               key="courses"
               variant="flat"
+              as={Link}
               href="/admin/courses"
               startContent={<GraduationCap size={iconSize} />}
               color="primary"
@@ -137,6 +138,7 @@ export default function SideMenu() {
             <ListboxItem
               key="categories"
               variant="flat"
+              as={Link}
               href="/admin/categories"
               startContent={<FolderClosed size={iconSize} />}
               color="primary"
@@ -146,6 +148,7 @@ export default function SideMenu() {
             <ListboxItem
               key="skills"
               variant="flat"
+              as={Link}
               href="/admin/skills"
               startContent={<Hash size={iconSize} />}
               color="primary"
@@ -157,6 +160,7 @@ export default function SideMenu() {
           <ListboxItem
             key="settings"
             variant="flat"
+            as={Link}
             href="/admin/settings"
             startContent={<Settings size={iconSize} />}
             color="primary"

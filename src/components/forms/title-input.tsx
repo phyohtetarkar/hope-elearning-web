@@ -9,7 +9,12 @@ export interface InputProps
   wrapperClass?: string;
 }
 
-function TitleInput({ className, wrapperClass, onChange, ...props }: InputProps) {
+function TitleInput({
+  className,
+  wrapperClass,
+  onChange,
+  ...props
+}: InputProps) {
   const ref = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -20,6 +25,7 @@ function TitleInput({ className, wrapperClass, onChange, ...props }: InputProps)
         ta.style.height = `${ta.scrollHeight}px`;
       }
     };
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
