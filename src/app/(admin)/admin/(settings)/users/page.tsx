@@ -56,6 +56,7 @@ export default async function Users(props: Props) {
               User
             </TableHead>
             <TableHead className="uppercase min-w-[300px]">Email</TableHead>
+            <TableHead className="uppercase min-w-[150px]">Role</TableHead>
             <TableHead className="uppercase min-w-[150px]">Action</TableHead>
           </TableRow>
         </TableHeader>
@@ -64,9 +65,10 @@ export default async function Users(props: Props) {
             return (
               <TableRow key={u.id}>
                 <TableCell>
-                  <h6>{u.username}</h6>
+                  <h6>{u.nickname}</h6>
                 </TableCell>
                 <TableCell className="text-sliver text-sm">{u.email}</TableCell>
+                <TableCell className="text-sliver text-sm">{u.role}</TableCell>
                 <TableCell>
                   <UserActionButtons />
                 </TableCell>
