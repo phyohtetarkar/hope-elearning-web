@@ -49,7 +49,6 @@ export default function SideMenu() {
           <X className="text-sliver" />
         </button>
       </div>
-      {/* <Divider /> */}
       <div className="flex grow p-2 pb-0 overflow-y-auto scrollbar-custom">
         <Listbox
           aria-label="Admin menus"

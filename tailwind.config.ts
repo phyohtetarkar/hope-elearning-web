@@ -7,7 +7,6 @@ const config = {
   darkMode: ["class"],
   content: [
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
-    // "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
     "./node_modules/@nextui-org/theme/dist/components/(navbar|pagination|listbox).js",
   ],
   prefix: "",
@@ -25,7 +24,6 @@ const config = {
     extend: {
       colors: {
         transparent: "transparent",
-        // primary: colors.indigo[500],
         success: {
           foreground: "#ffffff",
           DEFAULT: "#00a524",
@@ -107,11 +105,11 @@ const config = {
     require("@tailwindcss/aspect-ratio"),
     nextui({
       layout: {
-        radius: {
-          small: "2px", // rounded-small
-          medium: "4px", // rounded-medium
-          large: "6px", // rounded-large
-        },
+        // radius: {
+        //   small: "2px", // rounded-small
+        //   medium: "4px", // rounded-medium
+        //   large: "6px", // rounded-large
+        // },
         // borderWidth: {
         //   small: "1px", // border-small
         //   medium: "1px", // border-medium

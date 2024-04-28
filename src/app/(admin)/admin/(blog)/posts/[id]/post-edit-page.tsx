@@ -44,7 +44,7 @@ import { toast } from "react-toastify";
 import { z } from "zod";
 
 const schema = z.object({
-  id: z.number(),
+  id: z.string(),
   cover: z.string().optional(),
   title: z.string().optional(),
   slug: z.string().min(1, {

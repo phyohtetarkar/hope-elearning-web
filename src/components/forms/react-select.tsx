@@ -31,12 +31,12 @@ export default function ReactSelect<
           control: ({ isFocused }) => {
             if (error) {
               return cn(
-                "flex py-1 rounded border border-danger",
+                "flex py-1 rounded-md border border-danger",
                 isFocused ? "ring-[4px] ring-danger/30" : ""
               );
             }
             return cn(
-              "flex py-1 rounded border",
+              "flex py-1 rounded-md border",
               isFocused ? "border-primary" : "border-gray-300"
             );
           },

@@ -26,13 +26,13 @@ const PasswordInput = forwardRef<HTMLInputElement, InputProps>(
             className={cn(
               `flex-grow ${
                 isInvalid ? "invalid-input" : "default-input"
-              } rounded-l z-10`,
+              } rounded-l-md z-10`,
               className
             )}
             {...props}
           />
           <div
-            className="border border-l-0 rounded-r px-3 flex items-center bg-gray-100"
+            className="border border-l-0 rounded-r-md px-3 flex items-center bg-gray-100"
             role="button"
             onClick={() => setIsPassword(!isPassword)}
           >

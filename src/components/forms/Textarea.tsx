@@ -22,7 +22,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, InputProps>(
         <textarea
           ref={ref}
           className={cn(
-            `${isInvalid ? "invalid-input" : "default-input"} rounded`,
+            `${isInvalid ? "invalid-input" : "default-input"} rounded-md`,
             className
           )}
           {...props}

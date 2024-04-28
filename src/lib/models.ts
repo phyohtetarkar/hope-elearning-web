@@ -24,7 +24,7 @@ export interface User {
 }
 
 export interface Post {
-  id: number;
+  id: string;
   cover?: string;
   title?: string;
   slug: string;

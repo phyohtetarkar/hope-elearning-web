@@ -2,12 +2,6 @@
 
 import { Input, Select } from "@/components/forms";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
@@ -16,8 +10,8 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
-import { Edit, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
+import CourseChaptersEdit from "./course-chapters-edit";
 
 interface CourseEditPageProps {}
 
@@ -72,20 +66,23 @@ export default function CourseEditPage({}: CourseEditPageProps) {
 
               <div className="flex flex-col">
                 <label className="font-medium mb-1">Cover photo</label>
-                <div className="aspect-w-16 aspect-h-9 border-2 border-dashed rounded-md bg-gray-50">
-                  {/* <Image
-                  alt="Cover"
-                  src={"/images/placeholder.jpeg"}
-                  fill
-                  sizes="100vh"
-                  priority
-                  className="object-cover p-1"
-                /> */}
-                  <div className="flex flex-col items-center justify-center">
+                <div className="aspect-w-3 aspect-h-1 border-2 border-dashed rounded-md bg-gray-50">
+                  <div className="flex justify-center p-1">
+                    {/* <Image
+                      alt="Cover"
+                      src={"/images/placeholder.jpeg"}
+                      width={0}
+                      height={0}
+                      sizes="100vw"
+                      priority
+                      className="object-cover h-full w-auto"
+                    /> */}
+                  </div>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center">
                     <Button variant="link" className="font-semibold">
                       Upload image
                     </Button>
-                    <span className="text-sm text-sliver">
+                    <span className="text-sm text-sliver text-center">
                       PNG or JPG up to 300KB
                     </span>
                   </div>
@@ -100,88 +97,7 @@ export default function CourseEditPage({}: CourseEditPageProps) {
                 Curriculum
               </legend>
 
-              <Accordion
-                type="single"
-                className="flex flex-col gap-2 bg-gray-100 rounded-md px-2"
-                collapsible
-              >
-                <AccordionItem value="chapter-1">
-                  <AccordionTrigger>
-                    <h6 className="text-sm">Chapter 1</h6>
-                  </AccordionTrigger>
-                  <AccordionContent className="flex flex-col gap-2">
-                    <div className="flex items-center gap-2 bg-white rounded p-2">
-                      <h6 className="text-sm">Lesson 1</h6>
-                      <div className="flex-1"></div>
-                      <Button
-                        size="icon"
-                        variant="default"
-                        className="size-8 flex-shrink-0"
-                        asChild
-                      >
-                        <Link href={`/admin/courses/1/lessons/1`}>
-                          <Edit className="size-4" />
-                        </Link>
-                      </Button>
-                      <Button
-                        size="icon"
-                        variant="destructive"
-                        className="size-8 flex-shrink-0"
-                      >
-                        <Trash2 className="size-4" />
-                      </Button>
-                    </div>
-                    <div className="flex items-center gap-2 bg-white rounded p-2">
-                      <h6 className="text-sm">Lesson 2</h6>
-                      <div className="flex-1"></div>
-                      <Button
-                        size="icon"
-                        variant="default"
-                        className="size-8 flex-shrink-0"
-                        asChild
-                      >
-                        <Link href={`/admin/courses/1/lessons/1`}>
-                          <Edit className="size-4" />
-                        </Link>
-                      </Button>
-                      <Button
-                        size="icon"
-                        variant="destructive"
-                        className="size-8 flex-shrink-0"
-                      >
-                        <Trash2 className="size-4" />
-                      </Button>
-                    </div>
-                    <div className="flex gap-2 mt-2">
-                      <Button
-                        size="icon"
-                        variant="outline"
-                        className="flex-shrink-0"
-                      >
-                        <Edit className="size-4" />
-                      </Button>
-                      <Button
-                        size="icon"
-                        variant="outline"
-                        className="flex-shrink-0"
-                      >
-                        <Plus className="size-4" />
-                      </Button>
-                      <Button
-                        size="icon"
-                        variant="outline"
-                        className="flex-shrink-0"
-                      >
-                        <Trash2 className="size-4 text-danger" />
-                      </Button>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-
-              <div>
-                <Button size="sm">Add chapter</Button>
-              </div>
+              <CourseChaptersEdit />
             </fieldset>
           </div>
         </div>

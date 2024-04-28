@@ -22,7 +22,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         <input
           ref={ref}
           className={cn(
-            `${isInvalid ? "invalid-input" : "default-input"} rounded`,
+            `${isInvalid ? "invalid-input" : "default-input"} rounded-md`,
             className
           )}
           {...props}
