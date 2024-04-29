@@ -144,16 +144,6 @@ export default function SideMenu() {
             >
               Categories
             </ListboxItem>
-            <ListboxItem
-              key="skills"
-              variant="flat"
-              as={Link}
-              href="/admin/skills"
-              startContent={<Hash size={iconSize} />}
-              color="primary"
-            >
-              Skills
-            </ListboxItem>
           </ListboxSection>
 
           <ListboxItem

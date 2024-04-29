@@ -51,10 +51,3 @@ export interface Category {
   name: string;
   audit?: Audit;
 }
-
-export interface Skill {
-  id: number;
-  slug: string;
-  name: string;
-  audit?: Audit;
-}
