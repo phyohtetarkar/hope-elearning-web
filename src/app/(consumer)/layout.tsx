@@ -25,9 +25,9 @@ export default async function ConsumerLayout({
 
   return (
     <AuthenticationContextProvider user={user}>
-      <div className="flex h-full">
+      <div className="flex flex-col h-full">
         <Header user={user} />
-        <div className="flex flex-col grow overflow-y-auto mt-[65px]">
+        <div className="flex flex-col grow mt-[65px] overflow-y-auto">
           <main className="grow">{children}</main>
           <Footer />
         </div>

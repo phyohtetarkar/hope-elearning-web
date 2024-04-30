@@ -1,3 +1,5 @@
+"use client";
+
 // export { default as TagInput } from "./TagInput";
 export { default as Input } from "./input";
 export { default as PasswordInput } from "./password-input";

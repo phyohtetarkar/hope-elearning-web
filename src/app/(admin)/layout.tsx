@@ -20,7 +20,7 @@ const getUser = async () => {
   }
 
   if (!resp.ok) {
-    revalidatePath("/admin", "layout");
+    revalidatePath("/", "layout");
     redirect("/");
   }
 
@@ -35,7 +35,7 @@ export default async function AdminLayout({
   const user = await getUser();
 
   if (user.role === "user") {
-    revalidatePath("/admin", 'layout')
+    revalidatePath("/", "layout");
     redirect("/");
   }
 

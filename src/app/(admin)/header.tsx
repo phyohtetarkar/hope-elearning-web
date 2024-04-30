@@ -48,13 +48,13 @@ export default function Header() {
         {user && (
           <DropdownMenu>
             <DropdownMenuTrigger className="outline-none">
-              <div className="aspect-w-1 aspect-h-1 w-[32px]">
+              <div className="size-[32px] relative">
                 <Image
                   src={user.image ?? "/images/profile.png"}
                   alt="Avatar"
                   fill
                   sizes="50vh"
-                  className="rounded-full border-1 border-transparent ring-1 ring-primary object-cover"
+                  className="rounded-full border-1 object-cover"
                 />
               </div>
             </DropdownMenuTrigger>

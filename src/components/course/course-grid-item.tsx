@@ -33,7 +33,7 @@ function CourseGridItem() {
             Introduction to docker
           </Link>
           <div className="flex items-center text-small mb-2 mt-1">
-            <div className="text-sliver">10 Sections</div>
+            <div className="text-sliver">10 Chapters</div>
             <div className="mx-2 text-sliver">&bull;</div>
             <div className="text-primary">Beginner</div>
           </div>

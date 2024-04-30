@@ -1,6 +1,15 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  if (pathname.match(/^\/learn\/.+\/lessons\/.+/)) {
+    return null;
+  }
+
   const copyRight = `© ${new Date().getFullYear()} ${
     process.env.NEXT_PUBLIC_APP_NAME
   }`;

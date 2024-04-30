@@ -3,8 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-export async function validateResponse(resp: Response) {
-  if (resp.status === 401) {
+export async function validateResponse(resp: Response, skipAuth?: boolean) {
+  if (resp.status === 401 && !skipAuth) {
     revalidatePath("/", 'layout');
     redirect("/login");
   }

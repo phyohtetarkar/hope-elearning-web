@@ -22,7 +22,7 @@ export default function Home() {
                   className="w-full lg:w-auto"
                   asChild
                 >
-                  <Link href="/admin">Browse courses</Link>
+                  <Link href="/courses/docker">Browse courses</Link>
                 </Button>
               </div>
             </div>

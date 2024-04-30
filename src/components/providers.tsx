@@ -6,6 +6,7 @@ import NProgress from "nprogress";
 import { Suspense, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import { NavigationEvents } from "./navigation-events";
+import { Toaster } from "./ui/toaster";
 
 type PushStateInput = [
   data: any,
@@ -18,7 +19,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     const handleAnchorClick = (event: MouseEvent) => {
       const targetUrl = (event.currentTarget as HTMLAnchorElement).href;
       const currentUrl = location.href;
-      if (targetUrl !== currentUrl) {
+      if (targetUrl !== currentUrl && !targetUrl.includes("#")) {
         NProgress.start();
       }
     };
@@ -64,6 +65,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         />
       </Suspense>
       <NextUIProvider className="h-full">{children}</NextUIProvider>
+      <Toaster />
     </>
   );
 }

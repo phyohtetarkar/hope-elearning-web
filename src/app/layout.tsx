@@ -26,7 +26,7 @@ export default function RootLayout({
       <head>
         <meta charSet="utf-8" />
       </head>
-      <body className="h-full m-0">
+      <body className="h-full m-0 overflow-hidden">
         <Providers>{children}</Providers>
       </body>
     </html>
