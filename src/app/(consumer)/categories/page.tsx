@@ -4,7 +4,7 @@ export default function Categories() {
   return (
     <div className="mb-5">
       <div className="bg-primary mb-4">
-        <div className="container h-48">
+        <div className="container h-[200px]">
           <div className="flex justify-center items-center h-full">
             <h1 className="text-white">Explore the catalog</h1>
           </div>
