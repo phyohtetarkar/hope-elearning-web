@@ -19,5 +19,6 @@ export async function deleteLesson(courseId: string, lessonId: string) {
 
   await validateResponse(resp);
 
-  revalidatePath(`/(admin)/admin/(course)/courses/[courseId]`, "page");
+  // revalidatePath(`/(admin)/admin/(course)/courses/[courseId]`, "page");
+  revalidatePath(`/admin/courses/${courseId}`);
 }

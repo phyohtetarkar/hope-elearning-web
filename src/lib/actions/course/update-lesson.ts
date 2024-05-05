@@ -21,5 +21,6 @@ export async function updateLesson(courseId: string, body: any) {
 
   await validateResponse(resp);
 
-  revalidatePath(`/(admin)/admin/(course)/courses/[courseId]/lessons/[lessonId]`, "page");
+  // revalidatePath(`/(admin)/admin/(course)/courses/[courseId]/lessons/[lessonId]`, "page");
+  revalidatePath(`/admin/courses/${courseId}/lessons/${body.id}`);
 }

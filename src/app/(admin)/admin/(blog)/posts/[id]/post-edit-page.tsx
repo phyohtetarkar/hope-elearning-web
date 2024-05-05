@@ -31,7 +31,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/use-toast";
-import { Audit, Post, PostVisibility, Tag, User } from "@/lib/models";
+import { useStaffs, useTags } from "@/lib/hooks";
+import { Post, PostVisibility, Tag, User } from "@/lib/models";
 import { parseErrorResponse } from "@/lib/parse-error-response";
 import { cn, debounce, formatTimestamp, setStringToSlug } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -75,22 +76,18 @@ type PostUpdateForm = z.infer<typeof schema>;
 
 interface PostEditPageProps {
   post: Post;
-  authors: User[];
-  tags: Tag[];
 }
 
-export default function PostEditPage({
-  post,
-  authors,
-  tags,
-}: PostEditPageProps) {
+export default function PostEditPage({ post }: PostEditPageProps) {
   const { user } = useContext(AuthenticationContext);
   const { toast } = useToast();
-  const [data, setData] = useState(post);
 
   const [isOpenSettings, setOpenSettings] = useState(false);
   const [isStale, setStale] = useState(false);
   const [isSaving, setSaving] = useState(false);
+
+  const { tags, isLoading: tagLoading } = useTags();
+  const { users, isLoading: userLoading } = useStaffs();
 
   const {
     control,
@@ -102,16 +99,16 @@ export default function PostEditPage({
   } = useForm<PostUpdateForm>({
     resolver: zodResolver(schema),
     defaultValues: {
-      id: data.id,
-      cover: data.cover,
-      title: data.title,
-      slug: data.slug,
-      excerpt: data.excerpt,
-      visibility: data.visibility,
-      lexical: data.lexical,
-      publishedAt: data.publishedAt,
-      authors: data.authors ?? [],
-      tags: data.tags ?? [],
+      id: post.id,
+      cover: post.cover,
+      title: post.title,
+      slug: post.slug,
+      excerpt: post.excerpt,
+      visibility: post.visibility,
+      lexical: post.lexical,
+      publishedAt: post.publishedAt,
+      authors: post.authors ?? [],
+      tags: post.tags ?? [],
     },
   });
 
@@ -128,12 +125,11 @@ export default function PostEditPage({
 
       // const result = await updatePost({
       //   ...body,
-      //   slug: !slug ? data.slug : slug,
+      //   slug: !slug.trim() ? post.slug : slug,
       //   authors: authors.length > 0 ? authors.map((v) => v.id) : undefined,
       //   tags: tags.map((v) => v.id),
-      //   updatedAt: audit?.updatedAt,
+      //   updatedAt: post.audit?.updatedAt,
       // });
-      // setData(result);
       console.log("update post");
       await new Promise((resolve) => setTimeout(() => resolve(true), 3000));
     } catch (error) {
@@ -165,7 +161,7 @@ export default function PostEditPage({
   };
 
   const coverImageView = () => {
-    if (!data.cover) {
+    if (!post.cover) {
       return (
         <Button variant="outline" size="sm" className="mb-8 rounded-full">
           <ImagePlus size={20} className="mr-2" />
@@ -176,7 +172,7 @@ export default function PostEditPage({
     return (
       <div className="relative mb-8">
         <Image
-          src={data.cover ?? "/images/course.jpg"}
+          src={post.cover ?? "/images/course.jpg"}
           alt="Cover"
           width={0}
           height={0}
@@ -216,7 +212,7 @@ export default function PostEditPage({
               <BreadcrumbSeparator />
               <BreadcrumbItem>
                 <BreadcrumbPage className="text-nowrap font-medium">
-                  {data.status === "published" ? (
+                  {post.status === "published" ? (
                     <Link
                       href={`/blogs/${post.slug}`}
                       target="_blank"
@@ -275,7 +271,7 @@ export default function PostEditPage({
                         const value = evt.target.value;
                         const slug = setStringToSlug(value);
                         setValue("slug", slug);
-                        if (data.status === "draft") {
+                        if (post.status === "draft") {
                           debouncedUpdate(undefined);
                         }
                       }}
@@ -285,10 +281,10 @@ export default function PostEditPage({
               />
             </div>
             <NovelEditor
-              content={data.lexical ? JSON.parse(data.lexical) : undefined}
+              content={post.lexical ? JSON.parse(post.lexical) : undefined}
               onChange={(json) => {
                 setValue("lexical", JSON.stringify(json));
-                if (data.status === "draft") {
+                if (post.status === "draft") {
                   handleUpdate();
                 }
               }}
@@ -298,7 +294,7 @@ export default function PostEditPage({
         <div
           onClick={(evt) => {
             setOpenSettings(false);
-            if (isStale && data.status === "draft") {
+            if (isStale && post.status === "draft") {
               handleUpdate();
             }
           }}
@@ -326,7 +322,7 @@ export default function PostEditPage({
             className="ms-auto"
             onClick={() => {
               setOpenSettings(false);
-              if (isStale && data.status === "draft") {
+              if (isStale && post.status === "draft") {
                 handleUpdate();
               }
             }}
@@ -488,7 +484,7 @@ export default function PostEditPage({
                     label="Tags"
                     wrapperClass="mb-4"
                     value={field.value}
-                    options={tags}
+                    options={tags?.contents}
                     getOptionLabel={(op) => op.name}
                     getOptionValue={(op) => `${op.id}`}
                     onChange={(newValue, action) => {
@@ -502,6 +498,7 @@ export default function PostEditPage({
                     isMulti
                     error={error?.message}
                     isClearable={false}
+                    isLoading={tagLoading}
                   />
                 );
               }}
@@ -516,7 +513,7 @@ export default function PostEditPage({
                     <ReactSelect<User, true>
                       label="Authors"
                       value={field.value}
-                      options={authors}
+                      options={users?.contents}
                       getOptionLabel={(op) => op.nickname}
                       getOptionValue={(op) => `${op.id}`}
                       onChange={(newValue, action) => {
@@ -534,6 +531,7 @@ export default function PostEditPage({
                       isMulti
                       error={error?.message}
                       isClearable={false}
+                      isLoading={userLoading}
                     />
                   );
                 }}

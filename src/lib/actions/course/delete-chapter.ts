@@ -19,5 +19,6 @@ export async function deleteChapter(courseId: string, chapterId: string) {
 
   await validateResponse(resp);
 
-  revalidatePath(`/(admin)/admin/(course)/courses/[courseId]`, "page");
+  // revalidatePath(`/(admin)/admin/(course)/courses/[courseId]`, "page");
+  revalidatePath(`/admin/courses/${courseId}`);
 }

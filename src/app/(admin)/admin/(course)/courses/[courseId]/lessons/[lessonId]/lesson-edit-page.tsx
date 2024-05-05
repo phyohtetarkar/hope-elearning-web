@@ -15,7 +15,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { updateLesson } from "@/lib/actions";
 import { Lesson } from "@/lib/models";
 import { parseErrorResponse } from "@/lib/parse-error-response";
-import { debounce } from "@/lib/utils";
+import { debounce, setStringToSlug } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Cloud, CloudUpload, LoaderCircle } from "lucide-react";
 import Link from "next/link";
@@ -64,7 +64,11 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
     try {
       setSaving(true);
       setStale(false);
-      const body = { ...values, updatedAt: lesson?.audit?.updatedAt };
+      const body = {
+        ...values,
+        slug: !values.slug?.trim() ? lesson.slug : values.slug,
+        updatedAt: lesson?.audit?.updatedAt,
+      };
       await updateLesson(lesson.course?.id ?? "", body);
     } catch (error) {
       setStale(true);
@@ -147,6 +151,8 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
                     onChange={(evt) => {
                       field.onChange(evt);
                       const value = evt.target.value;
+                      const slug = setStringToSlug(value);
+                      setValue("slug", slug);
                       if (lesson.status === "draft") {
                       }
                     }}

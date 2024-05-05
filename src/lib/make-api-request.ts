@@ -1,3 +1,5 @@
+import { API_URL } from "./constants";
+
 interface Props {
   url: string;
   options?: RequestInit;
@@ -11,24 +13,18 @@ export async function makeApiRequest({
     ...options,
   };
 
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
-
-  const response = await fetch(`${baseUrl}${url}`, requestOptions);
+  const requestUrl = `${API_URL}${url}`;
+  const response = await fetch(requestUrl, requestOptions);
 
   if (response.status === 401) {
     // access token has expired, try to refresh it
     const refreshResponse = await fetch(`/api/auth/refresh`, {
-      method: "POST"
+      method: "POST",
     });
     if (refreshResponse.ok) {
-    //   const { accessToken, refreshToken } = await refreshResponse.json();
+      //   const { accessToken, refreshToken } = await refreshResponse.json();
       // retry original request with new access token
-      const retryResponse = await makeApiRequest({
-        url,
-        options: {
-          ...requestOptions
-        },
-      });
+      const retryResponse = await fetch(requestUrl, requestOptions);
       return retryResponse;
     }
   }

@@ -2,11 +2,10 @@
 
 import { getSession } from "@/lib/auth";
 import { API_URL } from "@/lib/constants";
-import { Post } from "@/lib/models";
 import { validateResponse } from "@/lib/validate-response";
 import { revalidatePath } from "next/cache";
 
-export async function updatePost(body: object) {
+export async function updatePost(body: any) {
   const session = await getSession();
 
   const url = `${API_URL}/admin/posts`;
@@ -22,7 +21,7 @@ export async function updatePost(body: object) {
 
   await validateResponse(resp);
 
-  // revalidatePath("/(admin)/admin/(blog)/posts/[id]", "page");
+  revalidatePath(`/admin/posts/${body.id}`);
 
-  return (await resp.json()) as Post;
+  // return (await resp.json()) as Post;
 }

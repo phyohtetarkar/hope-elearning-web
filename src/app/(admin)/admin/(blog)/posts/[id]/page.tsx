@@ -29,9 +29,6 @@ const getAuthors = async () => {
     headers: {
       Cookie: cookies().toString(),
     },
-    next: {
-      revalidate: 30,
-    },
   });
 
   await validateResponse(resp);
@@ -45,9 +42,6 @@ const getTags = async () => {
   const resp = await fetch(url, {
     headers: {
       Cookie: cookies().toString(),
-    },
-    next: {
-      revalidate: 30,
     },
   });
 
@@ -63,12 +57,10 @@ export default async function PostEdit({ params }: { params: { id: string } }) {
     redirect("/admin/posts");
   }
 
-  const authorPage = getAuthors();
-  const tagPage = getTags();
+  // const authorPage = getAuthors();
+  // const tagPage = getTags();
 
-  const [authors, tags] = await Promise.all([authorPage, tagPage]);
+  // const [authors, tags] = await Promise.all([authorPage, tagPage]);
 
-  return (
-    <PostEditPage post={post} authors={authors.contents} tags={tags.contents} />
-  );
+  return <PostEditPage post={post} />;
 }

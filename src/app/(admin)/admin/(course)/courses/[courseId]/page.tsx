@@ -47,9 +47,6 @@ const getAuthors = async () => {
     headers: {
       Cookie: cookies().toString(),
     },
-    next: {
-      revalidate: 30,
-    },
   });
 
   await validateResponse(resp);
@@ -68,19 +65,13 @@ export default async function CourseEdit({
     redirect("/admin/courses");
   }
 
-  const categoriesPromise = getCategories();
-  const authorsPromise = getAuthors();
+  // const categoriesPromise = getCategories();
+  // const authorsPromise = getAuthors();
 
-  const [categories, authors] = await Promise.all([
-    categoriesPromise,
-    authorsPromise,
-  ]);
+  // const [categories, authors] = await Promise.all([
+  //   categoriesPromise,
+  //   authorsPromise,
+  // ]);
 
-  return (
-    <CourseEditPage
-      course={course}
-      categories={categories.contents}
-      authors={authors.contents}
-    />
-  );
+  return <CourseEditPage course={course} />;
 }
