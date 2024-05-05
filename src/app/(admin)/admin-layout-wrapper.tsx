@@ -1,20 +1,35 @@
 "use client";
 
-import {
-  DrawerBackdrop,
-  DrawerContextProvider,
-} from "@/components/ui/drawer";
-import { ReactNode, useEffect } from "react";
+import { DrawerBackdrop, DrawerContextProvider } from "@/components/ui/drawer";
+import { ReactNode, useContext, useEffect } from "react";
 import SideMenu from "./side-menu";
 import Header from "./header";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { AuthenticationContext } from "@/components/authentication-context-porvider";
 
 export default function AdminLayoutWrapper({
   children,
 }: {
   children: ReactNode;
 }) {
+  const { user } = useContext(AuthenticationContext);
+
   const pathname = usePathname();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user === null || user?.role === "user") {
+      router.replace("/");
+    }
+  }, [user, router]);
+
+  if (!user) {
+    return null;
+  }
+
+  if (user.role === "user") {
+    return null;
+  }
 
   if (pathname.match(/^\/admin\/posts\/.+/)) {
     return <>{children}</>;

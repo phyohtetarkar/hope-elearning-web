@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 
 export async function validateResponse(resp: Response, skipAuth?: boolean) {
   if (resp.status === 401 && !skipAuth) {
-    revalidatePath("/", 'layout');
+    revalidatePath("/", "layout");
     redirect("/login");
   }
 
@@ -13,9 +13,9 @@ export async function validateResponse(resp: Response, skipAuth?: boolean) {
     throw Error("FORBIDDEN: Permission denied");
   }
 
-  // if (resp.status === 500) {
-  //   throw Error("Internal server error");
-  // }
+  if (resp.status === 404) {
+    throw Error("Resource not found");
+  }
 
   if (!resp.ok) {
     const json = await resp.json();

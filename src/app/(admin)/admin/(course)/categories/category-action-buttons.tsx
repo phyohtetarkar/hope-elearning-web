@@ -1,5 +1,15 @@
 "use client";
 
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,24 +24,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Category } from "@/lib/models";
-import { Edit, LoaderCircle, Trash2 } from "lucide-react";
-import CategoryEdit from "./category-edit";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { deleteCategory } from "@/lib/actions";
-import { toast } from "react-toastify";
+import { Category } from "@/lib/models";
 import { parseErrorResponse } from "@/lib/parse-error-response";
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import { Edit, LoaderCircle, Trash2 } from "lucide-react";
+import { useState } from "react";
+import CategoryEdit from "./category-edit";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function CategoryActionButtons({
   category,
@@ -41,16 +40,19 @@ export default function CategoryActionButtons({
   const [isEditOpen, setEditOpen] = useState(false);
   const [isAlertOpen, setAlertOpen] = useState(false);
   const [isDeleting, setDeleting] = useState(false);
-  const router = useRouter();
+
+  const { toast } = useToast();
 
   const handleDelete = async () => {
     try {
       setDeleting(true);
       await deleteCategory(category.id);
-      toast.success("Category deleted successfully");
-      router.refresh();
     } catch (error) {
-      toast.error(parseErrorResponse(error));
+      toast({
+        title: "Error",
+        description: parseErrorResponse(error),
+        variant: "destructive",
+      });
     } finally {
       setDeleting(false);
     }
@@ -61,7 +63,7 @@ export default function CategoryActionButtons({
       <TooltipProvider>
         <Dialog open={isEditOpen} onOpenChange={setEditOpen}>
           <Tooltip delayDuration={300}>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
               <DialogTrigger asChild>
                 <Button variant="default" size="icon" asChild>
                   <span>
@@ -83,7 +85,7 @@ export default function CategoryActionButtons({
 
         <AlertDialog open={isAlertOpen} onOpenChange={setAlertOpen}>
           <Tooltip delayDuration={300}>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
               <AlertDialogTrigger asChild>
                 <Button variant="destructive" size="icon" asChild>
                   <span>

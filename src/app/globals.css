@@ -221,19 +221,6 @@ body {
   background: #aaa;
 }
 
-.overlay {
-  /* Height & width depends on how you want to reveal the overlay (see JS below) */
-  height: 100%;
-  width: 100%;
-  position: fixed; /* Stay in place */
-  z-index: 9999; /* Sit on top */
-  left: 0;
-  top: 0;
-  background-color: rgb(1, 0, 0); /* Black fallback color */
-  background-color: rgb(1, 0, 0, 0.4); /* Black w/opacity */
-  overflow-x: hidden; /* Disable horizontal scroll */
-}
-
 /* Swiper */
 .swiper-pagination-bullet {
   background-color: #fff;
@@ -246,7 +233,7 @@ body {
 
 .swiper-button-next,
 .swiper-button-prev {
-  --swiper-navigation-color: var(--bs-primary);
+  --swiper-navigation-color: var(--primary);
 }
 
 /* Tinymce */
@@ -256,15 +243,4 @@ body {
 
 .mce-edit-focus {
   outline: none;
-}
-
-/* Editorjs */
-.ce-block__content,
-.ce-toolbar__content {
-  max-width: calc(100% - 0px) !important;
-  margin-left: 0px;
-}
-
-.cdx-block {
-  max-width: 100% !important;
 }

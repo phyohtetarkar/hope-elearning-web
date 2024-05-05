@@ -6,19 +6,15 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatNumber(value?: number) {
-  if (typeof value !== "number" && typeof value !== "bigint") {
-    return "";
-  }
-
-  if (isNaN(value)) {
+export function formatNumber(value?: number | bigint) {
+  if (typeof value === "undefined") {
     return "";
   }
 
   return Intl.NumberFormat("en-US").format(value);
 }
 
-export function formatAbbreviate(value: number) {
+export function formatAbbreviate(value?: number | bigint) {
   if (!value) {
     return "0";
   }

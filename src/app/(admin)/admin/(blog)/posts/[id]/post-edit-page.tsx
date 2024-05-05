@@ -17,22 +17,32 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Separator } from "@/components/ui/separator";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useToast } from "@/components/ui/use-toast";
 import { Audit, Post, PostVisibility, Tag, User } from "@/lib/models";
 import { parseErrorResponse } from "@/lib/parse-error-response";
-import { cn, debounce, setStringToSlug } from "@/lib/utils";
+import { cn, debounce, formatTimestamp, setStringToSlug } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  CalendarIcon,
   Cloud,
   CloudUpload,
   ImagePlus,
   LoaderCircle,
   PanelRight,
+  SquareArrowOutUpRight,
   Trash2,
   X,
 } from "lucide-react";
@@ -40,7 +50,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useContext, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 import { z } from "zod";
 
 const schema = z.object({
@@ -58,8 +67,8 @@ const schema = z.object({
   authors: z.custom<User>().array().min(1, {
     message: "Required at least one author",
   }),
+  publishedAt: z.string().optional(),
   tags: z.custom<Tag>().array(),
-  audit: z.custom<Audit>().optional(),
 });
 
 type PostUpdateForm = z.infer<typeof schema>;
@@ -76,6 +85,7 @@ export default function PostEditPage({
   tags,
 }: PostEditPageProps) {
   const { user } = useContext(AuthenticationContext);
+  const { toast } = useToast();
   const [data, setData] = useState(post);
 
   const [isOpenSettings, setOpenSettings] = useState(false);
@@ -91,7 +101,18 @@ export default function PostEditPage({
     getValues,
   } = useForm<PostUpdateForm>({
     resolver: zodResolver(schema),
-    values: data,
+    defaultValues: {
+      id: data.id,
+      cover: data.cover,
+      title: data.title,
+      slug: data.slug,
+      excerpt: data.excerpt,
+      visibility: data.visibility,
+      lexical: data.lexical,
+      publishedAt: data.publishedAt,
+      authors: data.authors ?? [],
+      tags: data.tags ?? [],
+    },
   });
 
   const handleUpdate = async () => {
@@ -99,12 +120,12 @@ export default function PostEditPage({
       setStale(true);
       return;
     }
-    
+
     try {
       setSaving(true);
       setStale(false);
-      const { slug, authors, tags, audit, ...body } = getValues();
-      
+      const { slug, authors, tags, ...body } = getValues();
+
       // const result = await updatePost({
       //   ...body,
       //   slug: !slug ? data.slug : slug,
@@ -116,7 +137,11 @@ export default function PostEditPage({
       console.log("update post");
       await new Promise((resolve) => setTimeout(() => resolve(true), 3000));
     } catch (error) {
-      toast.error(parseErrorResponse(error));
+      toast({
+        title: "Error",
+        description: parseErrorResponse(error),
+        variant: "destructive",
+      });
       setStale(true);
     } finally {
       setSaving(false);
@@ -191,14 +216,27 @@ export default function PostEditPage({
               <BreadcrumbSeparator />
               <BreadcrumbItem>
                 <BreadcrumbPage className="text-nowrap font-medium">
-                  {`${post.status[0].toUpperCase()}${post.status.substring(1)}`}
+                  {data.status === "published" ? (
+                    <Link
+                      href={`/blogs/${post.slug}`}
+                      target="_blank"
+                      className="hover:underline"
+                    >
+                      Published
+                      <SquareArrowOutUpRight className="size-4" />
+                    </Link>
+                  ) : (
+                    `${post.status[0].toUpperCase()}${post.status.substring(1)}`
+                  )}
                 </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
           <div className="flex-1"></div>
           {saveStateView()}
-          <Button disabled={isSaving}>Publish</Button>
+          <Button disabled={isSaving} className="ms-2">
+            Publish
+          </Button>
           <TooltipProvider>
             <Tooltip delayDuration={300}>
               <TooltipTrigger className="ms-auto">
@@ -337,11 +375,103 @@ export default function PostEditPage({
                 <option value="paid_member">Paid member only</option>
               </Select>
             )}
+
+            <div className="flex flex-col mb-4">
+              <label className="font-medium mb-1">Publish date</label>
+              <Controller
+                control={control}
+                name="publishedAt"
+                render={({ field }) => {
+                  const date = field.value ? new Date(field.value) : new Date();
+                  date.setMilliseconds(0);
+                  const h = date.getHours();
+                  const m = date.getMinutes();
+                  return (
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant={"outline"}
+                          className="justify-start text-left font-normal"
+                        >
+                          <CalendarIcon className="mr-2 size-4" />
+                          {formatTimestamp(date.getTime(), true)}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent
+                        className="w-auto p-0 flex flex-col"
+                        align="start"
+                      >
+                        <Calendar
+                          mode="single"
+                          selected={new Date(field.value ?? 0)}
+                          onSelect={(v) => {
+                            if (v) {
+                              date.setDate(v.getDate());
+                              setValue("publishedAt", date?.toISOString());
+                            }
+                          }}
+                          initialFocus
+                        />
+                        <Separator />
+                        <div className="flex w-[280px] items-center p-3">
+                          <div className="relative">
+                            <Input
+                              type="text"
+                              placeholder="00"
+                              className="w-full"
+                              value={h > 0 ? h : ""}
+                              onChange={(evt) => {
+                                const hour = parseInt(evt.target.value);
+                                if (!isNaN(hour)) {
+                                  date.setHours(hour);
+                                  setValue("publishedAt", date?.toISOString());
+                                } else {
+                                  date.setHours(0);
+                                  setValue("publishedAt", date?.toISOString());
+                                }
+                                setStale(true);
+                              }}
+                            />
+                            <span className="text-sliver absolute right-2 inset-y-0 flex items-center">
+                              HH
+                            </span>
+                          </div>
+                          <span className="mx-1">:</span>
+                          <div className="relative">
+                            <Input
+                              type="text"
+                              placeholder="00"
+                              className="w-full"
+                              value={m > 0 ? m : ""}
+                              onChange={(evt) => {
+                                const minute = parseInt(evt.target.value);
+                                if (!isNaN(minute)) {
+                                  date.setMinutes(minute);
+                                  setValue("publishedAt", date?.toISOString());
+                                } else {
+                                  date.setMinutes(0);
+                                  setValue("publishedAt", date?.toISOString());
+                                }
+                                setStale(true);
+                              }}
+                            />
+                            <div className="text-sliver absolute right-2 inset-y-0 flex items-center">
+                              mm
+                            </div>
+                          </div>
+                        </div>
+                      </PopoverContent>
+                    </Popover>
+                  );
+                }}
+              />
+            </div>
+
             <Textarea
               label="Excerpt"
               wrapperClass="mb-4"
               className="resize-none"
-              placeholder=""
+              placeholder="Short description"
               rows={3}
               {...register("excerpt", {
                 onChange: (evt) => {

@@ -103,72 +103,7 @@ const config = {
     require("@tailwindcss/typography"),
     require("@tailwindcss/forms"),
     require("@tailwindcss/aspect-ratio"),
-    nextui({
-      layout: {
-        // radius: {
-        //   small: "2px", // rounded-small
-        //   medium: "4px", // rounded-medium
-        //   large: "6px", // rounded-large
-        // },
-        // borderWidth: {
-        //   small: "1px", // border-small
-        //   medium: "1px", // border-medium
-        //   large: "2px", // border-large
-        // },
-      },
-      themes: {
-        light: {
-          colors: {
-            primary: {
-              ...colors.indigo,
-              foreground: "#FFFFFF",
-              DEFAULT: colors.indigo[600],
-            },
-            secondary: {
-              foreground: "#222",
-              DEFAULT: "#F9A826",
-            },
-            success: {
-              foreground: "#FFFFFF",
-              DEFAULT: "#00a524",
-            },
-            danger: {
-              foreground: "#FFFFFF",
-              DEFAULT: "#d50002",
-            },
-            warning: {
-              foreground: "#FFFFFF",
-              DEFAULT: "#ff9017",
-            },
-          },
-        },
-        dark: {
-          colors: {
-            primary: {
-              ...colors.indigo,
-              foreground: "#FFFFFF",
-              DEFAULT: colors.indigo[600],
-            },
-            secondary: {
-              foreground: "#222",
-              DEFAULT: "#F9A826",
-            },
-            success: {
-              foreground: "#FFFFFF",
-              DEFAULT: "#00a524",
-            },
-            danger: {
-              foreground: "#FFFFFF",
-              DEFAULT: "#d50002",
-            },
-            warning: {
-              foreground: "#FFFFFF",
-              DEFAULT: "#ff9017",
-            },
-          },
-        },
-      },
-    }),
+    nextui(),
   ],
 } satisfies Config;
 

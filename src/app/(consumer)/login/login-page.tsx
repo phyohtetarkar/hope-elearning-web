@@ -15,7 +15,6 @@ import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import NProgress from "nprogress";
 
 const schema = z.object({
   username: z.string().email({
@@ -55,7 +54,6 @@ function LoginPage() {
         accessToken: idToken,
         refreshToken: refreshToken,
       });
-      NProgress.start();
     } catch (error) {
       console.error(error);
     }

@@ -5,14 +5,13 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import PostEditPage from "./post-edit-page";
 
-const getPost = async (id: number) => {
+const getPost = async (id: string) => {
   const url = `${API_URL}/admin/posts/${id}`;
 
   const resp = await fetch(url, {
     headers: {
       Cookie: cookies().toString(),
     },
-    cache: "no-store",
   });
 
   await validateResponse(resp);
@@ -58,12 +57,7 @@ const getTags = async () => {
 };
 
 export default async function PostEdit({ params }: { params: { id: string } }) {
-  const postId = parseInt(params.id);
-  if (isNaN(postId)) {
-    redirect("/admin/posts");
-  }
-
-  const post = await getPost(postId);
+  const post = await getPost(params.id);
 
   if (!post) {
     redirect("/admin/posts");

@@ -1,5 +1,4 @@
 "use client";
-import "../../styles/codeblock.scss";
 
 import { cn, debounce } from "@/lib/utils";
 import {

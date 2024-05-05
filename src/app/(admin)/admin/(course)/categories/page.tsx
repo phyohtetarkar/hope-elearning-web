@@ -14,15 +14,24 @@ import { API_URL } from "@/lib/constants";
 import { cookies } from "next/headers";
 import { validateResponse } from "@/lib/validate-response";
 import { Category, Page } from "@/lib/models";
+import { buildQueryParams, formatNumber } from "@/lib/utils";
 
-const getCategories = async () => {
-  const url = `${API_URL}/admin/categories`;
+interface Props {
+  searchParams: { [key: string]: string | undefined };
+}
+
+const getCategories = async ({ searchParams }: Props) => {
+  const query = buildQueryParams({
+    ...searchParams,
+    limit: 10,
+    includeCourseCount: true,
+  });
+  const url = `${API_URL}/admin/categories${query}`;
 
   const resp = await fetch(url, {
     headers: {
       Cookie: cookies().toString(),
     },
-    cache: "no-store",
   });
 
   await validateResponse(resp);
@@ -30,8 +39,8 @@ const getCategories = async () => {
   return (await resp.json()) as Page<Category>;
 };
 
-export default async function Categories() {
-  const data = await getCategories();
+export default async function Categories(props: Props) {
+  const data = await getCategories(props);
 
   return (
     <>
@@ -50,7 +59,10 @@ export default async function Categories() {
             <TableHead className="uppercase min-w-[300px] w-full">
               Category
             </TableHead>
-            <TableHead className="uppercase min-w-[300px]">Slug</TableHead>
+            <TableHead className="uppercase min-w-[200px]">Slug</TableHead>
+            <TableHead className="uppercase min-w-[200px]">
+              No.of courses
+            </TableHead>
             <TableHead className="uppercase min-w-[150px]">Action</TableHead>
           </TableRow>
         </TableHeader>
@@ -62,6 +74,9 @@ export default async function Categories() {
                   <h6>{c.name}</h6>
                 </TableCell>
                 <TableCell className="text-sliver text-sm">{c.slug}</TableCell>
+                <TableCell className="text-sliver text-sm">
+                  {formatNumber(BigInt(c.courseCount ?? 0))}
+                </TableCell>
                 <TableCell>
                   <CategoryActionButtons category={c} />
                 </TableCell>

@@ -3,6 +3,8 @@
 import { getSession } from "@/lib/auth";
 import { API_URL } from "@/lib/constants";
 import { validateResponse } from "@/lib/validate-response";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export async function createPost() {
   const session = await getSession();
@@ -25,5 +27,8 @@ export async function createPost() {
 
   await validateResponse(resp);
 
-  return (await resp.json()) as number;
+  const postId = (await resp.json()) as string;
+
+  revalidatePath("/admin/posts");
+  redirect(`/admin/posts/${postId}`);
 }

@@ -3,15 +3,14 @@
 import { Input } from "@/components/forms";
 import { Button } from "@/components/ui/button";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
+import { useToast } from "@/components/ui/use-toast";
 import { createTag, updateTag } from "@/lib/actions";
 import { Tag } from "@/lib/models";
 import { parseErrorResponse } from "@/lib/parse-error-response";
 import { setStringToSlug } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircle } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 import { z } from "zod";
 
 const schema = z.object({
@@ -27,7 +26,7 @@ const schema = z.object({
 type TagForm = z.infer<typeof schema>;
 
 function TagEdit({ data, close }: { data?: Tag; close?: () => void }) {
-  const router = useRouter();
+  const { toast } = useToast();
 
   const {
     control,
@@ -55,9 +54,12 @@ function TagEdit({ data, close }: { data?: Tag; close?: () => void }) {
               await updateTag(values);
             }
             close?.();
-            router.refresh();
           } catch (error) {
-            toast.error(parseErrorResponse(error));
+            toast({
+              title: "Error",
+              description: parseErrorResponse(error),
+              variant: "destructive",
+            });
           }
         })();
       }}

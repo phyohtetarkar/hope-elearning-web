@@ -1,5 +1,15 @@
 "use client";
 
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,40 +24,32 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Tag } from "@/lib/models";
-import { Edit, LoaderCircle, Trash2 } from "lucide-react";
-import TagEdit from "./tag-edit";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/use-toast";
 import { deleteTag } from "@/lib/actions";
-import { toast } from "react-toastify";
+import { Tag } from "@/lib/models";
 import { parseErrorResponse } from "@/lib/parse-error-response";
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import { Edit, LoaderCircle, Trash2 } from "lucide-react";
+import { useState } from "react";
+import TagEdit from "./tag-edit";
 
 export default function TagActionButtons({ tag }: { tag: Tag }) {
   const [isEditOpen, setEditOpen] = useState(false);
   const [isAlertOpen, setAlertOpen] = useState(false);
   const [isDeleting, setDeleting] = useState(false);
 
-  const router = useRouter();
+  const { toast } = useToast();
 
   const handleDelete = async () => {
     try {
       setDeleting(true);
       await deleteTag(tag.id);
-      toast.success("Tag deleted successfully");
-      router.refresh();
+      setAlertOpen(false);
     } catch (error) {
-      toast.error(parseErrorResponse(error));
+      toast({
+        title: "Error",
+        description: parseErrorResponse(error),
+        variant: "destructive",
+      });
     } finally {
       setDeleting(false);
     }
@@ -58,7 +60,7 @@ export default function TagActionButtons({ tag }: { tag: Tag }) {
       <TooltipProvider>
         <Dialog open={isEditOpen} onOpenChange={setEditOpen}>
           <Tooltip delayDuration={300}>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
               <DialogTrigger asChild>
                 <Button variant="default" size="icon" asChild>
                   <span>
@@ -80,7 +82,7 @@ export default function TagActionButtons({ tag }: { tag: Tag }) {
 
         <AlertDialog open={isAlertOpen} onOpenChange={setAlertOpen}>
           <Tooltip delayDuration={300}>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
               <AlertDialogTrigger asChild>
                 <Button variant="destructive" size="icon" asChild>
                   <span>

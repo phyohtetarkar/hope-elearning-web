@@ -1,5 +1,6 @@
 "use client";
 
+import { ContentRenderer } from "@/components/editor";
 import {
   Accordion,
   AccordionContent,
@@ -129,7 +130,7 @@ export default function ResumeCoursePage() {
         </div>
       </div>
       <div className="lg:col-span-7 2xl:col-span-8 relative">
-        <div className="absolute inset-0 lg:overflow-y-auto lg:scrollbar-hide p-4">
+        <div className="absolute inset-0 lg:overflow-y-auto lg:scrollbar-hide p-4 lg:px-6">
           <Breadcrumb className="mb-5">
             <BreadcrumbList>
               <BreadcrumbItem className="lg:hidden">
@@ -150,14 +151,9 @@ export default function ResumeCoursePage() {
             </BreadcrumbList>
           </Breadcrumb>
 
-          <article className="prose">
-            <h2 id="getting-started">Getting started</h2>
-            <p className="h-[400px]"></p>
-            <h2 id="installation">Installation</h2>
-            <p className="h-[400px]"></p>
-          </article>
+          <ContentRenderer />
 
-          <Separator className="my-4" />
+          <Separator className="mt-16 mb-4" />
 
           <div className="flex items-center space-x-2 mb-6">
             <Checkbox id="completed-check" className="rounded" />

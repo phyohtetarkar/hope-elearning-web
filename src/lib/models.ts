@@ -1,6 +1,10 @@
 export type UserRole = "user" | "contributor" | "author" | "admin" | "owner";
-export type PostStatus = "draft" | "published" | "disabled";
+export type PostStatus = "draft" | "published";
 export type PostVisibility = "public" | "member" | "paid_member";
+export type CourseStatus = "draft" | "published";
+export type CourseLevel = "beginner" | "intermediate" | "advanced";
+export type CourseAccess = "free" | "premium";
+export type LessonStatus = "draft" | "published";
 
 export interface Page<T> {
   contents: T[];
@@ -23,6 +27,22 @@ export interface User {
   image?: string;
 }
 
+export interface Tag {
+  id: number;
+  slug: string;
+  name: string;
+  postCount?: string;
+  audit?: Audit;
+}
+
+export interface Category {
+  id: number;
+  slug: string;
+  name: string;
+  courseCount?: string;
+  audit?: Audit;
+}
+
 export interface Post {
   id: string;
   cover?: string;
@@ -33,21 +53,74 @@ export interface Post {
   status: PostStatus;
   visibility: PostVisibility;
   featured: boolean;
-  authors: User[];
-  tags: Tag[];
+  authors?: User[];
+  tags?: Tag[];
+  publishedAt?: string;
+  meta?: PostMeta;
   audit?: Audit;
 }
 
-export interface Tag {
-  id: number;
+export interface PostMeta {
+  viewCount: string;
+}
+
+export interface Course {
+  id: string;
+  title: string;
   slug: string;
-  name: string;
+  cover?: string;
+  excerpt?: string;
+  featured: boolean;
+  description?: string;
+  level: CourseLevel;
+  access: CourseAccess;
+  status: CourseStatus;
+  publishedAt?: string;
+  category?: Category;
+  authors?: User[];
+  chapters?: Chapter[];
+  meta?: CourseMeta;
   audit?: Audit;
 }
 
-export interface Category {
-  id: number;
+export interface CourseMeta {
+  rating: string;
+  ratingCount: string;
+  enrolledCount: string;
+}
+
+export interface CourseReview {
+  rating: number;
+  message?: string;
+  user: User;
+  audit: Audit;
+}
+
+export interface Chapter {
+  id: string;
+  title: string;
   slug: string;
-  name: string;
+  sortOrder: number;
+  course?: Course;
+  lessons?: Lesson[];
   audit?: Audit;
+}
+
+export interface Lesson {
+  id: string;
+  title: string;
+  slug: string;
+  trial: boolean;
+  status: LessonStatus;
+  lexical?: string;
+  sortOrder: number;
+  chapter?: Chapter;
+  course?: Course;
+  audit?: Audit;
+}
+
+export interface EnrolledCourse {
+  course: Course;
+  completedLessons: string[];
+  progress: number;
 }

@@ -12,6 +12,9 @@ export function NavigationEvents() {
     startTransition(() => {
       NProgress.done();
     });
+    return () => {
+      NProgress.start();
+    };
   }, [pathname, searchParams]);
 
   return null;

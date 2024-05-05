@@ -2,7 +2,6 @@
 
 import { Input, Select } from "@/components/forms";
 import { useRouter, useSearchParams } from "next/navigation";
-import NProgress from "nprogress";
 import { useState } from "react";
 
 export default function UserFilter() {
@@ -20,7 +19,6 @@ export default function UserFilter() {
       } else {
         params.delete("email");
       }
-      NProgress.start();
       router.push(`?${params.toString()}`);
     }
   };
@@ -52,7 +50,6 @@ export default function UserFilter() {
             params.delete("role");
           }
           setRole(evt.target.value);
-          NProgress.start();
           router.push(`?${params.toString()}`);
         }}
       >

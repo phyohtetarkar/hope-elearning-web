@@ -3,9 +3,10 @@
 import { getSession } from "@/lib/auth";
 import { API_URL } from "@/lib/constants";
 import { validateResponse } from "@/lib/validate-response";
+import { revalidatePath } from "next/cache";
 
 export async function createTag(body: object) {
-    const session = await getSession();
+  const session = await getSession();
 
   const url = `${API_URL}/admin/tags`;
 
@@ -19,6 +20,8 @@ export async function createTag(body: object) {
   });
 
   await validateResponse(resp);
+
+  revalidatePath("/admin/tags");
 
   return (await resp.json()) as number;
 }

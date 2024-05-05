@@ -125,7 +125,7 @@ export default function CoursePage() {
                     href={`/courses/docker/reviews`}
                     className="ms-1 text-sm underline"
                   >
-                    (1,000 ratings)
+                    (1,000 reviews)
                   </Link>
                 </div>
               </div>

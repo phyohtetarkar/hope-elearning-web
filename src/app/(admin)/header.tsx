@@ -16,7 +16,6 @@ import { Menu } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useContext } from "react";
-import NProgress from "nprogress";
 
 export default function Header() {
   const { toggle } = useContext(DrawerContext);
@@ -48,13 +47,14 @@ export default function Header() {
         {user && (
           <DropdownMenu>
             <DropdownMenuTrigger className="outline-none">
-              <div className="size-[32px] relative">
+              <div className="size-[36px] relative">
                 <Image
                   src={user.image ?? "/images/profile.png"}
                   alt="Avatar"
                   fill
                   sizes="50vh"
                   className="rounded-full border-1 object-cover"
+                  priority
                 />
               </div>
             </DropdownMenuTrigger>
@@ -69,7 +69,6 @@ export default function Header() {
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={async () => {
-                  NProgress.start();
                   await clearAuthCookies();
                 }}
               >

@@ -1,5 +1,6 @@
 "use client";
 
+import { AuthenticationContext } from "@/components/authentication-context-porvider";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -10,7 +11,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { clearAuthCookies } from "@/lib/actions";
-import { User } from "@/lib/models";
 import {
   Navbar,
   NavbarBrand,
@@ -23,10 +23,10 @@ import {
 import { UserIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import NProgress from "nprogress";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
-export default function Header({ user }: { user?: User }) {
+export default function Header() {
+  const { user } = useContext(AuthenticationContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const accountView = () => {
@@ -63,7 +63,6 @@ export default function Header({ user }: { user?: User }) {
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={async () => {
-                  NProgress.start();
                   await clearAuthCookies();
                 }}
               >
@@ -128,6 +127,7 @@ export default function Header({ user }: { user?: User }) {
       classNames={{
         wrapper: "px-4",
       }}
+      isMenuOpen={isMenuOpen}
       onMenuOpenChange={setIsMenuOpen}
     >
       <NavbarMenuToggle

@@ -1,17 +1,16 @@
 import { cn } from "@/lib/utils";
-import {
-  TiptapImage,
-  TiptapLink,
-  UpdatedImage,
-  TaskList,
-  TaskItem,
-  HorizontalRule,
-  StarterKit,
-  Placeholder,
-  AIHighlight,
-} from "novel/extensions";
 import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
 import { common, createLowlight } from "lowlight";
+import {
+  AIHighlight,
+  Placeholder,
+  StarterKit,
+  TaskItem,
+  TaskList,
+  TiptapImage,
+  TiptapLink,
+} from "novel/extensions";
+import { CustomYoutube } from "./extensions/youtube";
 
 // You can overwrite the placeholder with your own configuration
 const aiHighlight = AIHighlight;
@@ -49,7 +48,9 @@ const lowlight = createLowlight(common);
 
 const codeBlockLowLight = CodeBlockLowlight.configure({
   HTMLAttributes: {
-    class: cn("rounded-md bg-gray-800 text-gray-200 border p-5 font-mono font-medium"),
+    class: cn(
+      "rounded-md bg-gray-800 text-gray-200 border p-5 font-mono font-medium"
+    ),
     spellCheck: false,
   },
   defaultLanguage: "plaintext",
@@ -80,7 +81,9 @@ const starterKit = StarterKit.configure({
   codeBlock: false,
   code: {
     HTMLAttributes: {
-      class: cn("rounded-lg bg-gray-100 text-danger-600 px-1.5 py-1 font-mono font-medium"),
+      class: cn(
+        "rounded-lg bg-gray-100 text-danger-600 px-1.5 py-1 font-mono font-medium"
+      ),
       spellcheck: "false",
     },
   },
@@ -105,4 +108,9 @@ export const defaultExtensions = [
   taskItem,
   aiHighlight,
   codeBlockLowLight,
+  CustomYoutube.configure({
+    nocookie: true,
+    width: 0,
+    height: 0,
+  }),
 ];

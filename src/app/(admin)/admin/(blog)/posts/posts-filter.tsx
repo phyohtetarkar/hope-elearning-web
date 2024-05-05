@@ -3,9 +3,8 @@
 import { Select } from "@/components/forms";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import NProgress from "nprogress";
 
-export default function PostFilter() {
+export default function PostsFilter() {
   const router = useRouter();
   const sp = useSearchParams();
 
@@ -26,13 +25,12 @@ export default function PostFilter() {
             params.delete("status");
           }
           setStatus(evt.target.value);
-          NProgress.start();
           router.push(`?${params.toString()}`);
         }}
       >
         <option value="">All status</option>
-        <option value="draft">Draft posts</option>
-        <option value="published">Published posts</option>
+        <option value="draft">Draft</option>
+        <option value="published">Published</option>
       </Select>
       <Select
         value={visibility}
@@ -44,7 +42,6 @@ export default function PostFilter() {
             params.delete("visibility");
           }
           setVisibility(evt.target.value);
-          NProgress.start();
           router.push(`?${params.toString()}`);
         }}
       >

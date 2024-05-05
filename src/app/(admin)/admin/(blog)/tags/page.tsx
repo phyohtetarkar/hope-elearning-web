@@ -14,15 +14,24 @@ import { validateResponse } from "@/lib/validate-response";
 import { cookies } from "next/headers";
 import TagActionButtons from "./tag-action-buttons";
 import TagCreateButton from "./tag-create-button";
+import { buildQueryParams, formatNumber } from "@/lib/utils";
 
-const getTags = async () => {
-  const url = `${API_URL}/admin/tags`;
+interface Props {
+  searchParams: { [key: string]: string | undefined };
+}
+
+const getTags = async ({ searchParams }: Props) => {
+  const query = buildQueryParams({
+    ...searchParams,
+    limit: 10,
+    includePostCount: true,
+  });
+  const url = `${API_URL}/admin/tags${query}`;
 
   const resp = await fetch(url, {
     headers: {
       Cookie: cookies().toString(),
     },
-    cache: "no-store",
   });
 
   await validateResponse(resp);
@@ -30,8 +39,8 @@ const getTags = async () => {
   return (await resp.json()) as Page<Tag>;
 };
 
-export default async function Tags() {
-  const data = await getTags();
+export default async function Tags(props: Props) {
+  const data = await getTags(props);
 
   return (
     <>
@@ -48,8 +57,8 @@ export default async function Tags() {
             <TableHead className="uppercase min-w-[300px] w-full">
               Tag
             </TableHead>
-            <TableHead className="uppercase min-w-[150px]">Slug</TableHead>
-            <TableHead className="uppercase min-w-[150px]">
+            <TableHead className="uppercase min-w-[200px]">Slug</TableHead>
+            <TableHead className="uppercase min-w-[200px]">
               No.of posts
             </TableHead>
             <TableHead className="uppercase min-w-[150px]">Action</TableHead>
@@ -63,7 +72,9 @@ export default async function Tags() {
                   <h6>{t.name}</h6>
                 </TableCell>
                 <TableCell className="text-sliver text-sm">{t.slug}</TableCell>
-                <TableCell className="text-sliver text-sm">10 post</TableCell>
+                <TableCell className="text-sliver text-sm">
+                  {formatNumber(BigInt(t.postCount ?? 0))}
+                </TableCell>
                 <TableCell>
                   <TagActionButtons tag={t} />
                 </TableCell>

@@ -1,3 +1,4 @@
+import { ContentRenderer } from "@/components/editor";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -48,8 +49,9 @@ export default function Lesson({
 
         <Button>Enroll course</Button>
       </div>
-      <Separator className="my-4" />
-      <div></div>
+      <Separator className="mt-4 mb-8" />
+      <ContentRenderer />
+      <div className="h-16"></div>
     </div>
   );
 }

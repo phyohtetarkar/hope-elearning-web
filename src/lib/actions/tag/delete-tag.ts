@@ -3,6 +3,7 @@
 import { getSession } from "@/lib/auth";
 import { API_URL } from "@/lib/constants";
 import { validateResponse } from "@/lib/validate-response";
+import { revalidatePath } from "next/cache";
 
 export async function deleteTag(id: number) {
   const session = await getSession();
@@ -17,4 +18,6 @@ export async function deleteTag(id: number) {
   });
 
   await validateResponse(resp);
+
+  revalidatePath("/admin/tags");
 }

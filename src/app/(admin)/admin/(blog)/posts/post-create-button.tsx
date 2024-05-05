@@ -1,16 +1,16 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 import { createPost } from "@/lib/actions";
 import { parseErrorResponse } from "@/lib/parse-error-response";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { toast } from "react-toastify";
-import NProgress from "nprogress";
 
 export default function PostCreateButton() {
   const router = useRouter();
+  const { toast } = useToast();
 
   const [isLoading, setLoading] = useState(false);
   return (
@@ -20,13 +20,15 @@ export default function PostCreateButton() {
       onClick={async () => {
         try {
           setLoading(true);
-          const postId = await createPost();
-          NProgress.start();
-          router.push(`/admin/posts/${postId}`);
+          await createPost();
         } catch (error) {
-          toast.error(parseErrorResponse(error));
+          toast({
+            title: "Error",
+            description: parseErrorResponse(error),
+            variant: "destructive",
+          });
         } finally {
-          setLoading(false);
+          // setLoading(false);
         }
       }}
     >

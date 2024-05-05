@@ -3,6 +3,7 @@
 import { getSession } from "@/lib/auth";
 import { API_URL } from "@/lib/constants";
 import { validateResponse } from "@/lib/validate-response";
+import { revalidatePath } from "next/cache";
 
 export async function createCategory(body: object) {
   const session = await getSession();
@@ -19,6 +20,8 @@ export async function createCategory(body: object) {
   });
 
   await validateResponse(resp);
+
+  revalidatePath("/admin/categories");
 
   return (await resp.json()) as number;
 }
