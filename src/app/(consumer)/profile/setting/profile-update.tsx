@@ -6,7 +6,7 @@ export default function ProfileUpdate() {
   return (
     <form>
       <div className="grid grid-cols-12 mt-3 mb-5">
-        <div className="col-span-8">
+        <div className="col-span-8 me-2">
           <div className="grid grid-cols-12">
             <div className="lg:col-span-6 lg:me-2 col-span-12">
               <Input
@@ -53,6 +53,7 @@ export default function ProfileUpdate() {
                 alt="User image"
                 sizes="33vw"
                 className="rounded-full object-cover"
+                priority
               />
               <div className="absolute bg-black bg-opacity-50 text-white text-center w-full bottom-0">
                 Edit

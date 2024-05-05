@@ -29,17 +29,19 @@ export default function ProfileMenu() {
     return (
       <Link
         href={href}
-        className={`flex p-2 items-center ${active ? "text-primary" : ""}`}
+        className={`flex p-2 items-center ${
+          active ? "text-primary" : "text-gray-500"
+        }`}
       >
         {icon}
-        <span className="">{title}</span>
+        <span>{title}</span>
       </Link>
     );
   }
 
   const content = (
     <>
-      <div className="text-gray-500 mb-2 px-1 text-sm uppercase hidden lg:block ">
+      <div className="text-gray-400 mb-2 px-1 text-sm uppercase hidden lg:block ">
         ACCOUNT
       </div>
       <div className="flex flex-col gap-1">

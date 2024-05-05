@@ -10,31 +10,29 @@ export default function ProfilePage() {
     <Card className="shadow-none mb-3">
       <CardContent className="p-4">
         <div className="flex gap-3 items-center">
-          <div className="relative flex-shrink-0">
+          <div className="flex-shrink-0">
             <Image
               src="/images/profile.png"
               width={60}
               height={60}
-              alt=""
+              alt="User image"
               sizes="50vh"
               className="rounded-full object-cover"
             />
           </div>
           <div className="truncate">
-            <h6 className="mb-0">Naing</h6>
+            <h6 className="mb-0">Hector</h6>
             <span className="text-gray-500 text-sm">
-              theinmwenaing@gmail.com
+              hectorgibbons@gmail.com
             </span>
           </div>
           <div className="ms-auto">
-            <div className="flex">
-              <Link
-                href={"/profile/setting"}
-                className=" border-2 border-primary px-3 py-2 rounded-lg text-primary"
-              >
-                Edit
-              </Link>
-            </div>
+            <Link
+              href={"/profile/setting"}
+              className=" border-2 border-primary px-3 py-2 rounded-lg text-primary"
+            >
+              Edit
+            </Link>
           </div>
           {/* <div className="block lg:hidden">
             <Button variant="primary" size="icon" asChild>
