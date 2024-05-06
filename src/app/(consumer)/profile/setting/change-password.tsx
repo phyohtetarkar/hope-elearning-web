@@ -5,7 +5,7 @@ export default function ChangePassword() {
   return (
     <form>
       <div className="grid grid-cols-12 mt-4 mb-5">
-        <div className="col-span-8">
+        <div className="lg:col-span-8 col-span-12">
           <PasswordInput
             label="Old password"
             autoComplete="old-password"

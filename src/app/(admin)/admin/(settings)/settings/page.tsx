@@ -20,7 +20,7 @@ const SettingMenu = ({
           {avatar}
           <div className="flex flex-col">
             <h6 className="font-semibold mb-1">{title}</h6>
-            <p className="text-xs mb-0 text-gray-500">{description ?? ""}</p>
+            <p className="text-xs mb-0 text-sliver">{description ?? ""}</p>
           </div>
         </div>
       </CardContent>

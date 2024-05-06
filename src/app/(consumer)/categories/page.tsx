@@ -4,7 +4,7 @@ export default function Categories() {
   return (
     <div className="mb-5">
       <div className="bg-primary mb-4">
-        <div className="container h-[200px]">
+        <div className="container h-[150px]">
           <div className="flex justify-center items-center h-full">
             <h1 className="text-white">Explore the catalog</h1>
           </div>
@@ -16,7 +16,7 @@ export default function Categories() {
             <Card className="shadow-none">
               <CardContent className="p-4 text-center">
                 <h4 className="text-primary mb-1">AWS</h4>
-                <div className="text-gray-500">30 Courses</div>
+                <div className="text-sliver">30 Courses</div>
               </CardContent>
             </Card>
           </div>
@@ -24,7 +24,7 @@ export default function Categories() {
             <Card className="shadow-none">
               <CardContent className="p-4 text-center">
                 <h4 className="text-primary mb-1">Java</h4>
-                <div className="text-gray-500">30 Courses</div>
+                <div className="text-sliver">30 Courses</div>
               </CardContent>
             </Card>
           </div>
@@ -32,7 +32,7 @@ export default function Categories() {
             <Card className="shadow-none">
               <CardContent className="p-4 text-center">
                 <h4 className="text-primary mb-1">DevOps</h4>
-                <div className="text-gray-500">30 Courses</div>
+                <div className="text-sliver">30 Courses</div>
               </CardContent>
             </Card>
           </div>
@@ -40,7 +40,7 @@ export default function Categories() {
             <Card className="shadow-none">
               <CardContent className="p-4 text-center">
                 <h4 className="text-primary mb-1">React</h4>
-                <div className="text-gray-500">30 Courses</div>
+                <div className="text-sliver">30 Courses</div>
               </CardContent>
             </Card>
           </div>
@@ -48,7 +48,7 @@ export default function Categories() {
             <Card className="shadow-none">
               <CardContent className="p-4 text-center">
                 <h4 className="text-primary mb-1">Android</h4>
-                <div className="text-gray-500">30 Courses</div>
+                <div className="text-sliver">30 Courses</div>
               </CardContent>
             </Card>
           </div>
@@ -56,7 +56,7 @@ export default function Categories() {
             <Card className="shadow-none">
               <CardContent className="p-4 text-center">
                 <h4 className="text-primary mb-1">Swift</h4>
-                <div className="text-gray-500">30 Courses</div>
+                <div className="text-sliver">30 Courses</div>
               </CardContent>
             </Card>
           </div>

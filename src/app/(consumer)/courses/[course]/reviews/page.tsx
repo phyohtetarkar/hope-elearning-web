@@ -40,9 +40,9 @@ export default function CourseReviews() {
           />
           <div className="flex flex-col">
             <h6 className="font-semibold mb-1">Naing</h6>
-            <span className="text-sm text-gray-500 mb-5">May 5,2024</span>
+            <span className="text-sm text-sliver mb-5">May 5,2024</span>
             <Rating rating={4.5} size="lg" />
-            <p className="text-gray-500 mt-5">
+            <p className="text-sliver mt-5">
               The online platform used for the course was user-friendly and easy
               to navigate, making it convenient to access lectures and
               materials.The assignments were practical and relevant, allowing me
@@ -61,9 +61,9 @@ export default function CourseReviews() {
           />
           <div className="flex flex-col">
             <h6 className="font-semibold mb-1">Hector Gibbons</h6>
-            <span className="text-sm text-gray-500 mb-5">May 5,2024</span>
+            <span className="text-sm text-sliver mb-5">May 5,2024</span>
             <Rating rating={4} size="lg" />
-            <p className="text-gray-500 mt-5">
+            <p className="text-sliver mt-5">
               The course content was engaging and kept me interested throughout.
               I never felt bored or disinterested during the lectures.
             </p>
@@ -80,9 +80,9 @@ export default function CourseReviews() {
           />
           <div className="flex flex-col">
             <h6 className="font-semibold mb-1">Mark Edwards</h6>
-            <span className="text-sm text-gray-500 mb-5">May 5,2024</span>
+            <span className="text-sm text-sliver mb-5">May 5,2024</span>
             <Rating rating={5} size="lg" />
-            <p className="text-gray-500 mt-5">
+            <p className="text-sliver mt-5">
               The course provided valuable insights and practical skills that I
               can apply in my personal or professional life.
             </p>

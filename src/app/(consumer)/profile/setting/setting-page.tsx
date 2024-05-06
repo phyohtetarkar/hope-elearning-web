@@ -6,7 +6,7 @@ import ProfileUpdate from "./profile-update";
 export default function SettingPage() {
   return (
     <Card className="shadow-none">
-      <CardContent className="p-4">
+      <CardContent className="px-6 py-4">
         <ProfileUpdate />
         <Separator />
         <ChangePassword />

@@ -5,8 +5,8 @@ import Image from "next/image";
 export default function ProfileUpdate() {
   return (
     <form>
-      <div className="grid grid-cols-12 mt-3 mb-5">
-        <div className="col-span-8 me-2">
+      <div className="grid grid-cols-12 mb-5">
+        <div className="lg:col-span-8 col-span-12 me-2 md:order-2 order-2">
           <div className="grid grid-cols-12">
             <div className="lg:col-span-6 lg:me-2 col-span-12">
               <Input
@@ -33,7 +33,6 @@ export default function ProfileUpdate() {
             label="Email"
             id="emailInput"
             type="email"
-            className="bg-default"
             wrapperClass="mb-5"
             defaultValue={"theimwenaing@gmail.com"}
             disabled
@@ -43,7 +42,7 @@ export default function ProfileUpdate() {
           </Button>
         </div>
 
-        <div className="col-span-4 flex justify-center">
+        <div className="lg:col-span-4 col-span-12 flex justify-center lg:order-2 mb-2">
           <div>
             <div className="relative overflow-hidden rounded-full">
               <Image

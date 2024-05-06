@@ -8,7 +8,7 @@ import Link from "next/link";
 export default function ProfilePage() {
   return (
     <Card className="shadow-none mb-3">
-      <CardContent className="p-4">
+      <CardContent className="px-6 py-4">
         <div className="flex gap-3 items-center">
           <div className="flex-shrink-0">
             <Image
@@ -22,9 +22,7 @@ export default function ProfilePage() {
           </div>
           <div className="truncate">
             <h6 className="mb-0">Hector</h6>
-            <span className="text-gray-500 text-sm">
-              hectorgibbons@gmail.com
-            </span>
+            <span className="text-sliver text-sm">hectorgibbons@gmail.com</span>
           </div>
           <div className="ms-auto">
             <Link
@@ -43,7 +41,7 @@ export default function ProfilePage() {
           </div> */}
         </div>
         <Separator className="mt-3" />
-        <div className="text-gray-500 mt-3 mb-3">Overview</div>
+        <div className="text-sliver mt-3 mb-3">Overview</div>
         <div className="flex flex-col gap-2 lg:flex-row lg:gap-0">
           <div className="flex-1 bg-default-100 border border-default-300 rounded lg:rounded-e-none lg:border-e-0">
             <div className="p-2">
