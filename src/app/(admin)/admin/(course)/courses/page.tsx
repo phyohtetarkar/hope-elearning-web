@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { API_URL } from "@/lib/constants";
+import { API_URL_LOCAL } from "@/lib/constants";
 import { Category, Course, CourseStatus, Page } from "@/lib/models";
 import { buildQueryParams, formatNumber } from "@/lib/utils";
 import { validateResponse } from "@/lib/validate-response";
@@ -26,7 +26,7 @@ interface Props {
 const getCourses = async ({ searchParams }: Props) => {
   const query = buildQueryParams({ ...searchParams, limit: 10 });
 
-  const url = `${API_URL}/admin/courses${query}`;
+  const url = `${API_URL_LOCAL}/admin/courses${query}`;
 
   const resp = await fetch(url, {
     headers: {
@@ -40,7 +40,7 @@ const getCourses = async ({ searchParams }: Props) => {
 };
 
 const getCategories = async () => {
-  const url = `${API_URL}/admin/categories`;
+  const url = `${API_URL_LOCAL}/admin/categories`;
 
   const resp = await fetch(url, {
     headers: {

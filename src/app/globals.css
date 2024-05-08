@@ -6,7 +6,6 @@
 @import "swiper/css/navigation";
 @import "swiper/css/pagination";
 @import "swiper/css/zoom";
-@import "~react-toastify/dist/ReactToastify.min.css";
 @import "../styles/prosemirror.css";
 
 /* @layer base {
@@ -158,7 +157,7 @@
 
 @layer components {
   .default-input {
-    @apply border-gray-300 focus:border-primary focus:ring-0;
+    @apply border-gray-300 focus:border-primary focus:ring-0 disabled:bg-gray-200 disabled:cursor-not-allowed;
   }
 
   .valid-input {

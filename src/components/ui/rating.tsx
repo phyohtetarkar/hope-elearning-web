@@ -7,8 +7,6 @@ interface RatingProps {
 
 const stars = [1, 2, 3, 4, 5];
 
-const size = 18;
-
 const activeColor = "#ff9017";
 
 const defaultColor = "#cbd5e1";
@@ -42,10 +40,17 @@ function Rating({ rating, size = "default" }: RatingProps) {
           );
         }
 
-        if (rating >= e - 0.5 && rating < e) {
-          // return <RiStarHalfFill key={i} size={18} className="text-warning" />;
+        const scale = e - rating;
+
+        if (scale < 1) {
+          let width = 1 - scale;
+          if (width < 0.4) {
+            width += 0.05;
+          } else if (width > 0.5) {
+            width -= 0.05;
+          }
           return (
-            <div key={i} className="flex relative" style={{ width: 18 }}>
+            <div key={i} className="flex relative" style={{ width: iconSize }}>
               <div className="absolute left-0">
                 <Star
                   key={i}
@@ -55,8 +60,8 @@ function Rating({ rating, size = "default" }: RatingProps) {
                 />
               </div>
               <div
-                className={`overflow-hidden z-10`}
-                style={{ width: iconSize / 2 }}
+                className={`overflow-hidden z-[1]`}
+                style={{ width: iconSize * width }}
               >
                 <Star
                   key={i}

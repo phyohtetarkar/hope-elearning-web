@@ -86,6 +86,20 @@ export function setStringToSlug(v?: string) {
   );
 }
 
+export function uppercaseFirstChar(v?: string) {
+  if (!v || v.length === 1) {
+    return v;
+  }
+
+  return `${v[0].toUpperCase()}${v.substring(1)}`;
+}
+
+export function wordPerMinute(wordCount: number) {
+  const averageWordPerMinute = 200;
+  const wpm = (wordCount * 60) / averageWordPerMinute;
+  return Math.round(wpm / 60);
+}
+
 export function buildQueryParams(params: any) {
   if (typeof params !== "object" || params instanceof Array) {
     return "";

@@ -2,18 +2,18 @@
 
 import { Command, CommandInput } from "@/components/ui/command";
 
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { TypingSpinner } from "@/components/ui/typing-spinner";
+import { useToast } from "@/components/ui/use-toast";
 import { useCompletion } from "ai/react";
+import { ArrowUp, Sparkles } from "lucide-react";
 import { useEditor } from "novel";
+import { addAIHighlight } from "novel/extensions";
 import { useState } from "react";
 import Markdown from "react-markdown";
-import AISelectorCommands from "./ai-selector-commands";
 import AICompletionCommands from "./ai-completion-command";
-import { ArrowUp, Sparkles } from "lucide-react";
-import { addAIHighlight } from "novel/extensions";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/button";
-import { toast } from "react-toastify";
-import { TypingSpinner } from "@/components/ui/typing-spinner";
+import AISelectorCommands from "./ai-selector-commands";
 //TODO: I think it makes more sense to create a custom Tiptap extension for this functionality https://tiptap.dev/docs/editor/ai/introduction
 
 interface AISelectorProps {
@@ -24,17 +24,26 @@ interface AISelectorProps {
 export function AISelector({ open, onOpenChange }: AISelectorProps) {
   const { editor } = useEditor();
   const [inputValue, setInputValue] = useState("");
+  const { toast } = useToast();
 
   const { completion, complete, isLoading } = useCompletion({
     api: "/api/generate/gemini",
     onResponse: (response) => {
       if (response.status === 429) {
-        toast.error("You have reached your request limit for the day.");
+        toast({
+          title: "Error",
+          description: "You have reached your request limit for the day.",
+          variant: "destructive",
+        });
         return;
       }
     },
     onError: (e) => {
-      toast.error(e.message);
+      toast({
+        title: "Error",
+        description: e.message,
+        variant: "destructive",
+      });
     },
   });
 

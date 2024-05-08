@@ -1,7 +1,8 @@
+import { Bookmark } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { Card, CardContent, CardFooter } from "../ui/card";
 import Rating from "../ui/rating";
-import { Bookmark } from "lucide-react";
 import { Separator } from "../ui/separator";
 import {
   Tooltip,
@@ -9,9 +10,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
-import { Card, CardContent, CardFooter } from "../ui/card";
 
-function CourseGridItem() {
+export function CourseGridItem() {
   return (
     <Card className="overflow-hidden shadow-none">
       <CardContent className="p-0">
@@ -28,11 +28,11 @@ function CourseGridItem() {
         <div className="flex flex-col p-4">
           <Link
             href="/course/100"
-            className="text-black font-medium text-lg text-nowrap"
+            className="text-foreground font-medium text-lg text-nowrap"
           >
             Introduction to docker
           </Link>
-          <div className="flex items-center text-small mb-2 mt-1">
+          <div className="flex items-center text-sm mb-2 mt-1">
             <div className="text-sliver">10 Chapters</div>
             <div className="mx-2 text-sliver">&bull;</div>
             <div className="text-primary">Beginner</div>
@@ -54,5 +54,3 @@ function CourseGridItem() {
     </Card>
   );
 }
-
-export default CourseGridItem;

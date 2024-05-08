@@ -1,7 +1,16 @@
 "use client";
 
 import { NovelEditor } from "@/components/editor";
-import { TitleInput } from "@/components/forms";
+import { Input, TitleInput } from "@/components/forms";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -11,13 +20,33 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
-import { updateLesson } from "@/lib/actions";
+import { deleteLesson, updateLesson } from "@/lib/actions";
 import { Lesson } from "@/lib/models";
 import { parseErrorResponse } from "@/lib/parse-error-response";
 import { debounce, setStringToSlug } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Cloud, CloudUpload, LoaderCircle } from "lucide-react";
+import {
+  Cloud,
+  CloudUpload,
+  EllipsisVertical,
+  LoaderCircle,
+} from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -30,6 +59,7 @@ const schema = z.object({
   }),
   slug: z.string().optional(),
   lexical: z.string().optional(),
+  trial: z.boolean().optional(),
 });
 
 type LessonForm = z.infer<typeof schema>;
@@ -37,6 +67,11 @@ type LessonForm = z.infer<typeof schema>;
 export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
   const [isStale, setStale] = useState(false);
   const [isSaving, setSaving] = useState(false);
+  const [isDeleting, setDeleting] = useState(false);
+
+  const [openSetting, setOpenSetting] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+
   const { toast } = useToast();
 
   const {
@@ -52,6 +87,7 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
       title: lesson.title,
       slug: lesson.slug,
       lexical: lesson.lexical,
+      trial: lesson.trial,
     },
   });
 
@@ -66,6 +102,7 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
       setStale(false);
       const body = {
         ...values,
+        courseId: lesson.course?.id,
         slug: !values.slug?.trim() ? lesson.slug : values.slug,
         updatedAt: lesson?.audit?.updatedAt,
       };
@@ -79,6 +116,21 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
       });
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      setDeleting(true);
+      await deleteLesson(lesson.course?.id ?? "", lesson.id, true);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: parseErrorResponse(error),
+        variant: "destructive",
+      });
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -99,78 +151,180 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
   };
 
   return (
-    <div className="flex flex-col">
-      <div className="flex items-center gap-3 fixed inset-x-0 top-0 bg-white px-4 h-[65px] border-b z-10">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link href={`/admin/courses/${lesson.course?.id}`}>Course</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage className="text-nowrap">
-                Edit Lesson
-              </BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-        <div className="flex-1"></div>
-        <Button>Save</Button>
-      </div>
-      <div className="grow fixed inset-0 overflow-y-auto mt-[65px]">
-        <div className="container max-w-3xl mt-7 mb-10">
-          <Breadcrumb className="mb-6">
+    <>
+      <div className="flex flex-col">
+        <div className="flex items-center space-x-3 fixed inset-x-0 top-0 bg-white px-4 h-[65px] border-b z-10">
+          <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
                   <Link href={`/admin/courses/${lesson.course?.id}`}>
-                    {lesson.course?.title}
+                    Course
                   </Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbPage>{lesson.chapter?.title}</BreadcrumbPage>
+                <BreadcrumbPage className="text-nowrap">
+                  Edit Lesson
+                </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-          <div className="mb-6">
+          <div className="flex-1"></div>
+          <Button>Update</Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="outline-none" asChild>
+              <Button variant="default" size="icon">
+                <EllipsisVertical className="size-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="shadow-xl">
+              <DropdownMenuItem onClick={() => setOpenSetting(true)}>
+                Settings
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => setOpenDelete(true)}
+                className="text-destructive focus:text-destructive"
+              >
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+        <div className="grow fixed inset-0 overflow-y-auto mt-[65px]">
+          <div className="container max-w-3xl mt-7 mb-10">
+            <Breadcrumb className="mb-6">
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link href={`/admin/courses/${lesson.course?.id}`}>
+                      {lesson.course?.title}
+                    </Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>{lesson.chapter?.title}</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+            <div className="mb-6">
+              <Controller
+                control={control}
+                name="title"
+                render={({ field }) => {
+                  return (
+                    <TitleInput
+                      placeholder="Lesson title"
+                      className="text-gray-800"
+                      spellCheck={false}
+                      maxLength={2000}
+                      value={field.value ?? ""}
+                      onChange={(evt) => {
+                        field.onChange(evt);
+                        const value = evt.target.value;
+                        const slug = setStringToSlug(value);
+                        setValue("slug", slug);
+                        if (lesson.status === "draft") {
+                        }
+                      }}
+                    />
+                  );
+                }}
+              />
+            </div>
+            <NovelEditor
+              content={lesson.lexical ? JSON.parse(lesson.lexical) : undefined}
+              onChange={(json) => {
+                setValue("lexical", JSON.stringify(json));
+                if (lesson.status === "draft") {
+                }
+              }}
+            />
+          </div>
+        </div>
+      </div>
+
+      <Dialog open={openSetting} onOpenChange={setOpenSetting}>
+        <DialogContent onInteractOutside={(evt) => evt.preventDefault()}>
+          <DialogHeader>
+            <DialogTitle>Lesson settings</DialogTitle>
+          </DialogHeader>
+          <div className="gird grid-cols-1">
             <Controller
               control={control}
-              name="title"
-              render={({ field }) => {
+              name="slug"
+              render={({ field, fieldState: { error } }) => {
                 return (
-                  <TitleInput
-                    placeholder="Lesson title"
-                    className="text-gray-800"
-                    spellCheck={false}
-                    maxLength={2000}
+                  <Input
+                    label="Slug"
+                    id="slug"
+                    type="text"
+                    wrapperClass="mb-6"
+                    placeholder="Enter slug"
                     value={field.value ?? ""}
                     onChange={(evt) => {
-                      field.onChange(evt);
-                      const value = evt.target.value;
-                      const slug = setStringToSlug(value);
-                      setValue("slug", slug);
-                      if (lesson.status === "draft") {
-                      }
+                      const slug = setStringToSlug(evt.target.value) ?? "";
+                      setValue("slug", slug, {
+                        shouldValidate: true,
+                      });
                     }}
+                    error={error?.message}
                   />
                 );
               }}
             />
+
+            <Controller
+              control={control}
+              name="trial"
+              render={({ field }) => {
+                return (
+                  <div className="flex items-center space-x-2 mb-4">
+                    <Switch
+                      id="trial"
+                      checked={field.value ?? false}
+                      onCheckedChange={(v) => setValue("trial", v)}
+                    />
+                    <label htmlFor="trial" className="font-medium">
+                      Trial
+                    </label>
+                  </div>
+                );
+              }}
+            />
           </div>
-          <NovelEditor
-            content={lesson.lexical ? JSON.parse(lesson.lexical) : undefined}
-            onChange={(json) => {
-              setValue("lexical", JSON.stringify(json));
-              if (lesson.status === "draft") {
-              }
-            }}
-          />
-        </div>
-      </div>
-    </div>
+
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button type="button" className="mt-2" disabled={isSubmitting}>
+                Done
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <AlertDialog open={openDelete} onOpenChange={setOpenDelete}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirm Delete</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure to delete lesson?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+            <Button onClick={handleDelete} disabled={isDeleting}>
+              {isDeleting && (
+                <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              Proceed
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }

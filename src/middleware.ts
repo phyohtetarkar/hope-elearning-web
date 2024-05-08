@@ -64,9 +64,9 @@ export async function middleware(request: NextRequest) {
   const currentTime = new Date().getTime() / 1000;
   const expiredTime = payload.exp ?? 0;
   const timeLeft = expiredTime - currentTime;
-  console.log(new Date((payload.iat ?? 0) * 1000).toLocaleString());
-  console.log(new Date((payload.exp ?? 0) * 1000).toLocaleString());
-  console.log(timeLeft);
+  // console.log(new Date((payload.iat ?? 0) * 1000).toLocaleString());
+  // console.log(new Date((payload.exp ?? 0) * 1000).toLocaleString());
+  // console.log(timeLeft);
 
   if (timeLeft <= 300) {
     const rt = request.cookies.get("refresh_token")?.value;

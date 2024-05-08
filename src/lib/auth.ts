@@ -38,13 +38,13 @@ export async function getSession(): Promise<SessionType> {
     redirect("/login");
   }
 
-  console.log(new Date((payload.iat ?? 0) * 1000).toLocaleString());
-  console.log(new Date((payload.exp ?? 0) * 1000).toLocaleString());
+  // console.log(new Date((payload.iat ?? 0) * 1000).toLocaleString());
+  // console.log(new Date((payload.exp ?? 0) * 1000).toLocaleString());
 
   const currentTime = new Date().getTime() / 1000;
   const expiredTime = payload?.exp ?? 0;
   const timeLeft = expiredTime - currentTime;
-  console.log(timeLeft);
+  // console.log(timeLeft);
 
   if (timeLeft <= 300) {
     const rt = cookieStore.get("refresh_token")?.value;

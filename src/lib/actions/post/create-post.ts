@@ -1,7 +1,7 @@
 "use server";
 
 import { getSession } from "@/lib/auth";
-import { API_URL } from "@/lib/constants";
+import { API_URL_LOCAL } from "@/lib/constants";
 import { validateResponse } from "@/lib/validate-response";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -9,7 +9,7 @@ import { redirect } from "next/navigation";
 export async function createPost() {
   const session = await getSession();
 
-  const url = `${API_URL}/admin/posts`;
+  const url = `${API_URL_LOCAL}/admin/posts`;
 
   const body = {
     slug: "untitled",

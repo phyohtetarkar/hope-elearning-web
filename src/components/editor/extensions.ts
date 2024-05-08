@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
+import { CharacterCount } from "@tiptap/extension-character-count";
 import { common, createLowlight } from "lowlight";
 import {
   AIHighlight,
@@ -113,4 +114,5 @@ export const defaultExtensions = [
     width: 0,
     height: 0,
   }),
+  CharacterCount
 ];

@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import CategoryActionButtons from "./category-action-buttons";
 import CategoryCreateButton from "./category-create-button";
-import { API_URL } from "@/lib/constants";
+import { API_URL_LOCAL } from "@/lib/constants";
 import { cookies } from "next/headers";
 import { validateResponse } from "@/lib/validate-response";
 import { Category, Page } from "@/lib/models";
@@ -26,7 +26,7 @@ const getCategories = async ({ searchParams }: Props) => {
     limit: 10,
     includeCourseCount: true,
   });
-  const url = `${API_URL}/admin/categories${query}`;
+  const url = `${API_URL_LOCAL}/admin/categories${query}`;
 
   const resp = await fetch(url, {
     headers: {

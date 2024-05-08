@@ -53,6 +53,7 @@ export interface Post {
   status: PostStatus;
   visibility: PostVisibility;
   featured: boolean;
+  wordCount: number;
   authors?: User[];
   tags?: Tag[];
   publishedAt?: string;
@@ -123,4 +124,13 @@ export interface EnrolledCourse {
   course: Course;
   completedLessons: string[];
   progress: number;
+}
+
+export interface DashboardSummary {
+  courseCount: number;
+  postCount: number;
+  subscriberCount: number;
+  userCount: number;
+  monthlyEnrollments: { [key: string]: number };
+  enrolledByLevel: { [key: string]: number };
 }

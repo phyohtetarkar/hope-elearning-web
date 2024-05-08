@@ -9,6 +9,16 @@ import {
   Textarea,
 } from "@/components/forms";
 import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
@@ -20,7 +30,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
-import { updateCourse } from "@/lib/actions";
+import { deleteCourse, updateCourse } from "@/lib/actions";
 import { useCategories, useStaffs } from "@/lib/hooks";
 import {
   Category,
@@ -37,8 +47,10 @@ import {
   CloudUpload,
   LoaderCircle,
   SquareArrowOutUpRight,
+  Trash2,
   Upload,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useContext, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -82,6 +94,8 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
   const { user } = useContext(AuthenticationContext);
   const [isStale, setStale] = useState(false);
   const [isSaving, setSaving] = useState(false);
+  const [isDeleting, setDeleting] = useState(false);
+
   const { toast } = useToast();
 
   const { categories, isLoading: categoryLoading } = useCategories();
@@ -122,6 +136,21 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      setDeleting(true);
+      await deleteCourse(course.id, true);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: parseErrorResponse(error),
+        variant: "destructive",
+      });
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   const saveStateView = () => {
     if (isSaving) {
       return (
@@ -144,7 +173,7 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
 
   return (
     <div className="flex flex-col">
-      <div className="flex items-center gap-3 fixed inset-x-0 top-0 bg-white px-4 h-[65px] border-b">
+      <div className="flex items-center space-x-3 fixed inset-x-0 top-0 bg-white px-4 h-[65px] border-b">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -174,12 +203,59 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
           </BreadcrumbList>
         </Breadcrumb>
         <div className="flex-1"></div>
-        <Button disabled={isSubmitting || isSaving} variant="default" asChild>
-          <Link href={`/admin/courses/${course.id}/preview`}>Preview</Link>
-        </Button>
-        <Button disabled={isSubmitting || isSaving} className="">
-          {course.status === "published" ? "Unpublish" : "Publish"}
-        </Button>
+
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button disabled={isSubmitting || isSaving} className="ms-2">
+              {course.status === "draft" ? "Publish" : "Unpublish"}
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Confirm</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure to&nbsp;
+                {course.status === "draft" ? "publish" : "unpublish"} course?
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel disabled={isSaving}>Cancel</AlertDialogCancel>
+              <Button disabled={isSaving}>
+                {isSaving && (
+                  <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                {course.status === "draft" ? "Publish" : "Unpublish"}
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="destructive" size="icon">
+              <Trash2 className="size-5" />
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Confirm Delete</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure to delete course?
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel disabled={isDeleting}>
+                Cancel
+              </AlertDialogCancel>
+              <Button onClick={handleDelete} disabled={isDeleting}>
+                {isDeleting && (
+                  <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                Proceed
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
       <div className="grow fixed inset-0 overflow-y-auto mt-[65px] py-4">
         <div className="container grid grid-cols-1 lg:grid-cols-12 gap-4 mb-10">
@@ -327,29 +403,41 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
                   <div className="flex flex-col">
                     <label className="font-medium mb-1">Cover photo</label>
                     <div className="aspect-w-3 aspect-h-1 border-2 border-dashed rounded-md bg-gray-50">
-                      <div className="flex justify-center p-1">
-                        {/* <Image
-                      alt="Cover"
-                      src={"/images/placeholder.jpeg"}
-                      width={0}
-                      height={0}
-                      sizes="100vw"
-                      priority
-                      className="object-cover h-full w-auto"
-                    /> */}
-                      </div>
-                      <div className="absolute inset-0 flex flex-col items-center justify-center">
-                        <Button
-                          variant="link"
-                          className="font-semibold hover:no-underline"
-                        >
-                          Upload image
-                          <Upload className="size-5 ms-2" />
-                        </Button>
-                        <span className="text-sm text-sliver text-center">
-                          PNG or JPG up to 1MB
-                        </span>
-                      </div>
+                      <Controller
+                        control={control}
+                        name="cover"
+                        render={({ field }) => {
+                          if (field.value) {
+                            return (
+                              <div className="flex justify-center p-1">
+                                <Image
+                                  alt="Cover"
+                                  src={field.value}
+                                  width={0}
+                                  height={0}
+                                  sizes="100vw"
+                                  priority
+                                  className="object-cover h-full w-auto"
+                                />
+                              </div>
+                            );
+                          }
+                          return (
+                            <div className="absolute inset-0 flex flex-col items-center justify-center">
+                              <Button
+                                variant="link"
+                                className="font-semibold hover:no-underline"
+                              >
+                                Upload image
+                                <Upload className="size-5 ms-2" />
+                              </Button>
+                              <span className="text-sm text-sliver text-center">
+                                PNG or JPG up to 1MB
+                              </span>
+                            </div>
+                          );
+                        }}
+                      />
                     </div>
                   </div>
 
@@ -390,6 +478,7 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
                 </div>
               </CardContent>
             </Card>
+
             {/* <fieldset className="grid grid-cols-1 gap-4 rounded border p-4 lg:p-5">
               <legend className="-ml-1 px-1 text-sm font-medium">
                 Curriculum

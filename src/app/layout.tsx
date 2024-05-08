@@ -3,7 +3,7 @@ import "../styles/codeblock.scss";
 
 import type { Metadata, Viewport } from "next";
 import Providers from "@/components/providers";
-import { API_URL } from "@/lib/constants";
+import { API_URL_LOCAL } from "@/lib/constants";
 import { cookies } from "next/headers";
 import { User } from "@/lib/models";
 import { AuthenticationContextProvider } from "@/components/authentication-context-porvider";
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 };
 
 const getUser = async () => {
-  const url = `${API_URL}/profile`;
+  const url = `${API_URL_LOCAL}/profile`;
   const resp = await fetch(url, {
     headers: {
       Cookie: cookies().toString(),

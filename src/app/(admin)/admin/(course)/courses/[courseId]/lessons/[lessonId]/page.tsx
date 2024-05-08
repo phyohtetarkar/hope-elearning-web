@@ -1,12 +1,12 @@
-import { API_URL } from "@/lib/constants";
+import { API_URL_LOCAL } from "@/lib/constants";
 import { Lesson } from "@/lib/models";
 import { validateResponse } from "@/lib/validate-response";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import LessonEditPage from "./lesson-edit-page";
 
-const getLesson = async (courseId: string, lessonId: string) => {
-  const url = `${API_URL}/admin/courses/${courseId}/lessons/${lessonId}`;
+const getLesson = async (lessonId: string) => {
+  const url = `${API_URL_LOCAL}/admin/lessons/${lessonId}`;
 
   const resp = await fetch(url, {
     headers: {
@@ -31,9 +31,13 @@ export default async function LessonEdit({
 }: {
   params: { courseId: string; lessonId: string };
 }) {
-  const lesson = await getLesson(params.courseId, params.lessonId);
+  const lesson = await getLesson(params.lessonId);
 
   if (!lesson) {
+    redirect(`/admin/courses/${params.courseId}`);
+  }
+
+  if (lesson.course?.id !== params.courseId) {
     redirect(`/admin/courses/${params.courseId}`);
   }
 

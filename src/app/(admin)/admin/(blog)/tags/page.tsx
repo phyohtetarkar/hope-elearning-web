@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { API_URL } from "@/lib/constants";
+import { API_URL_LOCAL } from "@/lib/constants";
 import { Page, Tag } from "@/lib/models";
 import { validateResponse } from "@/lib/validate-response";
 import { cookies } from "next/headers";
@@ -26,7 +26,7 @@ const getTags = async ({ searchParams }: Props) => {
     limit: 10,
     includePostCount: true,
   });
-  const url = `${API_URL}/admin/tags${query}`;
+  const url = `${API_URL_LOCAL}/admin/tags${query}`;
 
   const resp = await fetch(url, {
     headers: {

@@ -7,6 +7,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { applyAuthCookies } from "@/lib/actions";
 import { firebaseAuth } from "@/lib/firebase.config";
+import { parseErrorResponse } from "@/lib/parse-error-response";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { inMemoryPersistence, signInWithEmailAndPassword } from "firebase/auth";
 import { Loader2 } from "lucide-react";
@@ -44,7 +45,11 @@ function LoginPage() {
       setError(undefined);
       const auth = firebaseAuth;
       auth.setPersistence(inMemoryPersistence);
-      const result = await signInWithEmailAndPassword(auth, values.username, values.password);
+      const result = await signInWithEmailAndPassword(
+        auth,
+        values.username,
+        values.password
+      );
 
       const idToken = await result.user.getIdToken();
       const refreshToken = result.user.refreshToken;
@@ -55,7 +60,7 @@ function LoginPage() {
         refreshToken: refreshToken,
       });
     } catch (error) {
-      console.error(error);
+      setError(parseErrorResponse(error));
     }
   };
 
@@ -66,7 +71,11 @@ function LoginPage() {
           <CardContent className="px-6 py-4">
             <h3 className="fw-bold mt-2 mb-4">Sign In</h3>
 
-            {error && <Alert variant="destructive" className="mb-4">{error}</Alert>}
+            {error && (
+              <Alert variant="destructive" className="mb-4">
+                {error}
+              </Alert>
+            )}
 
             <form
               className="grid grid-cols-1"

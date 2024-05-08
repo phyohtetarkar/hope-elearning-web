@@ -81,7 +81,10 @@ const LessonItem = ({ course, value }: { course: Course; value: Lesson }) => {
         {...attributes}
         {...listeners}
       />
-      <h6 className="text-sm">{value.title}</h6>
+      <div className="text-sm">
+        <span className="font-semibold line-clamp-1">{value.title}</span>
+        {value.trial && <span className="text-sliver">Trial</span>}
+      </div>
       <div className="flex-1"></div>
       <TooltipProvider>
         <Tooltip>
@@ -130,7 +133,7 @@ const LessonItem = ({ course, value }: { course: Course; value: Lesson }) => {
                 {isDeleting && (
                   <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
                 )}
-                Continue
+                Proceed
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>

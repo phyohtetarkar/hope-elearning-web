@@ -12,7 +12,7 @@ import {
   JSONContent,
 } from "novel";
 import { ImageResizer, handleCommandNavigation } from "novel/extensions";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Separator } from "../ui/separator";
 import { defaultExtensions } from "./extensions";
 import GenerativeMenuSwitch from "./generative/generative-menu-switch";
@@ -26,7 +26,7 @@ const extensions = [...defaultExtensions, slashCommand];
 
 interface NovelEditorProps {
   content?: JSONContent;
-  onChange?: (content: JSONContent) => void;
+  onChange?: (content: JSONContent, wordCount: number) => void;
 }
 
 export default function NovelEditor({ content, onChange }: NovelEditorProps) {
@@ -37,7 +37,8 @@ export default function NovelEditor({ content, onChange }: NovelEditorProps) {
 
   const debouncedUpdate = debounce((editor: EditorInstance) => {
     const json = editor.getJSON();
-    onChange?.(json);
+    const wordCount = editor.storage.characterCount.words();
+    onChange?.(json, wordCount ?? 0);
   }, 2000);
 
   return (

@@ -26,7 +26,8 @@ export default function SideMenu() {
   const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    setSelectedKeys(new Set([pathname.replace("/admin/", "")]));
+    const path = pathname.replace("/admin/", "");
+    setSelectedKeys(new Set([path === "/admin" ? "dashboard" : path]));
   }, [pathname]);
 
   return (
@@ -86,6 +87,7 @@ export default function SideMenu() {
             endContent={<SquareArrowOutUpRight size={iconSize} />}
             color="primary"
             target="_blank"
+            className="data-[selectable=true]:focus:bg-white data-[selectable=true]:focus:text-default-600 data-[focus=true]:bg-white"
           >
             View site
           </ListboxItem>

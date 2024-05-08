@@ -3,6 +3,8 @@
 import { Input } from "@/components/forms";
 import { Button } from "@/components/ui/button";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
+import { Switch } from "@/components/ui/switch";
+import { useToast } from "@/components/ui/use-toast";
 import { createLesson, updateLesson } from "@/lib/actions";
 import { Chapter, Course, Lesson } from "@/lib/models";
 import { parseErrorResponse } from "@/lib/parse-error-response";
@@ -10,7 +12,6 @@ import { setStringToSlug } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircle } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 import { z } from "zod";
 
 const schema = z.object({
@@ -23,6 +24,7 @@ const schema = z.object({
   slug: z.string().min(1, {
     message: "Please enter lesson slug",
   }),
+  trial: z.boolean().optional(),
 });
 
 type LessonForm = z.infer<typeof schema>;
@@ -38,6 +40,8 @@ function LessonEdit({
   data?: Lesson;
   close?: () => void;
 }) {
+
+  const { toast } = useToast();
   const {
     control,
     register,
@@ -73,7 +77,11 @@ function LessonEdit({
             }
             close?.();
           } catch (error) {
-            toast.error(parseErrorResponse(error));
+            toast({
+              title: "Error",
+              description: parseErrorResponse(error),
+              variant: "destructive",
+            });
           }
         })();
       }}
@@ -104,7 +112,7 @@ function LessonEdit({
                 label="Slug"
                 id="slug"
                 type="text"
-                wrapperClass="mb-4"
+                wrapperClass="mb-6"
                 placeholder="Enter slug"
                 value={field.value ?? ""}
                 onChange={(evt) => {
@@ -115,6 +123,23 @@ function LessonEdit({
                 }}
                 error={error?.message}
               />
+            );
+          }}
+        />
+
+        <Controller
+          control={control}
+          name="trial"
+          render={({ field }) => {
+            return (
+              <div className="flex items-center space-x-2 mb-4">
+                <Switch
+                  id="trial"
+                  checked={field.value ?? false}
+                  onCheckedChange={(v) => setValue("trial", v)}
+                />
+                <label htmlFor="trial" className="font-medium">Trial</label>
+              </div>
             );
           }}
         />

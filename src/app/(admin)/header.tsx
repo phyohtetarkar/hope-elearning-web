@@ -71,8 +71,9 @@ export default function Header() {
                 onClick={async () => {
                   await clearAuthCookies();
                 }}
+                className="text-destructive focus:text-destructive"
               >
-                Log Out
+                Log out
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

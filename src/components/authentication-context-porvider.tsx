@@ -3,7 +3,7 @@ import { User } from "@/lib/models";
 import { ReactNode, createContext, useEffect, useState } from "react";
 
 interface AuthenticationContextType {
-  user?: User | null;
+  user?: User | null | undefined;
 }
 
 const AuthenticationContext = createContext<AuthenticationContextType>({
@@ -14,7 +14,7 @@ const AuthenticationContextProvider = ({
   user,
   children,
 }: {
-  user?: User | null;
+  user?: User | null | undefined;
   children: ReactNode;
 }) => {
   const [authState, setAuthState] = useState<AuthenticationContextType>({});

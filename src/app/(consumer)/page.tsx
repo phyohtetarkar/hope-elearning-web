@@ -3,6 +3,7 @@ import Image from "next/image";
 import QuoteSwiper from "./quote-swiper";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { BlogGridItem } from "@/components/blog";
 
 export default function Home() {
   return (
@@ -47,8 +48,8 @@ export default function Home() {
         <QuoteSwiper />
       </div>
       <div className="container py-10">
-        <h3 className="mb-5">Recommended</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 bg-transparent">
+        <h3 className="mb-5">Top courses</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10 bg-transparent">
           <CourseGridItem />
           <CourseGridItem />
           <CourseGridItem />
@@ -57,7 +58,13 @@ export default function Home() {
           <CourseGridItem />
         </div>
 
-        <h3>Articles</h3>
+        <h3 className="mb-5">Recent posts</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 bg-transparent">
+          <BlogGridItem />
+          <BlogGridItem excerpt />
+          <BlogGridItem />
+          <BlogGridItem />
+        </div>
       </div>
     </>
   );

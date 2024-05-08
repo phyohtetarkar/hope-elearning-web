@@ -1,12 +1,12 @@
-import { API_URL } from "@/lib/constants";
-import { Page, Post, Tag, User } from "@/lib/models";
+import { API_URL_LOCAL } from "@/lib/constants";
+import { Post } from "@/lib/models";
 import { validateResponse } from "@/lib/validate-response";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import PostEditPage from "./post-edit-page";
 
 const getPost = async (id: string) => {
-  const url = `${API_URL}/admin/posts/${id}`;
+  const url = `${API_URL_LOCAL}/admin/posts/${id}`;
 
   const resp = await fetch(url, {
     headers: {
@@ -20,34 +20,6 @@ const getPost = async (id: string) => {
     .json()
     .then((json) => json as Post)
     .catch((e) => undefined);
-};
-
-const getAuthors = async () => {
-  const url = `${API_URL}/admin/users?staffOnly=true`;
-
-  const resp = await fetch(url, {
-    headers: {
-      Cookie: cookies().toString(),
-    },
-  });
-
-  await validateResponse(resp);
-
-  return (await resp.json()) as Page<User>;
-};
-
-const getTags = async () => {
-  const url = `${API_URL}/admin/tags`;
-
-  const resp = await fetch(url, {
-    headers: {
-      Cookie: cookies().toString(),
-    },
-  });
-
-  await validateResponse(resp);
-
-  return (await resp.json()) as Page<Tag>;
 };
 
 export default async function PostEdit({ params }: { params: { id: string } }) {

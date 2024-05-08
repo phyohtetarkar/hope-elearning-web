@@ -2,12 +2,6 @@
 
 import { ContentRenderer } from "@/components/editor";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbList,
@@ -16,10 +10,11 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Progress } from "@/components/ui/progress";
+import { DrawerContext } from "@/components/ui/drawer";
 import { Separator } from "@/components/ui/separator";
-import { CheckCircle, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import Link from "next/link";
+import { useContext } from "react";
 
 const curriculum = [
   {
@@ -76,60 +71,11 @@ const curriculum = [
 ];
 
 export default function ResumeCoursePage() {
+  const { isMenuOpen, toggle } = useContext(DrawerContext);
+
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 lg:h-full">
-      <div className="lg:col-span-3 2xl:col-span-2 border-r relative">
-        <div className="absolute inset-0 bg-gray-50 hidden lg:block overflow-y-auto scrollbar-custom">
-          <div className="flex flex-col p-4">
-            <h5 className="mb-5">Getting started with docker</h5>
-
-            <div className="text-sm text-sliver mb-1">50% completed</div>
-            <Progress
-              value={50}
-              max={100}
-              className="h-3 mb-6"
-              indicatorClass="bg-success"
-            />
-
-            <Accordion
-              type="multiple"
-              className="flex flex-col gap-2"
-              defaultValue={["chapter-0", "chapter-1", "chapter-2"]}
-            >
-              {curriculum.map((c, i) => {
-                return (
-                  <AccordionItem key={i} value={`chapter-${i}`}>
-                    <AccordionTrigger className="py-2">
-                      <h6>{c.name}</h6>
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      <div className="flex flex-col divide-y">
-                        {c.lessons.map((l, i) => {
-                          return (
-                            <div
-                              key={i}
-                              className="flex items-center gap-2 py-3"
-                            >
-                              <CheckCircle className="text-success size-5" />
-                              <Link
-                                href={`/courses/docker/lessons/lesson-1`}
-                                className="hover:text-primary"
-                              >
-                                {l.name}
-                              </Link>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                );
-              })}
-            </Accordion>
-          </div>
-        </div>
-      </div>
-      <div className="lg:col-span-7 2xl:col-span-8 relative">
+    <div className="grid grid-cols-1 lg:grid-cols-10 h-full">
+      <div className="lg:col-span-8 relative">
         <div className="absolute inset-0 lg:overflow-y-auto lg:scrollbar-hide p-4 lg:px-6">
           <Breadcrumb className="mb-5">
             <BreadcrumbList>
@@ -137,6 +83,7 @@ export default function ResumeCoursePage() {
                 <div
                   role="button"
                   className="flex items-center gap-2 text-primary font-semibold"
+                  onClick={toggle}
                 >
                   <Menu />
                   Menu
@@ -174,8 +121,8 @@ export default function ResumeCoursePage() {
           </div>
         </div>
       </div>
-      <div className="lg:col-span-2 relative border-l">
-        <div className="absolute inset-0 lg:overflow-y-auto lg:scrollbar-hide p-4 hidden lg:block">
+      <div className="lg:col-span-2 relative border-l hidden lg:block">
+        <div className="absolute inset-0 lg:overflow-y-auto lg:scrollbar-hide p-4">
           <h6 className="text-sm">On this lesson</h6>
           <Separator className="my-3" />
           <ul>

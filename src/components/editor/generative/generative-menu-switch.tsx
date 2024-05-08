@@ -1,9 +1,9 @@
-import { EditorBubble, useEditor } from "novel";
-import React, { Fragment, useEffect, type ReactNode } from "react";
-import { AISelector } from "./ai-selector";
-import { removeAIHighlight } from "novel/extensions";
 import { Button } from "@/components/ui/button";
 import { Sparkles } from "lucide-react";
+import { EditorBubble, useEditor } from "novel";
+import { removeAIHighlight } from "novel/extensions";
+import { useEffect, type ReactNode } from "react";
+import { AISelector } from "./ai-selector";
 
 interface GenerativeMenuSwitchProps {
   children: ReactNode;

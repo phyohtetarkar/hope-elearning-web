@@ -24,6 +24,7 @@ import { UserIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useContext, useState } from "react";
+import HeaderSearchField from "./header-search-field";
 
 export default function Header() {
   const { user } = useContext(AuthenticationContext);
@@ -60,13 +61,20 @@ export default function Header() {
               <DropdownMenuItem asChild>
                 <Link href="/profile">My Profile</Link>
               </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/profile/learnings">My Learnings</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/profile/bookmarks">My Bookmarks</Link>
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={async () => {
                   await clearAuthCookies();
                 }}
+                className="text-destructive focus:text-destructive"
               >
-                Log Out
+                Log out
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -142,6 +150,7 @@ export default function Header() {
               alt="Logo"
               fill
               className="rounded object-fill"
+              priority
             />
           </div>
           <h3 className="ms-3">{process.env.NEXT_PUBLIC_APP_NAME}</h3>
@@ -167,13 +176,7 @@ export default function Header() {
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link
-            href={"/about-us"}
-            color="foreground"
-            className="hover:text-primary"
-          >
-            About us
-          </Link>
+          <HeaderSearchField />
         </NavbarItem>
       </NavbarContent>
 

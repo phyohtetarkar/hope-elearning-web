@@ -3,6 +3,7 @@
 import { Input } from "@/components/forms";
 import { Button } from "@/components/ui/button";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
+import { useToast } from "@/components/ui/use-toast";
 import { createCategory, updateCategory } from "@/lib/actions";
 import { Category } from "@/lib/models";
 import { parseErrorResponse } from "@/lib/parse-error-response";
@@ -10,7 +11,6 @@ import { setStringToSlug } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircle } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 import { z } from "zod";
 
 const schema = z.object({
@@ -32,6 +32,8 @@ function CategoryEdit({
   data?: Category;
   close?: () => void;
 }) {
+  const { toast } = useToast();
+
   const {
     control,
     register,
@@ -59,7 +61,11 @@ function CategoryEdit({
             }
             close?.();
           } catch (error) {
-            toast.error(parseErrorResponse(error));
+            toast({
+              title: "Error",
+              description: parseErrorResponse(error),
+              variant: "destructive",
+            });
           }
         })();
       }}

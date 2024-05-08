@@ -7,6 +7,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { applyAuthCookies } from "@/lib/actions";
 import { firebaseAuth } from "@/lib/firebase.config";
+import { parseErrorResponse } from "@/lib/parse-error-response";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   createUserWithEmailAndPassword,
@@ -77,7 +78,7 @@ function SignUpPage() {
         refreshToken: refreshToken,
       });
     } catch (error) {
-      console.error(error);
+      setError(parseErrorResponse(error));
     }
   };
 

@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { API_URL } from "@/lib/constants";
+import { API_URL_LOCAL } from "@/lib/constants";
 import { Page, Post, PostStatus } from "@/lib/models";
 import { buildQueryParams } from "@/lib/utils";
 import { validateResponse } from "@/lib/validate-response";
@@ -26,7 +26,7 @@ interface Props {
 const getPosts = async ({ searchParams }: Props) => {
   const query = buildQueryParams({ ...searchParams, limit: 10 });
 
-  const url = `${API_URL}/admin/posts${query}`;
+  const url = `${API_URL_LOCAL}/admin/posts${query}`;
 
   const resp = await fetch(url, {
     headers: {

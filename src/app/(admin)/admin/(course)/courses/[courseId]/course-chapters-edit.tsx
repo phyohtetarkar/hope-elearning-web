@@ -97,19 +97,47 @@ const ChapterItem = ({
       style={style}
     >
       <AccordionTrigger>
-        <div className="flex items-start gap-2">
+        <div className="flex items-start space-x-2">
           <Menu
             className="size-5 cursor-move outline-none text-gray-500 flex-shrink-0"
             {...attributes}
             {...listeners}
           />
-          <h6 className="text-sm">{value.title}</h6>
+          <h6 className="text-sm line-clamp-1">{value.title}</h6>
         </div>
       </AccordionTrigger>
-      <AccordionContent className="flex flex-col gap-2">
+      <AccordionContent className="flex flex-col space-y-2">
         <CourseLessonsEdit course={course} chapter={value} />
         <TooltipProvider>
-          <div className="flex gap-2 mt-2">
+          <div className="flex space-x-2 mt-2">
+            <Dialog open={openLessonEdit} onOpenChange={setOpenLessonEdit}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <DialogTrigger asChild>
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      className="flex-shrink-0"
+                    >
+                      <Plus className="size-4" />
+                    </Button>
+                  </DialogTrigger>
+                </TooltipTrigger>
+                <TooltipContent>Add lesson</TooltipContent>
+              </Tooltip>
+
+              <DialogContent onInteractOutside={(evt) => evt.preventDefault()}>
+                <DialogHeader>
+                  <DialogTitle>Create Lesson</DialogTitle>
+                </DialogHeader>
+                <LessonEdit
+                  course={course}
+                  chapter={value}
+                  close={() => setOpenLessonEdit(false)}
+                />
+              </DialogContent>
+            </Dialog>
+
             <Dialog open={openChapterEdit} onOpenChange={setOpenChapterEdit}>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -135,34 +163,6 @@ const ChapterItem = ({
                   data={value}
                   index={index}
                   close={() => setOpenChapterEdit(false)}
-                />
-              </DialogContent>
-            </Dialog>
-
-            <Dialog open={openLessonEdit} onOpenChange={setOpenLessonEdit}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <DialogTrigger asChild>
-                    <Button
-                      size="icon"
-                      variant="outline"
-                      className="flex-shrink-0"
-                    >
-                      <Plus className="size-4" />
-                    </Button>
-                  </DialogTrigger>
-                </TooltipTrigger>
-                <TooltipContent>Add lesson</TooltipContent>
-              </Tooltip>
-
-              <DialogContent onInteractOutside={(evt) => evt.preventDefault()}>
-                <DialogHeader>
-                  <DialogTitle>Create Lesson</DialogTitle>
-                </DialogHeader>
-                <LessonEdit
-                  course={course}
-                  chapter={value}
-                  close={() => setOpenLessonEdit(false)}
                 />
               </DialogContent>
             </Dialog>
@@ -200,7 +200,7 @@ const ChapterItem = ({
                     {isDeleting && (
                       <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
                     )}
-                    Continue
+                    Proceed
                   </Button>
                 </AlertDialogFooter>
               </AlertDialogContent>

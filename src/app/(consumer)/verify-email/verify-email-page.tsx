@@ -2,14 +2,15 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { useToast } from "@/components/ui/use-toast";
 import { sendVerificationEmail } from "@/lib/actions";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 
 export default function VerifyEmailPage() {
   const [resend, setResend] = useState(true);
   const [timer, setTimer] = useState(0);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (resend) {
@@ -64,7 +65,11 @@ export default function VerifyEmailPage() {
                     setResend(false);
                     await sendVerificationEmail();
                   } catch (error: any) {
-                    toast.error(error.message);
+                    toast({
+                      title: "Error",
+                      description: error.message,
+                      variant: "destructive",
+                    });
                   }
                 }}
               >

@@ -1,12 +1,39 @@
 "use client";
 
 import { NextUIProvider } from "@nextui-org/system";
+import {
+  ArcElement,
+  CategoryScale,
+  Chart,
+  DoughnutController,
+  Filler,
+  Legend,
+  LineController,
+  LineElement,
+  LinearScale,
+  PieController,
+  PointElement,
+  Tooltip
+} from "chart.js";
 import NextNProgress from "nextjs-progressbar";
 import NProgress from "nprogress";
 import { Suspense, useEffect } from "react";
-import { ToastContainer } from "react-toastify";
 import { NavigationEvents } from "./navigation-events";
 import { Toaster } from "./ui/toaster";
+
+Chart.register(
+  LineController,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
+  PieController,
+  DoughnutController,
+  ArcElement,
+  Filler,
+  Tooltip,
+  Legend
+);
 
 type PushStateInput = [
   data: any,
@@ -55,13 +82,6 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           options={{
             showSpinner: false,
           }}
-        />
-        <ToastContainer
-          position="top-right"
-          autoClose={3000}
-          hideProgressBar
-          newestOnTop
-          theme="colored"
         />
       </Suspense>
       <NextUIProvider className="h-full">{children}</NextUIProvider>

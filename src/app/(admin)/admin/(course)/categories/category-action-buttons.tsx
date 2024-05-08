@@ -111,7 +111,7 @@ export default function CategoryActionButtons({
                 {isDeleting && (
                   <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
                 )}
-                Continue
+                Proceed
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>

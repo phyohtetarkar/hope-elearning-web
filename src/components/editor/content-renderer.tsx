@@ -347,9 +347,13 @@ const json = {
     },
   ],
 };
-export function ContentRenderer() {
+export function ContentRenderer({ lexical }: { lexical?: string }) {
   const output = useMemo(() => {
-    return generateHTML(json, [
+    if (!lexical) {
+      return "";
+    }
+    
+    return generateHTML(JSON.parse(lexical), [
       Document,
       Heading,
       Text,
@@ -362,7 +366,7 @@ export function ContentRenderer() {
       HorizontalRule,
       CustomYoutube,
     ]);
-  }, []);
+  }, [lexical]);
 
   useEffect(() => {
     hljs.highlightAll();

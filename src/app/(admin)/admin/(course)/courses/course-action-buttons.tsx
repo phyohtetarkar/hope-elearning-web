@@ -18,6 +18,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/use-toast";
+import { deleteCourse } from "@/lib/actions";
 import { Course } from "@/lib/models";
 import { parseErrorResponse } from "@/lib/parse-error-response";
 import { Edit, LoaderCircle, Trash2 } from "lucide-react";
@@ -33,6 +34,7 @@ export default function CourseActionButtons({ course }: { course: Course }) {
   const handleDelete = async () => {
     try {
       setDeleting(true);
+      await deleteCourse(course.id);
       setAlertOpen(false);
     } catch (error) {
       toast({
@@ -88,7 +90,7 @@ export default function CourseActionButtons({ course }: { course: Course }) {
                 {isDeleting && (
                   <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
                 )}
-                Continue
+                Proceed
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>

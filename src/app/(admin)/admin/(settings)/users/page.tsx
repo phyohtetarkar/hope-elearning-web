@@ -10,7 +10,7 @@ import {
 import UserActionButtons from "./user-action-buttons";
 import Pagination from "@/components/ui/pagination";
 import UserFilter from "./users-filter";
-import { API_URL } from "@/lib/constants";
+import { API_URL_LOCAL } from "@/lib/constants";
 import { cookies } from "next/headers";
 import { validateResponse } from "@/lib/validate-response";
 import { Page, User } from "@/lib/models";
@@ -23,7 +23,7 @@ interface Props {
 const getUsers = async ({ searchParams }: Props) => {
   const query = buildQueryParams({ ...searchParams, limit: 10 });
 
-  const url = `${API_URL}/admin/users${query}`;
+  const url = `${API_URL_LOCAL}/admin/users${query}`;
 
   const resp = await fetch(url, {
     headers: {

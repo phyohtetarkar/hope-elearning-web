@@ -1,14 +1,19 @@
 "use server";
 
 import { getSession } from "@/lib/auth";
-import { API_URL } from "@/lib/constants";
+import { API_URL_LOCAL } from "@/lib/constants";
 import { validateResponse } from "@/lib/validate-response";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
-export async function deleteLesson(courseId: string, lessonId: string) {
+export async function deleteLesson(
+  courseId: string,
+  lessonId: string,
+  needRedirect?: boolean
+) {
   const session = await getSession();
 
-  const url = `${API_URL}/admin/courses/${courseId}/lessons/${lessonId}`;
+  const url = `${API_URL_LOCAL}/admin/lessons/${lessonId}`;
 
   const resp = await fetch(url, {
     method: "DELETE",
@@ -21,4 +26,8 @@ export async function deleteLesson(courseId: string, lessonId: string) {
 
   // revalidatePath(`/(admin)/admin/(course)/courses/[courseId]`, "page");
   revalidatePath(`/admin/courses/${courseId}`);
+
+  if (needRedirect) {
+    redirect(`/admin/courses/${courseId}`);
+  }
 }

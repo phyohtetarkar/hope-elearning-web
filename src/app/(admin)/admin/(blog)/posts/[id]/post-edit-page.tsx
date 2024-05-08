@@ -9,6 +9,16 @@ import {
   TitleInput,
 } from "@/components/forms";
 import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
@@ -31,6 +41,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/use-toast";
+import { deletePost } from "@/lib/actions";
 import { useStaffs, useTags } from "@/lib/hooks";
 import { Post, PostVisibility, Tag, User } from "@/lib/models";
 import { parseErrorResponse } from "@/lib/parse-error-response";
@@ -65,6 +76,7 @@ const schema = z.object({
     return typeof v === "string" ? /public|member|paid_member/.test(v) : false;
   }),
   lexical: z.string().optional(),
+  wordCount: z.number(),
   authors: z.custom<User>().array().min(1, {
     message: "Required at least one author",
   }),
@@ -85,6 +97,7 @@ export default function PostEditPage({ post }: PostEditPageProps) {
   const [isOpenSettings, setOpenSettings] = useState(false);
   const [isStale, setStale] = useState(false);
   const [isSaving, setSaving] = useState(false);
+  const [isDeleting, setDeleting] = useState(false);
 
   const { tags, isLoading: tagLoading } = useTags();
   const { users, isLoading: userLoading } = useStaffs();
@@ -106,6 +119,7 @@ export default function PostEditPage({ post }: PostEditPageProps) {
       excerpt: post.excerpt,
       visibility: post.visibility,
       lexical: post.lexical,
+      wordCount: post.wordCount,
       publishedAt: post.publishedAt,
       authors: post.authors ?? [],
       tags: post.tags ?? [],
@@ -144,6 +158,21 @@ export default function PostEditPage({ post }: PostEditPageProps) {
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      setDeleting(true);
+      await deletePost(post.id, true);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: parseErrorResponse(error),
+        variant: "destructive",
+      });
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   const debouncedUpdate = debounce(handleUpdate, 2000);
 
   const saveStateView = () => {
@@ -160,36 +189,36 @@ export default function PostEditPage({ post }: PostEditPageProps) {
     return <Cloud className="flex-shrink-0 text-success" />;
   };
 
-  const coverImageView = () => {
-    if (!post.cover) {
-      return (
-        <Button variant="outline" size="sm" className="mb-8 rounded-full">
-          <ImagePlus size={20} className="mr-2" />
-          Add Cover
-        </Button>
-      );
-    }
-    return (
-      <div className="relative mb-8">
-        <Image
-          src={post.cover ?? "/images/course.jpg"}
-          alt="Cover"
-          width={0}
-          height={0}
-          sizes="100vw"
-          priority
-          style={{
-            objectFit: "cover",
-            width: "100%",
-            height: "auto",
-          }}
-        />
-        <Button variant="light" size="icon" className="absolute top-4 right-4">
-          <Trash2 size={20} />
-        </Button>
-      </div>
-    );
-  };
+  // const coverImageView = () => {
+  //   if (!post.cover) {
+  //     return (
+  //       <Button variant="outline" size="sm" className="mb-8 rounded-full">
+  //         <ImagePlus size={20} className="mr-2" />
+  //         Add Cover
+  //       </Button>
+  //     );
+  //   }
+  //   return (
+  //     <div className="relative mb-8">
+  //       <Image
+  //         src={post.cover ?? "/images/course.jpg"}
+  //         alt="Cover"
+  //         width={0}
+  //         height={0}
+  //         sizes="100vw"
+  //         priority
+  //         style={{
+  //           objectFit: "cover",
+  //           width: "100%",
+  //           height: "auto",
+  //         }}
+  //       />
+  //       <Button variant="light" size="icon" className="absolute top-4 right-4">
+  //         <Trash2 size={20} />
+  //       </Button>
+  //     </div>
+  //   );
+  // };
 
   if (!user) {
     return null;
@@ -230,9 +259,35 @@ export default function PostEditPage({ post }: PostEditPageProps) {
           </Breadcrumb>
           <div className="flex-1"></div>
           {saveStateView()}
-          <Button disabled={isSaving} className="ms-2">
-            Publish
-          </Button>
+
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button disabled={isSaving} className="ms-2">
+                Publish
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Confirm</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Are you sure to&nbsp;
+                  {post.status === "draft" ? "publish" : "unpublish"} post?
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel disabled={isSaving}>
+                  Cancel
+                </AlertDialogCancel>
+                <Button disabled={isSaving}>
+                  {isSaving && (
+                    <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  {post.status === "draft" ? "Publish" : "Unpublish"}
+                </Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+
           <TooltipProvider>
             <Tooltip delayDuration={300}>
               <TooltipTrigger className="ms-auto">
@@ -253,7 +308,48 @@ export default function PostEditPage({ post }: PostEditPageProps) {
         </nav>
         <div className="grow fixed inset-0 overflow-y-auto mt-[65px]">
           <div className="container max-w-3xl mt-7 mb-10">
-            {coverImageView()}
+            <Controller
+              control={control}
+              name="cover"
+              render={({ field }) => {
+                if (field.value) {
+                  return (
+                    <div className="relative mb-8">
+                      <Image
+                        src={field.value}
+                        alt="Cover"
+                        width={0}
+                        height={0}
+                        sizes="100vw"
+                        priority
+                        style={{
+                          objectFit: "cover",
+                          width: "100%",
+                          height: "auto",
+                        }}
+                      />
+                      <Button
+                        variant="light"
+                        size="icon"
+                        className="absolute top-4 right-4"
+                      >
+                        <Trash2 size={20} />
+                      </Button>
+                    </div>
+                  );
+                }
+                return (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="mb-8 rounded-full"
+                  >
+                    <ImagePlus size={20} className="mr-2" />
+                    Add Cover
+                  </Button>
+                );
+              }}
+            />
             <div className="mb-6">
               <Controller
                 control={control}
@@ -282,8 +378,9 @@ export default function PostEditPage({ post }: PostEditPageProps) {
             </div>
             <NovelEditor
               content={post.lexical ? JSON.parse(post.lexical) : undefined}
-              onChange={(json) => {
+              onChange={(json, wordCount) => {
                 setValue("lexical", JSON.stringify(json));
+                setValue("wordCount", wordCount);
                 if (post.status === "draft") {
                   handleUpdate();
                 }
@@ -539,7 +636,32 @@ export default function PostEditPage({ post }: PostEditPageProps) {
             )}
 
             <div className="grow mt-6"></div>
-            <Button variant="destructive">Delete post</Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive">Delete post</Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Confirm Delete</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Are you sure to delete post: &ldquo;
+                    {post.title ?? "(Untitled)"}
+                    &ldquo;?
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel disabled={isDeleting}>
+                    Cancel
+                  </AlertDialogCancel>
+                  <Button onClick={handleDelete} disabled={isDeleting}>
+                    {isDeleting && (
+                      <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                    )}
+                    Proceed
+                  </Button>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
             <div className="pb-4"></div>
           </div>
         </div>
