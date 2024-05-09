@@ -47,6 +47,7 @@ export default function CategoryActionButtons({
     try {
       setDeleting(true);
       await deleteCategory(category.id);
+      setAlertOpen(false);
     } catch (error) {
       toast({
         title: "Error",
