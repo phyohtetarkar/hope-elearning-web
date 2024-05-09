@@ -1,7 +1,8 @@
 import { Alert } from "@/components/ui/alert";
 import { API_URL_LOCAL } from "@/lib/constants";
-import { Course } from "@/lib/models";
+import { Course, EnrolledCourse } from "@/lib/models";
 import { Metadata, ResolvingMetadata } from "next";
+import { cookies } from "next/headers";
 import CoursePage from "./course-page";
 
 interface Props {
@@ -21,6 +22,56 @@ const getCourse = async (slug: string) => {
     .json()
     .then((json) => json as Course)
     .catch((e) => undefined);
+};
+
+const getEnrolledCourse = async (courseId: string) => {
+  const cookieStore = cookies();
+
+  if (!cookieStore.has("access_token")) {
+    return undefined;
+  }
+
+  const url = `${API_URL_LOCAL}/enrollments/${courseId}`;
+
+  const resp = await fetch(url, {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
+
+  if (!resp.ok) {
+    return undefined;
+  }
+
+  return resp
+    .json()
+    .then((json) => json as EnrolledCourse)
+    .catch(() => undefined);
+};
+
+const checkBookmarked = async (courseId: string) => {
+  const cookieStore = cookies();
+
+  if (!cookieStore.has("access_token")) {
+    return false;
+  }
+
+  const url = `${API_URL_LOCAL}/bookmarks/${courseId}/check`;
+
+  const resp = await fetch(url, {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
+
+  if (!resp.ok) {
+    return false;
+  }
+
+  return resp
+    .json()
+    .then((json) => json as boolean)
+    .catch(() => false);
 };
 
 export async function generateMetadata(
@@ -68,5 +119,20 @@ export default async function CourseDetail({ params }: Props) {
       </div>
     );
   }
-  return <CoursePage course={course} />;
+
+  const enrolledCoursePromise = getEnrolledCourse(course.id);
+  const checkBookmarkedPromise = checkBookmarked(course.id);
+
+  const [enrolledCourse, isBookmarked] = await Promise.all([
+    enrolledCoursePromise,
+    checkBookmarkedPromise,
+  ]);
+
+  return (
+    <CoursePage
+      course={course}
+      enrolledCourse={enrolledCourse}
+      isBookmarked={isBookmarked}
+    />
+  );
 }

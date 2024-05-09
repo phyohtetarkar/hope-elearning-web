@@ -18,13 +18,13 @@ const aiHighlight = AIHighlight;
 
 const placeholder = Placeholder.configure({});
 
-const tiptapLink = TiptapLink.configure({
-  HTMLAttributes: {
-    class: cn(
-      "text-muted-foreground underline underline-offset-[3px] hover:text-primary transition-colors cursor-pointer"
-    ),
-  },
-});
+// const tiptapLink = TiptapLink.configure({
+//   HTMLAttributes: {
+//     class: cn(
+//       "text-muted-foreground underline underline-offset-[3px] hover:text-primary transition-colors cursor-pointer"
+//     ),
+//   },
+// });
 
 const taskList = TaskList.configure({
   HTMLAttributes: {

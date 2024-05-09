@@ -13,7 +13,7 @@ export async function deleteLesson(
 ) {
   const session = await getSession();
 
-  const url = `${API_URL_LOCAL}/admin/lessons/${lessonId}`;
+  const url = `${API_URL_LOCAL}/admin/courses/${courseId}/lessons/${lessonId}`;
 
   const resp = await fetch(url, {
     method: "DELETE",

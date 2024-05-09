@@ -18,7 +18,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Course } from "@/lib/models";
+import { Course, EnrolledCourse } from "@/lib/models";
 import { formatNumber, uppercaseFirstChar } from "@/lib/utils";
 import {
   BarChart,
@@ -33,61 +33,15 @@ import Image from "next/image";
 import Link from "next/link";
 import CourseReviewEdit from "./course-review-edit";
 
-const curriculum = [
-  {
-    name: "Chapter 1",
-    lessons: [
-      {
-        name: "Lessons 1",
-        trial: true,
-      },
-      {
-        name: "Lessons 2",
-        trial: false,
-      },
-      {
-        name: "Lessons 3",
-        trial: false,
-      },
-    ],
-  },
-  {
-    name: "Chapter 2",
-    lessons: [
-      {
-        name: "Lessons 1",
-        trial: true,
-      },
-      {
-        name: "Lessons 2",
-        trial: false,
-      },
-      {
-        name: "Lessons 3",
-        trial: false,
-      },
-    ],
-  },
-  {
-    name: "Chapter 3",
-    lessons: [
-      {
-        name: "Lessons 1",
-        trial: true,
-      },
-      {
-        name: "Lessons 2",
-        trial: false,
-      },
-      {
-        name: "Lessons 3",
-        trial: false,
-      },
-    ],
-  },
-];
-
-export default function CoursePage({ course }: { course: Course }) {
+export default function CoursePage({
+  course,
+  enrolledCourse,
+  isBookmarked,
+}: {
+  course: Course;
+  enrolledCourse?: EnrolledCourse;
+  isBookmarked: boolean;
+}) {
   return (
     <>
       <div className="bg-primary py-6 lg:py-16">
@@ -233,8 +187,26 @@ export default function CoursePage({ course }: { course: Course }) {
                     </Tooltip>
                   </TooltipProvider>
                 </div>
-                <Button className="mb-2">Enroll</Button>
-                <Button variant="outline">Bookmark</Button>
+                {enrolledCourse ? (
+                  <Button className="mb-2" asChild>
+                    {enrolledCourse.resumeLesson?.slug ? (
+                      <Link
+                        href={`/learn/${course.slug}/lessons/${enrolledCourse.resumeLesson.slug}`}
+                      >
+                        Resume course
+                      </Link>
+                    ) : (
+                      <Link href={`/learn/${course.slug}`}>Resume course</Link>
+                    )}
+                  </Button>
+                ) : (
+                  <Button className="mb-2">Enroll</Button>
+                )}
+                {isBookmarked ? (
+                  <Button variant="outline">Remove bookmark</Button>
+                ) : (
+                  <Button variant="outline">Bookmark</Button>
+                )}
 
                 <Separator className="my-5" />
 

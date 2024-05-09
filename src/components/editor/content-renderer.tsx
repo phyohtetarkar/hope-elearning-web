@@ -13,6 +13,7 @@ import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import { generateHTML } from "@tiptap/html";
 import { useEffect, useMemo } from "react";
 import { CustomYoutube } from "./extensions/youtube";
+import { mergeAttributes, Node, textblockTypeInputRule } from "@tiptap/core";
 
 const json = {
   type: "doc",
@@ -352,10 +353,22 @@ export function ContentRenderer({ lexical }: { lexical?: string }) {
     if (!lexical) {
       return "";
     }
-    
+
     return generateHTML(JSON.parse(lexical), [
       Document,
-      Heading,
+      Heading.extend({
+        renderHTML({ node, HTMLAttributes }) {
+          const hasLevel = this.options.levels.includes(node.attrs.level);
+          const level = hasLevel ? node.attrs.level : this.options.levels[0];
+          return [
+            `h${level}`,
+            mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
+              id: node.text?.replaceAll(/\s+/g, "-").toLowerCase(),
+            }),
+            0,
+          ];
+        },
+      }),
       Text,
       Paragraph,
       CodeBlock,

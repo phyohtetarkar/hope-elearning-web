@@ -39,6 +39,8 @@ export default function Pagination({
       initialPage={1}
       page={currentPage}
       disableAnimation
+      siblings={0}
+      dotsJump={3}
       renderItem={({
         ref,
         key,

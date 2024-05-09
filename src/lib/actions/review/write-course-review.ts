@@ -5,13 +5,17 @@ import { API_URL_LOCAL } from "@/lib/constants";
 import { validateResponse } from "@/lib/validate-response";
 import { revalidatePath } from "next/cache";
 
-export async function updateLesson(courseId: string, body: any) {
+export async function writeCourseReview(
+  courseId: string,
+  body: object,
+  revalidate?: string
+) {
   const session = await getSession();
 
-  const url = `${API_URL_LOCAL}/admin/courses/${courseId}/lessons`;
+  const url = `${API_URL_LOCAL}/content/courses/${courseId}/reviews`;
 
   const resp = await fetch(url, {
-    method: "PUT",
+    method: "POST",
     body: JSON.stringify(body),
     headers: {
       Cookie: session.cookie,
@@ -21,6 +25,7 @@ export async function updateLesson(courseId: string, body: any) {
 
   await validateResponse(resp);
 
-  // revalidatePath(`/(admin)/admin/(course)/courses/[courseId]/lessons/[lessonId]`, "page");
-  revalidatePath(`/admin/courses/${courseId}/lessons/${body.id}`);
+  if (revalidate) {
+    revalidatePath(revalidate);
+  }
 }

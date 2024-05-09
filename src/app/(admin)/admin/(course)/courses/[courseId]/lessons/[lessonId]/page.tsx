@@ -5,8 +5,8 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import LessonEditPage from "./lesson-edit-page";
 
-const getLesson = async (lessonId: string) => {
-  const url = `${API_URL_LOCAL}/admin/lessons/${lessonId}`;
+const getLesson = async (courseId: string, lessonId: string) => {
+  const url = `${API_URL_LOCAL}/admin/courses/${courseId}/lessons/${lessonId}`;
 
   const resp = await fetch(url, {
     headers: {
@@ -31,7 +31,7 @@ export default async function LessonEdit({
 }: {
   params: { courseId: string; lessonId: string };
 }) {
-  const lesson = await getLesson(params.lessonId);
+  const lesson = await getLesson(params.courseId, params.lessonId);
 
   if (!lesson) {
     redirect(`/admin/courses/${params.courseId}`);

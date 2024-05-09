@@ -1,6 +1,7 @@
 "use client";
 
 import { AuthenticationContext } from "@/components/authentication-context-porvider";
+import { YoutubeIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -30,6 +31,20 @@ export default function Header() {
   const { user } = useContext(AuthenticationContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const socials = (
+    <>
+      <NavbarItem>
+        <a
+          href="https://www.youtube.com"
+          color="foreground"
+          className="text-gray-500 hover:text-primary flex items-center space-x-1"
+        >
+          <YoutubeIcon />
+        </a>
+      </NavbarItem>
+    </>
+  );
+
   const accountView = () => {
     if (user) {
       return (
@@ -54,9 +69,12 @@ export default function Header() {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               {user.role !== "user" && (
-                <DropdownMenuItem asChild>
-                  <Link href="/admin">Dashboard</Link>
-                </DropdownMenuItem>
+                <>
+                  <DropdownMenuItem asChild>
+                    <Link href="/admin">Dashboard</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                </>
               )}
               <DropdownMenuItem asChild>
                 <Link href="/profile">My Profile</Link>

@@ -8,7 +8,7 @@ import { revalidatePath } from "next/cache";
 export async function deleteChapter(courseId: string, chapterId: string) {
   const session = await getSession();
 
-  const url = `${API_URL_LOCAL}/admin/chapters/${chapterId}`;
+  const url = `${API_URL_LOCAL}/admin/courses/${courseId}/chapters/${chapterId}`;
 
   const resp = await fetch(url, {
     method: "DELETE",

@@ -109,6 +109,7 @@ export interface Chapter {
 
 export interface Lesson {
   id: string;
+  courseId: string;
   title: string;
   slug: string;
   trial: boolean;
@@ -117,11 +118,13 @@ export interface Lesson {
   sortOrder: number;
   chapter?: Chapter;
   course?: Course;
+  completed?: boolean;
   audit?: Audit;
 }
 
 export interface EnrolledCourse {
-  course: Course;
+  course?: Course;
+  resumeLesson?: Lesson;
   completedLessons: string[];
   progress: number;
 }
@@ -133,4 +136,11 @@ export interface DashboardSummary {
   userCount: number;
   monthlyEnrollments: { [key: string]: number };
   enrolledByLevel: { [key: string]: number };
+}
+
+export interface CourseReview {
+  rating: number;
+  message?: string;
+  user: User;
+  audit: Audit;
 }

@@ -8,8 +8,11 @@ import {
 } from "@/components/ui/accordion";
 import { DrawerContext } from "@/components/ui/drawer";
 import { Progress } from "@/components/ui/progress";
-import { CheckCircle, X } from "lucide-react";
+import { Course, EnrolledCourse, Lesson } from "@/lib/models";
+import { cn } from "@/lib/utils";
+import { CheckCircle, Circle, X } from "lucide-react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import { useContext } from "react";
 
 const curriculum = [
@@ -66,8 +69,20 @@ const curriculum = [
   },
 ];
 
-export default function CourseMenu() {
+export default function CourseMenu({
+  course,
+  enrolledCourse,
+}: {
+  course: Course;
+  enrolledCourse: EnrolledCourse;
+}) {
   const { isMenuOpen, toggle } = useContext(DrawerContext);
+
+  const params = useParams<{ course: string; lesson: string }>();
+
+  const isCompleted = (lesson: Lesson) => {
+    return enrolledCourse.completedLessons.some((v) => v === lesson.id);
+  };
 
   return (
     <div
@@ -76,11 +91,13 @@ export default function CourseMenu() {
       } transition-transform ease-out min-w-[200px] max-w-[360px] lg:max-w-[320px] fixed lg:static inset-y-0 w-full z-50 flex flex-col lg:translate-x-0`}
     >
       <div className="flex flex-col grow p-4 overflow-y-auto scrollbar-custom bg-white mr-[40px] lg:mr-0 border-r">
-        <h5 className="mb-5">Getting started with docker</h5>
+        <h5 className="mb-5">{course.title}</h5>
 
-        <div className="text-sm text-sliver mb-1">50% completed</div>
+        <div className="text-sm text-sliver mb-1">
+          {enrolledCourse.progress} completed
+        </div>
         <Progress
-          value={50}
+          value={enrolledCourse.progress}
           max={100}
           className="h-3 mb-8 flex-shrink-0"
           indicatorClass="bg-success"
@@ -91,26 +108,43 @@ export default function CourseMenu() {
           className="flex flex-col gap-2"
           defaultValue={["chapter-0", "chapter-1", "chapter-2"]}
         >
-          {curriculum.map((c, i) => {
+          {course.chapters?.map((c, i) => {
             return (
               <AccordionItem key={i} value={`chapter-${i}`}>
                 <AccordionTrigger className="py-2">
-                  <h6>{c.name}</h6>
+                  <h6>{c.title}</h6>
                 </AccordionTrigger>
                 <AccordionContent>
                   <div className="flex flex-col divide-y">
-                    {c.lessons.map((l, i) => {
+                    {c.lessons?.map((l, i) => {
                       return (
-                        <div key={i} className="flex items-center gap-2 py-3">
-                          <CheckCircle className="text-success size-5" />
+                        <div
+                          key={i}
+                          className={cn(
+                            "flex items-center gap-2 py-3",
+                            params.lesson === l.slug
+                              ? "rounded-md bg-muted"
+                              : undefined
+                          )}
+                        >
+                          {isCompleted(l) ? (
+                            <CheckCircle className="text-success size-5" />
+                          ) : (
+                            <Circle className="text-default size-5" />
+                          )}
                           <Link
-                            href={`/learn/docker/lessons/lesson-1`}
-                            className="hover:text-primary"
+                            href={`/learn/${course.slug}/lessons/${l.slug}`}
+                            className={cn(
+                              "hover:text-primary",
+                              params.lesson === l.slug
+                                ? "text-primary"
+                                : undefined
+                            )}
                             onClick={(evt) => {
                               isMenuOpen && toggle?.();
                             }}
                           >
-                            {l.name}
+                            {l.title}
                           </Link>
                         </div>
                       );

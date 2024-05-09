@@ -21,7 +21,7 @@ interface Props {
 }
 
 const getLesson = async (slug: string) => {
-  const url = `${API_URL_LOCAL}/content/lessons/${slug}`;
+  const url = `${API_URL_LOCAL}/content/lessons/${slug}/trial`;
 
   const resp = await fetch(url);
 

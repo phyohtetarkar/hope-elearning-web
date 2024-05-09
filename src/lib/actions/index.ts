@@ -19,11 +19,16 @@ export * from "./course/delete-course";
 export * from "./course/update-course";
 
 export * from "./course/create-chapter";
-export * from "./course/update-chapter";
 export * from "./course/delete-chapter";
 export * from "./course/sort-chapters";
+export * from "./course/update-chapter";
 
 export * from "./course/create-lesson";
-export * from "./course/update-lesson";
 export * from "./course/delete-lesson";
 export * from "./course/sort-lessons";
+export * from "./course/update-lesson";
+
+export * from "./review/write-course-review";
+
+export * from "./bookmark/bookmark-course";
+export * from "./bookmark/remove-bookmark";

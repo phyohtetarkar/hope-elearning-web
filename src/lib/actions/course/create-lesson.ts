@@ -8,7 +8,7 @@ import { revalidatePath } from "next/cache";
 export async function createLesson(courseId: string, body: any) {
   const session = await getSession();
 
-  const url = `${API_URL_LOCAL}/admin/lessons`;
+  const url = `${API_URL_LOCAL}/admin/courses/${courseId}/lessons`;
 
   const resp = await fetch(url, {
     method: "POST",

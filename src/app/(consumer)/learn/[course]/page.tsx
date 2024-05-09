@@ -1,9 +1,7 @@
-import { DrawerBackdrop, DrawerContextProvider } from "@/components/ui/drawer";
 import { API_URL_LOCAL } from "@/lib/constants";
 import { Course, EnrolledCourse } from "@/lib/models";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import CourseMenu from "./course-menu";
 
 const getCourse = async (slug: string) => {
   const url = `${API_URL_LOCAL}/content/courses/${slug}`;
@@ -40,12 +38,11 @@ const getEnrolledCourse = async (courseId: string) => {
     .catch(() => undefined);
 };
 
-interface Props {
+export default async function EnrolledCourse({
+  params,
+}: {
   params: { course: string };
-  children: React.ReactNode;
-}
-
-export default async function ResumeCourseLayout({ params, children }: Props) {
+}) {
   const course = await getCourse(params.course);
 
   if (!course) {
@@ -58,13 +55,17 @@ export default async function ResumeCourseLayout({ params, children }: Props) {
     redirect("/profile/learnings");
   }
 
-  return (
-    <DrawerContextProvider>
-      <div className="flex h-full">
-        <CourseMenu course={course} enrolledCourse={enrolledCourse} />
-        <div className="grow">{children}</div>
-        <DrawerBackdrop />
-      </div>
-    </DrawerContextProvider>
-  );
+  if (enrolledCourse.resumeLesson) {
+    redirect(
+      `/learn/${params.course}/lessons/${enrolledCourse.resumeLesson.slug}`
+    );
+  }
+
+  const firstLesson = course.chapters?.[0].lessons?.[0];
+
+  if (!firstLesson) {
+    redirect("/profile/learnings");
+  }
+
+  redirect(`/learn/${params.course}/lessons/${firstLesson.slug}`);
 }
