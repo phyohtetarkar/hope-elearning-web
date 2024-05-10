@@ -11,6 +11,10 @@ const isPrivatePath = (pathname: string) => {
     return true;
   }
 
+  if (pathname.startsWith("/learn")) {
+    return true;
+  }
+
   if (pathname.startsWith("/verify-email")) {
     return true;
   }
@@ -127,6 +131,6 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      */
-    "/((?!api|_next/static|_next/image|favicon.ico|images).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|fonts|images|tinymce).*)",
   ],
 };

@@ -12,36 +12,105 @@ import { Card, CardContent } from "@/components/ui/card";
 import Rating from "@/components/ui/rating";
 import { Separator } from "@/components/ui/separator";
 import { TabItem, Tabs } from "@/components/ui/tabs";
+import { ToastAction } from "@/components/ui/toast";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Course, EnrolledCourse } from "@/lib/models";
+import { useToast } from "@/components/ui/use-toast";
+import { bookmarkCourse, enrollCourse, removeBookmark } from "@/lib/actions";
+import { Course, CourseReview, EnrolledCourse } from "@/lib/models";
+import { parseErrorResponse } from "@/lib/parse-error-response";
 import { formatNumber, uppercaseFirstChar } from "@/lib/utils";
 import {
   BarChart,
   BookOpen,
   DollarSign,
   FolderClosed,
+  LoaderCircle,
   LockKeyhole,
   Share2,
   Users,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import CourseReviewEdit from "./course-review-edit";
+
+interface CoursePageProps {
+  course: Course;
+  enrolledCourse?: EnrolledCourse;
+  isBookmarked: boolean;
+  review?: CourseReview;
+}
 
 export default function CoursePage({
   course,
   enrolledCourse,
   isBookmarked,
-}: {
-  course: Course;
-  enrolledCourse?: EnrolledCourse;
-  isBookmarked: boolean;
-}) {
+  review,
+}: CoursePageProps) {
+  const [savingState, setSavingState] = useState<"enrollment" | "bookmark">();
+
+  const { toast } = useToast();
+
+  const handleEnrollment = async () => {
+    try {
+      setSavingState("enrollment");
+      await enrollCourse(course.id, `/courses/${course.slug}`);
+      toast({
+        title: "Success",
+        description: "Course enrollment success",
+        variant: "success",
+        action: (
+          <ToastAction altText="Start learning course" asChild>
+            <Link
+              href={`/learn/${course.slug}/lessons/${enrolledCourse?.resumeLesson?.slug}`}
+            >
+              Resume
+            </Link>
+          </ToastAction>
+        ),
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: parseErrorResponse(error),
+        variant: "destructive",
+      });
+    } finally {
+      setSavingState(undefined);
+    }
+  };
+
+  const handleBookmark = async () => {
+    try {
+      setSavingState("bookmark");
+      if (!isBookmarked) {
+        await bookmarkCourse(course.id, `/courses/${course.slug}`);
+      } else {
+        await removeBookmark(course.id, `/courses/${course.slug}`);
+      }
+      toast({
+        title: "Success",
+        description: isBookmarked
+          ? "Removed from bookmark"
+          : "Added to bookmark",
+        variant: "success",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: parseErrorResponse(error),
+        variant: "destructive",
+      });
+    } finally {
+      setSavingState(undefined);
+    }
+  };
+
   return (
     <>
       <div className="bg-primary py-6 lg:py-16">
@@ -165,7 +234,7 @@ export default function CoursePage({
             </div>
 
             <div className="mt-4">
-              <CourseReviewEdit />
+              <CourseReviewEdit course={course} review={review} />
             </div>
           </div>
           <div className="lg:col-span-4 order-1 lg:order-2">
@@ -200,12 +269,39 @@ export default function CoursePage({
                     )}
                   </Button>
                 ) : (
-                  <Button className="mb-2">Enroll</Button>
+                  <Button
+                    className="mb-2"
+                    onClick={handleEnrollment}
+                    disabled={!!savingState}
+                  >
+                    {savingState === "enrollment" && (
+                      <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                    )}
+                    Enroll
+                  </Button>
                 )}
                 {isBookmarked ? (
-                  <Button variant="outline">Remove bookmark</Button>
+                  <Button
+                    variant="outline"
+                    onClick={handleBookmark}
+                    disabled={!!savingState}
+                  >
+                    {savingState === "bookmark" && (
+                      <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                    )}
+                    Remove bookmark
+                  </Button>
                 ) : (
-                  <Button variant="outline">Bookmark</Button>
+                  <Button
+                    variant="outline"
+                    onClick={handleBookmark}
+                    disabled={!!savingState}
+                  >
+                    {savingState === "bookmark" && (
+                      <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                    )}
+                    Bookmark
+                  </Button>
                 )}
 
                 <Separator className="my-5" />

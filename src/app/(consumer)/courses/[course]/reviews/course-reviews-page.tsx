@@ -35,16 +35,15 @@ import { useToast } from "@/components/ui/use-toast";
 import { writeCourseReview } from "@/lib/actions";
 import { Course, CourseReview, Page } from "@/lib/models";
 import { parseErrorResponse } from "@/lib/parse-error-response";
-import { formatTimestamp } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 import { LoaderCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useContext, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
-import relativeTime from "dayjs/plugin/relativeTime";
 
 const schema = z.object({
   rating: z.number().min(1).max(5),

@@ -1,5 +1,5 @@
 import { API_URL_LOCAL } from "@/lib/constants";
-import { Course, CourseReview, Page, User } from "@/lib/models";
+import { Course, CourseReview, Page } from "@/lib/models";
 import { buildQueryParams } from "@/lib/utils";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -47,21 +47,13 @@ const getUserReview = async (courseId: string) => {
     return undefined;
   }
 
-  const userResp = await fetch(`${API_URL_LOCAL}/profile`, {
+  const url = `${API_URL_LOCAL}/profile/reviews/${courseId}/me`;
+
+  const resp = await fetch(url, {
     headers: {
       Cookie: cookieStore.toString(),
     },
   });
-
-  const user = userResp.ok ? ((await userResp.json()) as User) : null;
-
-  if (!user) {
-    return undefined;
-  }
-
-  const url = `${API_URL_LOCAL}/content/courses/${courseId}/reviews/${user.id}`;
-
-  const resp = await fetch(url);
 
   if (!resp.ok) {
     return undefined;

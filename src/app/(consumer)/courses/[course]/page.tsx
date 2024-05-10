@@ -1,6 +1,6 @@
 import { Alert } from "@/components/ui/alert";
 import { API_URL_LOCAL } from "@/lib/constants";
-import { Course, EnrolledCourse } from "@/lib/models";
+import { Course, CourseReview, EnrolledCourse } from "@/lib/models";
 import { Metadata, ResolvingMetadata } from "next";
 import { cookies } from "next/headers";
 import CoursePage from "./course-page";
@@ -74,6 +74,31 @@ const checkBookmarked = async (courseId: string) => {
     .catch(() => false);
 };
 
+const getUserReview = async (courseId: string) => {
+  const cookieStore = cookies();
+
+  if (!cookieStore.has("access_token")) {
+    return undefined;
+  }
+
+  const url = `${API_URL_LOCAL}/profile/reviews/${courseId}/me`;
+
+  const resp = await fetch(url, {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
+
+  if (!resp.ok) {
+    return undefined;
+  }
+
+  return resp
+    .json()
+    .then((json) => json as CourseReview)
+    .catch((e) => undefined);
+};
+
 export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
@@ -122,10 +147,12 @@ export default async function CourseDetail({ params }: Props) {
 
   const enrolledCoursePromise = getEnrolledCourse(course.id);
   const checkBookmarkedPromise = checkBookmarked(course.id);
+  const userReviewPromise = getUserReview(course.id);
 
-  const [enrolledCourse, isBookmarked] = await Promise.all([
+  const [enrolledCourse, isBookmarked, userReview] = await Promise.all([
     enrolledCoursePromise,
     checkBookmarkedPromise,
+    userReviewPromise,
   ]);
 
   return (
@@ -133,6 +160,7 @@ export default async function CourseDetail({ params }: Props) {
       course={course}
       enrolledCourse={enrolledCourse}
       isBookmarked={isBookmarked}
+      review={userReview}
     />
   );
 }

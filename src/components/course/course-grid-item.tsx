@@ -1,15 +1,9 @@
-import { Bookmark } from "lucide-react";
+import { formatAbbreviate } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import Rating from "../ui/rating";
 import { Separator } from "../ui/separator";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../ui/tooltip";
 
 export function CourseGridItem() {
   return (
@@ -40,16 +34,10 @@ export function CourseGridItem() {
         </div>
       </CardContent>
       <Separator />
-      <CardFooter className="px-4 py-3.5">
+      <CardFooter className="px-4 py-3.5 bg-gray-50">
         <Rating rating={4} />
-        <TooltipProvider>
-          <Tooltip delayDuration={300}>
-            <TooltipTrigger className="ms-auto">
-              <Bookmark size={20} className="text-sliver" />
-            </TooltipTrigger>
-            <TooltipContent>Add to bookmark</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <div className="flex-grow"></div>
+        <div className="text-sm text-sliver font-medium">Free</div>
       </CardFooter>
     </Card>
   );

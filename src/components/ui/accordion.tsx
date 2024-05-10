@@ -12,11 +12,7 @@ const AccordionItem = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>
 >(({ className, ...props }, ref) => (
-  <AccordionPrimitive.Item
-    ref={ref}
-    className={cn(className)}
-    {...props}
-  />
+  <AccordionPrimitive.Item ref={ref} className={cn(className)} {...props} />
 ));
 AccordionItem.displayName = "AccordionItem";
 
@@ -30,9 +26,11 @@ const AccordionTrigger = React.forwardRef<
     <AccordionPrimitive.Trigger
       ref={ref}
       className={cn(
-        "flex flex-1 items-center justify-between py-4 font-medium transition-all [&[data-state=open]>svg]:rotate-180",
+        "flex flex-1 items-center justify-between py-4 font-medium transition-all [&[data-state=open]>svg]:rotate-180 [&[data-state=open]>#icon>svg]:rotate-180",
         className,
-        iconType === "plus" ? "relative [&[data-state=open]&svg]:rotate-180 [&[data-state=open]>#plus]:opacity-0 [&[data-state=open]>#minus]:opacity-100 [&[data-state=closed]>#plus]:opacity-100 [&[data-state=closed]>#minus]:opacity-0" : undefined,
+        iconType === "plus"
+          ? "[&[data-state=open]&svg]:rotate-180 [&[data-state=open]>#icon>#plus]:opacity-0 [&[data-state=open]>#icon>#minus]:opacity-100 [&[data-state=closed]>#icon>#plus]:opacity-100 [&[data-state=closed]>#icon>#minus]:opacity-0"
+          : undefined
       )}
       {...props}
     >
@@ -41,10 +39,16 @@ const AccordionTrigger = React.forwardRef<
         <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
       )}
       {iconType === "plus" && (
-        <>
-          <Plus id="plus" className="absolute right-0 h-4 w-4 shrink-0 transition duration-200" />
-          <Minus id="minus" className="absolute right-0 h-4 w-4 shrink-0 transition duration-200" />
-        </>
+        <div id="icon" className="relative h-full">
+          <Plus
+            id="plus"
+            className="h-4 w-4 absolute right-0 top-[50%] translate-y-[-50%] shrink-0 transition duration-200"
+          />
+          <Minus
+            id="minus"
+            className="h-4 w-4 absolute right-0 top-[50%] translate-y-[-50%] shrink-0 transition duration-200"
+          />
+        </div>
       )}
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>

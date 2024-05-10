@@ -1,9 +1,9 @@
-import { CourseGridItem } from "@/components/course";
-import Image from "next/image";
-import QuoteSwiper from "./quote-swiper";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { BlogGridItem } from "@/components/blog";
+import { CourseGridItem } from "@/components/course";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import Link from "next/link";
+import QuoteSwiper from "./quote-swiper";
 
 export default function Home() {
   return (
@@ -20,10 +20,10 @@ export default function Home() {
               <div className="mb-4">
                 <Button
                   variant="secondary"
-                  className="w-full lg:w-auto"
+                  className="w-full lg:w-auto rounded-full px-6"
                   asChild
                 >
-                  <Link href="/courses/docker">Browse courses</Link>
+                  <Link href="/browse">Browse courses</Link>
                 </Button>
               </div>
             </div>

@@ -32,3 +32,10 @@ export * from "./review/write-course-review";
 
 export * from "./bookmark/bookmark-course";
 export * from "./bookmark/remove-bookmark";
+
+export * from "./enrollment/enroll-course";
+export * from "./enrollment/remove-enrollment";
+export * from "./enrollment/update-resume-lesson";
+export * from "./enrollment/add-completed-lesson";
+export * from "./enrollment/remove-completed-lesson";
+

@@ -11,6 +11,7 @@ export interface Page<T> {
   currentPage: number;
   totalPage: number;
   pageSize: number;
+  totalElements: number;
 }
 
 export interface Audit {

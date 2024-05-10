@@ -49,9 +49,12 @@ export default function Header() {
     if (user) {
       return (
         <NavbarContent as="div" justify="end">
+          <NavbarItem>
+            <HeaderSearchField />
+          </NavbarItem>
           <DropdownMenu>
             <DropdownMenuTrigger className="outline-none">
-              <div className="size-[36px] relative">
+              <div className="size-[40px] relative">
                 <Image
                   src={user.image ?? "/images/profile.png"}
                   alt="Avatar"
@@ -171,7 +174,7 @@ export default function Header() {
               priority
             />
           </div>
-          <h3 className="ms-3">{process.env.NEXT_PUBLIC_APP_NAME}</h3>
+          <h3 className="ms-3 hidden sm:block">{process.env.NEXT_PUBLIC_APP_NAME}</h3>
         </Link>
       </NavbarBrand>
       <NavbarContent className="hidden md:flex gap-4">
@@ -192,9 +195,6 @@ export default function Header() {
           >
             Blogs
           </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <HeaderSearchField />
         </NavbarItem>
       </NavbarContent>
 

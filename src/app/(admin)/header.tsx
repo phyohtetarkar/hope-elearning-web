@@ -47,7 +47,7 @@ export default function Header() {
         {user && (
           <DropdownMenu>
             <DropdownMenuTrigger className="outline-none">
-              <div className="size-[36px] relative">
+              <div className="size-[40px] relative">
                 <Image
                   src={user.image ?? "/images/profile.png"}
                   alt="Avatar"
