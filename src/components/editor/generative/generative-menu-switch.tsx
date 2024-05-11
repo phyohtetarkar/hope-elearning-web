@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { Sparkles } from "lucide-react";
 import { EditorBubble, useEditor } from "novel";
-import { removeAIHighlight } from "novel/extensions";
 import { useEffect, type ReactNode } from "react";
 import { AISelector } from "./ai-selector";
 
@@ -19,7 +19,7 @@ const GenerativeMenuSwitch = ({
 
   useEffect(() => {
     if (!open && editor) {
-      removeAIHighlight(editor);
+      // removeAIHighlight(editor);
     }
   }, [open, editor]);
   return (
@@ -30,8 +30,12 @@ const GenerativeMenuSwitch = ({
           onOpenChange(false);
           editor?.chain().unsetHighlight().run();
         },
+        appendTo: "parent",
       }}
-      className="flex w-fit max-w-[90vw] overflow-hidden rounded-md border bg-background shadow-xl"
+      className={cn(
+        "flex w-fit max-w-[90vw] overflow-hidden rounded-md border bg-background shadow-xl",
+        open ? "mb-10" : undefined
+      )}
     >
       {open && <AISelector open={open} onOpenChange={onOpenChange} />}
       {!open && (
@@ -42,7 +46,7 @@ const GenerativeMenuSwitch = ({
             onClick={() => onOpenChange(true)}
             size="sm"
           >
-            <Sparkles size={20} fill="currentColor"  />
+            <Sparkles size={20} fill="currentColor" />
             Ask AI
           </Button>
           {children}

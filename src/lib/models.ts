@@ -124,7 +124,7 @@ export interface Lesson {
 }
 
 export interface EnrolledCourse {
-  course?: Course;
+  course: Course;
   resumeLesson?: Lesson;
   completedLessons: string[];
   progress: number;
@@ -144,4 +144,10 @@ export interface CourseReview {
   message?: string;
   user: User;
   audit: Audit;
+}
+
+export interface AiPromptRequest {
+  prompt: string;
+  option: string;
+  command: string;
 }

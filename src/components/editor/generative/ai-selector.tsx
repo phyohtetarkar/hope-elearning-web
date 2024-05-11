@@ -6,10 +6,12 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TypingSpinner } from "@/components/ui/typing-spinner";
 import { useToast } from "@/components/ui/use-toast";
-import { useCompletion } from "ai/react";
+import { generateGeminiCompletion } from "@/lib/actions";
+import { AiPromptRequest } from "@/lib/models";
+import { parseErrorResponse } from "@/lib/parse-error-response";
+import { readStreamableValue } from "ai/rsc";
 import { ArrowUp, Sparkles } from "lucide-react";
 import { useEditor } from "novel";
-import { addAIHighlight } from "novel/extensions";
 import { useState } from "react";
 import Markdown from "react-markdown";
 import AICompletionCommands from "./ai-completion-command";
@@ -24,28 +26,53 @@ interface AISelectorProps {
 export function AISelector({ open, onOpenChange }: AISelectorProps) {
   const { editor } = useEditor();
   const [inputValue, setInputValue] = useState("");
+  const [completion, setCompletion] = useState("");
+  const [isLoading, setLoading] = useState(false);
   const { toast } = useToast();
 
-  const { completion, complete, isLoading } = useCompletion({
-    api: "/api/generate/gemini",
-    onResponse: (response) => {
-      if (response.status === 429) {
-        toast({
-          title: "Error",
-          description: "You have reached your request limit for the day.",
-          variant: "destructive",
-        });
-        return;
+  // const { completion, complete, isLoading } = useCompletion({
+  //   api: `${API_URL}/ai/generate`,
+  //   onResponse: (response) => {
+  //     if (response.status === 429) {
+  //       toast({
+  //         title: "Error",
+  //         description: "You have reached your request limit for the day.",
+  //         variant: "destructive",
+  //       });
+  //       return;
+  //     }
+  //   },
+  //   onError: (e) => {
+  //     toast({
+  //       title: "Error",
+  //       description: e.message,
+  //       variant: "destructive",
+  //     });
+  //   },
+  // });
+
+  const handleCompletion = async (values: AiPromptRequest) => {
+    try {
+      setLoading(true);
+      const result = await generateGeminiCompletion(values);
+      let textContent = "";
+
+      for await (const delta of readStreamableValue(result)) {
+        textContent = `${textContent}${delta}`;
+
+        setCompletion(textContent);
       }
-    },
-    onError: (e) => {
+      setInputValue("");
+    } catch (error) {
       toast({
         title: "Error",
-        description: e.message,
+        description: parseErrorResponse(error),
         variant: "destructive",
       });
-    },
-  });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const hasCompletion = completion.length > 0;
 
@@ -63,7 +90,7 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
 
       {isLoading && (
         <div className="flex h-12 w-full items-center px-4 text-sm font-medium text-muted-foreground text-purple-500">
-          <Sparkles className="mr-2 h-4 w-4 shrink-0  " />
+          <Sparkles className="mr-2 h-4 w-4 shrink-0" />
           AI is thinking
           <div className="ml-auto mt-1">
             <TypingSpinner />
@@ -83,25 +110,42 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
                   ? "Tell AI what to do next"
                   : "Ask AI to edit or generate..."
               }
-              onFocus={() => addAIHighlight(editor!)}
+              onFocus={() => {
+                // addAIHighlight(editor!)
+              }}
             />
             <Button
               size="icon"
               className="absolute right-2 top-1/2 h-6 w-6 -translate-y-1/2 rounded-full bg-purple-500 hover:bg-purple-900"
               onClick={() => {
-                if (completion)
-                  return complete(completion, {
-                    body: { option: "zap", command: inputValue },
-                  }).then(() => setInputValue(""));
+                if (completion) {
+                  // return complete(completion, {
+                  //   body: { option: "zap", command: inputValue },
+                  // }).then(() => setInputValue(""));
+
+                  handleCompletion({
+                    prompt: completion,
+                    option: "zap",
+                    command: inputValue,
+                  });
+
+                  return;
+                }
 
                 const slice = editor!.state.selection.content();
                 const text = editor!.storage.markdown.serializer.serialize(
                   slice.content
                 );
 
-                complete(text, {
-                  body: { option: "zap", command: inputValue },
-                }).then(() => setInputValue(""));
+                // complete(text, {
+                //   body: { option: "zap", command: inputValue },
+                // }).then(() => setInputValue(""));
+
+                handleCompletion({
+                  prompt: text,
+                  option: "zap",
+                  command: inputValue,
+                });
               }}
             >
               <ArrowUp className="h-4 w-4" />
@@ -118,7 +162,13 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
           ) : (
             <AISelectorCommands
               onSelect={(value, option) =>
-                complete(value, { body: { option } })
+                // complete(value, { body: { option } })
+
+                handleCompletion({
+                  prompt: value,
+                  option: option,
+                  command: "",
+                })
               }
             />
           )}

@@ -4,6 +4,7 @@ import { buildQueryParams } from "@/lib/utils";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import CourseReviewsPage from "./course-reviews-page";
+import { Metadata, ResolvingMetadata } from "next";
 
 interface Props {
   params: { course: string };
@@ -64,6 +65,41 @@ const getUserReview = async (courseId: string) => {
     .then((json) => json as CourseReview)
     .catch((e) => undefined);
 };
+
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  try {
+    const course = await getCourse(params.course);
+
+    const previousImages = (await parent).openGraph?.images || [];
+
+    if (course) {
+      return {
+        title: course.title,
+        description: "Reviews",
+        openGraph: {
+          url: `${process.env.NEXT_PUBLIC_BASE_URL}/courses/${course.slug}/reviews`,
+          title: course.title,
+          description: "Reviews",
+          images: [`${course.cover ?? ""}`, ...previousImages],
+          type: "website",
+        },
+        twitter: {
+          title: course.title,
+          description: "Reviews",
+          card: "summary_large_image",
+          images: [`${course.cover ?? ""}`, ...previousImages],
+        },
+      };
+    }
+  } catch (error) {}
+
+  return {
+    title: "Course not found",
+  };
+}
 
 export default async function CourseReviews(props: Props) {
   const course = await getCourse(props.params.course);

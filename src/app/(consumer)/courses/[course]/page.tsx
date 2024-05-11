@@ -99,6 +99,17 @@ const getUserReview = async (courseId: string) => {
     .catch((e) => undefined);
 };
 
+const getRelatedCourses = async (slug: string) => {
+  const url = `${API_URL_LOCAL}/content/courses/${slug}/related`;
+
+  const resp = await fetch(url);
+
+  return resp
+    .json()
+    .then((json) => json as Course[])
+    .catch((e) => undefined);
+};
+
 export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
@@ -148,12 +159,15 @@ export default async function CourseDetail({ params }: Props) {
   const enrolledCoursePromise = getEnrolledCourse(course.id);
   const checkBookmarkedPromise = checkBookmarked(course.id);
   const userReviewPromise = getUserReview(course.id);
+  const relatedCoursesPromise = getRelatedCourses(params.course);
 
-  const [enrolledCourse, isBookmarked, userReview] = await Promise.all([
-    enrolledCoursePromise,
-    checkBookmarkedPromise,
-    userReviewPromise,
-  ]);
+  const [enrolledCourse, isBookmarked, userReview, relatedCourses] =
+    await Promise.all([
+      enrolledCoursePromise,
+      checkBookmarkedPromise,
+      userReviewPromise,
+      relatedCoursesPromise,
+    ]);
 
   return (
     <CoursePage
@@ -161,6 +175,7 @@ export default async function CourseDetail({ params }: Props) {
       enrolledCourse={enrolledCourse}
       isBookmarked={isBookmarked}
       review={userReview}
+      relatedCourses={relatedCourses}
     />
   );
 }

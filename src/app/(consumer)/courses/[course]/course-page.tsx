@@ -44,6 +44,7 @@ interface CoursePageProps {
   enrolledCourse?: EnrolledCourse;
   isBookmarked: boolean;
   review?: CourseReview;
+  relatedCourses?: Course[];
 }
 
 export default function CoursePage({
@@ -51,6 +52,7 @@ export default function CoursePage({
   enrolledCourse,
   isBookmarked,
   review,
+  relatedCourses,
 }: CoursePageProps) {
   const [savingState, setSavingState] = useState<"enrollment" | "bookmark">();
 
@@ -365,10 +367,9 @@ export default function CoursePage({
 
         <h3 className="mb-4">Related courses</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 bg-transparent">
-          <CourseGridItem />
-          <CourseGridItem />
-          <CourseGridItem />
-          <CourseGridItem />
+          {relatedCourses?.map((c) => {
+            return <CourseGridItem key={c.id} data={c} />;
+          })}
         </div>
       </div>
     </>

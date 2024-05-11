@@ -174,10 +174,21 @@ export default function Header() {
               priority
             />
           </div>
-          <h3 className="ms-3 hidden sm:block">{process.env.NEXT_PUBLIC_APP_NAME}</h3>
+          <h3 className="ms-3 hidden sm:block">
+            {process.env.NEXT_PUBLIC_APP_NAME}
+          </h3>
         </Link>
       </NavbarBrand>
       <NavbarContent className="hidden md:flex gap-4">
+        <NavbarItem>
+          <Link
+            href={"/browse"}
+            color="foreground"
+            className="hover:text-primary"
+          >
+            Browse
+          </Link>
+        </NavbarItem>
         <NavbarItem>
           <Link
             href={"/categories"}
@@ -203,9 +214,20 @@ export default function Header() {
       <NavbarMenu className="gap-4 px-4 backdrop-blur-xl bg-white/95">
         <NavbarMenuItem>
           <Link
+            href={"/browse"}
+            color="foreground"
+            className="hover:text-primary"
+            onClick={(evt) => setIsMenuOpen(false)}
+          >
+            Browse
+          </Link>
+        </NavbarMenuItem>
+        <NavbarMenuItem>
+          <Link
             href={"/categories"}
             color="foreground"
             className="hover:text-primary"
+            onClick={(evt) => setIsMenuOpen(false)}
           >
             Categories
           </Link>
@@ -215,17 +237,9 @@ export default function Header() {
             href={"/blogs"}
             color="foreground"
             className="hover:text-primary"
+            onClick={(evt) => setIsMenuOpen(false)}
           >
             Blogs
-          </Link>
-        </NavbarMenuItem>
-        <NavbarMenuItem>
-          <Link
-            href={"/about-us"}
-            color="foreground"
-            className="hover:text-primary"
-          >
-            About us
           </Link>
         </NavbarMenuItem>
       </NavbarMenu>

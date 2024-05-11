@@ -1,45 +1,28 @@
-import {
-  Content,
-  GenerateContentRequest,
-  GoogleGenerativeAI,
-} from "@google/generative-ai";
-import { GoogleGenerativeAIStream, Message, StreamingTextResponse } from "ai";
+"use server";
+
+import { getSession } from "@/lib/auth";
+import { AiPromptRequest } from "@/lib/models";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import { CoreMessage, streamText } from "ai";
+import { createStreamableValue } from "ai/rsc";
 import { match } from "ts-pattern";
 
-// IMPORTANT! Set the runtime to edge: https://vercel.com/docs/functions/edge-functions/edge-runtime
-export const runtime = "edge";
-
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || "");
-
-const buildGoogleGenAIPrompt = (messages: Message[]) => {
-  const contents = messages
-    .filter((message) => message.role === "user")
-    .map((message) => {
-      return {
-        role: "user",
-        parts: [{ text: message.content }],
-      } as Content;
-    });
-
-  const request: GenerateContentRequest = {
-    contents: contents,
-  };
-
-  return request;
-};
-
-export async function POST(req: Request): Promise<Response> {
-  // Check if the GOOGLE_API_KEY is set, if not return 400
+export async function generateGeminiCompletion(values: AiPromptRequest) {
+  "use server";
   if (!process.env.GOOGLE_API_KEY || process.env.GOOGLE_API_KEY === "") {
-    return new Response(
-      "Missing GOOGLE_API_KEY - make sure to add it to your .env file.",
-      {
-        status: 400,
-      }
+    throw new Error(
+      "Missing GOOGLE_API_KEY - make sure to add it to your .env file."
     );
   }
 
-  let { prompt, option, command } = await req.json();
+  const { userId } = await getSession();
+
+  const google = createGoogleGenerativeAI({
+    apiKey: process.env.GOOGLE_API_KEY,
+  });
+
+  const { prompt, option, command } = values;
+
   const messages = match(option)
     .with("continue", () => [
       {
@@ -91,15 +74,26 @@ export async function POST(req: Request): Promise<Response> {
         `,
       },
     ])
-    .run() as Message[];
+    .run() as CoreMessage[];
 
-  const geminiStream = await genAI
-    .getGenerativeModel({ model: "gemini-pro" })
-    .generateContentStream(buildGoogleGenAIPrompt(messages));
+  const stream = createStreamableValue<string, string>();
 
-  // Convert the response into a friendly text-stream
-  const stream = GoogleGenerativeAIStream(geminiStream);
+  (async () => {
+    try {
+      const { textStream } = await streamText({
+        model: google("models/gemini-pro"),
+        messages: messages,
+      });
 
-  // Respond with the stream
-  return new StreamingTextResponse(stream);
+      for await (const text of textStream) {
+        stream.update(text);
+      }
+
+      stream.done();
+    } catch (error: any) {
+      stream.error(error?.message);
+    }
+  })();
+
+  return stream.value;
 }
