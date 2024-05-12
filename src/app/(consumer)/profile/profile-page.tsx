@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
@@ -25,14 +26,13 @@ export default function ProfilePage() {
             <span className="text-sliver text-sm">hectorgibbons@gmail.com</span>
           </div>
           <div className="ms-auto">
-            <Link
-              href={"/profile/setting"}
-              className=" border-2 border-primary px-3 py-2 rounded-lg text-primary"
-            >
-              Edit
-            </Link>
+            <Button variant="outline" className="border-primary" asChild>
+              <Link href="/profile/setting" className="text-primary">
+                Edit
+              </Link>
+            </Button>
           </div>
-          {/* <div className="block lg:hidden">
+          {/* <div className="ms-auto block lg:hidden">
             <Button variant="primary" size="icon" asChild>
               <span>
                 <Edit size={20} />

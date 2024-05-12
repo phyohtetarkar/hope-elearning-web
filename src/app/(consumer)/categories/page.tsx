@@ -6,14 +6,9 @@ import { buildQueryParams, formatNumber } from "@/lib/utils";
 import { validateResponse } from "@/lib/validate-response";
 import { cookies } from "next/headers";
 import Link from "next/link";
-interface Props {
-  searchParams: { [key: string]: string | undefined };
-}
 
-const getCategories = async ({ searchParams }: Props) => {
+const getCategories = async () => {
   const query = buildQueryParams({
-    ...searchParams,
-    limit: 10,
     includeCourseCount: true,
   });
   const url = `${API_URL}/content/categories${query}`;
@@ -29,8 +24,8 @@ const getCategories = async ({ searchParams }: Props) => {
   return (await resp.json()) as Page<Category>;
 };
 
-export default async function Categories(props: Props) {
-  const data = await getCategories(props);
+export default async function Categories() {
+  const data = await getCategories();
 
   return (
     <div className="mb-5">
