@@ -3,13 +3,14 @@ import { API_URL_LOCAL } from "@/lib/constants";
 import { Course, CourseReview, EnrolledCourse } from "@/lib/models";
 import { Metadata, ResolvingMetadata } from "next";
 import { cookies } from "next/headers";
+import { cache } from "react";
 import CoursePage from "./course-page";
 
 interface Props {
   params: { course: string };
 }
 
-const getCourse = async (slug: string) => {
+const getCourse = cache(async (slug: string) => {
   const url = `${API_URL_LOCAL}/content/courses/${slug}`;
 
   const resp = await fetch(url);
@@ -22,7 +23,7 @@ const getCourse = async (slug: string) => {
     .json()
     .then((json) => json as Course)
     .catch((e) => undefined);
-};
+});
 
 const getEnrolledCourse = async (courseId: string) => {
   const cookieStore = cookies();

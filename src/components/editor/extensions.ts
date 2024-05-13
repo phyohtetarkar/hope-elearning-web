@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
-import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
 import { CharacterCount } from "@tiptap/extension-character-count";
+import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
 import { common, createLowlight } from "lowlight";
 import {
   AIHighlight,
@@ -11,6 +11,7 @@ import {
   TiptapImage,
   TiptapLink,
 } from "novel/extensions";
+import { UploadImagesPlugin } from "novel/plugins";
 import { CustomYoutube } from "./extensions/youtube";
 
 // You can overwrite the placeholder with your own configuration
@@ -56,6 +57,21 @@ const codeBlockLowLight = CodeBlockLowlight.configure({
   },
   defaultLanguage: "plaintext",
   lowlight: lowlight,
+});
+
+const tiptapImage = TiptapImage.extend({
+  addProseMirrorPlugins() {
+    return [
+      UploadImagesPlugin({
+        imageClass: cn("opacity-40 rounded-md border border-stone-200"),
+      }),
+    ];
+  },
+}).configure({
+  allowBase64: false,
+  HTMLAttributes: {
+    class: cn("rounded-md border border-muted"),
+  },
 });
 
 const starterKit = StarterKit.configure({
@@ -104,7 +120,7 @@ export const defaultExtensions = [
   starterKit,
   placeholder,
   TiptapLink,
-  TiptapImage,
+  tiptapImage,
   taskList,
   taskItem,
   aiHighlight,
@@ -114,5 +130,5 @@ export const defaultExtensions = [
     width: 0,
     height: 0,
   }),
-  CharacterCount
+  CharacterCount,
 ];

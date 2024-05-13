@@ -1,5 +1,4 @@
 import { Alert } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
 import Pagination from "@/components/ui/pagination";
 import { Separator } from "@/components/ui/separator";
 import { API_URL_LOCAL } from "@/lib/constants";
@@ -63,24 +62,24 @@ export default async function Blogs(props: Props) {
                   alt="Cover"
                   fill
                   priority
-                  sizes="100vw"
-                  className="object-cover"
+                  sizes="50vw"
+                  className="object-cover border rounded-md"
                 />
               </div>
             </div>
             <div className="flex flex-col">
               <Link
                 href={`/blogs/${b.slug}`}
-                className="font-semibold text-2xl"
+                className="font-semibold text-xl line-clamp-2"
               >
                 {b.title}
               </Link>
-              <span className="text-sm mb-1 text-sliver">
+              <span className="text-sm mt-1 text-sliver">
                 {formatTimestamp(b.publishedAt)}
                 <Dot className="size-4 inline" />
                 {`${wordPerMinute(b.wordCount)} min read`}
               </span>
-              <p className="font-light">{b.excerpt}</p>
+              <p className="font-light mt-1">{b.excerpt}</p>
               <div className="flex flex-wrap gap-2 mt-4">
                 {b.tags?.map((t) => {
                   return (
@@ -127,15 +126,13 @@ export default async function Blogs(props: Props) {
               <div className="flex lg:flex-wrap gap-2 overflow-x-auto scrollbar-hide">
                 {tags?.contents.map((t) => {
                   return (
-                    <Button
+                    <Link
                       key={t.id}
-                      className="rounded-full"
-                      variant="default"
-                      size="sm"
-                      asChild
+                      href={`/tags/${t.slug}`}
+                      className="bg-gray-200 rounded-full text-sm px-3 py-1"
                     >
-                      <Link href={`/tags/${t.slug}`}>{t.name}</Link>
-                    </Button>
+                      {t.name}
+                    </Link>
                   );
                 })}
               </div>

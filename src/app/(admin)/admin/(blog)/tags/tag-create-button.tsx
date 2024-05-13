@@ -20,7 +20,6 @@ export default function TagCreateButton() {
       </DialogTrigger>
 
       <DialogContent
-        className="top-[25%]"
         onInteractOutside={(evt) => evt.preventDefault()}
       >
         <DialogHeader>

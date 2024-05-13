@@ -13,7 +13,9 @@ const getTopCourses = async () => {
 
   const url = `${API_URL_LOCAL}/content/courses${query}`;
 
-  const resp = await fetch(url);
+  const resp = await fetch(url, {
+    cache: "no-store",
+  });
 
   return resp
     .json()
@@ -26,7 +28,9 @@ const getRecentPosts = async () => {
 
   const url = `${API_URL_LOCAL}/content/posts${query}`;
 
-  const resp = await fetch(url);
+  const resp = await fetch(url, {
+    cache: "no-store",
+  });
 
   return resp
     .json()

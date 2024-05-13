@@ -14,6 +14,7 @@ import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
 import { Lesson } from "@/lib/models";
 import { parseErrorResponse } from "@/lib/parse-error-response";
+import { formatTimestamp } from "@/lib/utils";
 import { JSONContent } from "@tiptap/core";
 import { LoaderCircle, Menu } from "lucide-react";
 import { useContext, useMemo, useState } from "react";
@@ -119,6 +120,10 @@ export default function ResumeCoursePage({ lesson }: { lesson: Lesson }) {
                 </label>
               </>
             )}
+            <div className="flex-grow"></div>
+            <div className="text-sliver">
+              Last edited: {formatTimestamp(lesson.audit?.updatedAt)}
+            </div>
           </div>
           {/* <div className="flex justify-between pb-10">
             <Button variant="default" asChild>

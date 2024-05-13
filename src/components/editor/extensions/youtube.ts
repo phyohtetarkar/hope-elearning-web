@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
-import Youtube from "@tiptap/extension-youtube";
 import { mergeAttributes } from "@tiptap/core";
+import Youtube from "@tiptap/extension-youtube";
 
 const YOUTUBE_REGEX =
   /^(https?:\/\/)?(www\.|music\.)?(youtube\.com|youtu\.be|youtube-nocookie\.com)\/(?!channel\/)(?!@)(.+)?$/;
@@ -189,7 +189,10 @@ export const CustomYoutube = Youtube.extend({
 
     return [
       "div",
-      { "data-youtube-video": "", class: cn("aspect-w-16 aspect-h-9 w-full") },
+      {
+        "data-youtube-video": "",
+        class: cn("youtube aspect-w-16 aspect-h-9 w-full"),
+      },
       [
         "iframe",
         mergeAttributes(

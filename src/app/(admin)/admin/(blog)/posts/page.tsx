@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { API_URL_LOCAL } from "@/lib/constants";
 import { Page, Post, PostStatus } from "@/lib/models";
-import { buildQueryParams } from "@/lib/utils";
+import { buildQueryParams, formatAbbreviate } from "@/lib/utils";
 import { validateResponse } from "@/lib/validate-response";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -45,10 +45,10 @@ export default async function Posts(props: Props) {
 
   const statusView = (status: PostStatus) => {
     if (status === "draft") {
-      return <span className="text-primary text-sm">Draft</span>;
+      return <span className="text-sliver font-medium text-sm">Draft</span>;
     }
 
-    return <span className="text-sliver text-sm">Published</span>;
+    return <span className="text-primary font-medium text-sm">Published</span>;
   };
 
   return (
@@ -67,6 +67,7 @@ export default async function Posts(props: Props) {
             <TableHead className="uppercase min-w-[300px] w-full">
               Post
             </TableHead>
+            <TableHead className="uppercase min-w-[150px]">Views</TableHead>
             <TableHead className="uppercase min-w-[150px]">Action</TableHead>
           </TableRow>
         </TableHeader>
@@ -84,6 +85,9 @@ export default async function Posts(props: Props) {
                     </span>
                     {statusView(p.status)}
                   </div>
+                </TableCell>
+                <TableCell className="text-sliver text-sm">
+                  {formatAbbreviate(BigInt(p.meta?.viewCount ?? 0))}
                 </TableCell>
                 <TableCell>
                   <PostActionButtons post={p} />

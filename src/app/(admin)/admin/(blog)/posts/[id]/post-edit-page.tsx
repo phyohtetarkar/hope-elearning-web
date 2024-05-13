@@ -41,7 +41,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/use-toast";
-import { deletePost } from "@/lib/actions";
+import {
+  deletePost,
+  publishPost,
+  unpublishPost,
+  updatePost,
+  uploadImage,
+} from "@/lib/actions";
 import { useStaffs, useTags } from "@/lib/hooks";
 import { Post, PostVisibility, Tag, User } from "@/lib/models";
 import { parseErrorResponse } from "@/lib/parse-error-response";
@@ -51,16 +57,16 @@ import {
   CalendarIcon,
   Cloud,
   CloudUpload,
+  ExternalLink,
   ImagePlus,
   LoaderCircle,
   PanelRight,
-  SquareArrowOutUpRight,
   Trash2,
   X,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useContext, useState } from "react";
+import { ChangeEvent, useContext, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -95,9 +101,14 @@ export default function PostEditPage({ post }: PostEditPageProps) {
   const { toast } = useToast();
 
   const [isOpenSettings, setOpenSettings] = useState(false);
+  const [isOpenStatusAlert, setOpenStatusAlert] = useState(false);
+
   const [isStale, setStale] = useState(false);
   const [isSaving, setSaving] = useState(false);
   const [isDeleting, setDeleting] = useState(false);
+  const [isUploading, setUploading] = useState(false);
+
+  const coverFileRef = useRef<HTMLInputElement>(null);
 
   const { tags, isLoading: tagLoading } = useTags();
   const { users, isLoading: userLoading } = useStaffs();
@@ -105,8 +116,7 @@ export default function PostEditPage({ post }: PostEditPageProps) {
   const {
     control,
     register,
-    formState: { errors, isSubmitting },
-    handleSubmit,
+    formState: { errors },
     setValue,
     getValues,
   } = useForm<PostUpdateForm>({
@@ -137,15 +147,22 @@ export default function PostEditPage({ post }: PostEditPageProps) {
       setStale(false);
       const { slug, authors, tags, ...body } = getValues();
 
-      // const result = await updatePost({
-      //   ...body,
-      //   slug: !slug.trim() ? post.slug : slug,
-      //   authors: authors.length > 0 ? authors.map((v) => v.id) : undefined,
-      //   tags: tags.map((v) => v.id),
-      //   updatedAt: post.audit?.updatedAt,
-      // });
-      console.log("update post");
-      await new Promise((resolve) => setTimeout(() => resolve(true), 3000));
+      await updatePost({
+        ...body,
+        slug: !slug.trim() ? post.slug : slug,
+        authors: authors.length > 0 ? authors.map((v) => v.id) : undefined,
+        tags: tags.map((v) => v.id),
+        updatedAt: post.audit?.updatedAt,
+      });
+      // console.log("update post");
+      // await new Promise((resolve) => setTimeout(() => resolve(true), 3000));
+      if (post.status === "published") {
+        toast({
+          title: "Success",
+          description: "Post updated",
+          variant: "success",
+        });
+      }
     } catch (error) {
       toast({
         title: "Error",
@@ -175,7 +192,61 @@ export default function PostEditPage({ post }: PostEditPageProps) {
 
   const debouncedUpdate = debounce(handleUpdate, 2000);
 
+  const handleCoverUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+    try {
+      const files = event.target.files;
+      if (files && files.length > 0) {
+        const file = files[0];
+        setUploading(true);
+        const form = new FormData();
+        form.append("file", file);
+        const url = await uploadImage(form);
+        setValue("cover", url);
+        setStale(true);
+        if (post.status === "draft") {
+          handleUpdate();
+        }
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: parseErrorResponse(error),
+        variant: "destructive",
+      });
+    } finally {
+      event.target.value = "";
+      setUploading(false);
+    }
+  };
+
+  const handleStatusUpdate = async () => {
+    try {
+      setSaving(true);
+      if (post.status === "published") {
+        await unpublishPost(post.id);
+      } else {
+        if (isStale) {
+          await handleUpdate();
+        }
+        await publishPost(post.id);
+      }
+      setOpenStatusAlert(false);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: parseErrorResponse(error),
+        variant: "destructive",
+      });
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const saveStateView = () => {
+    if (post.status === "published") {
+      return null;
+    }
+
     if (isSaving) {
       return (
         <LoaderCircle className="flex-shrink-0 animate-spin text-sliver" />
@@ -188,37 +259,6 @@ export default function PostEditPage({ post }: PostEditPageProps) {
 
     return <Cloud className="flex-shrink-0 text-success" />;
   };
-
-  // const coverImageView = () => {
-  //   if (!post.cover) {
-  //     return (
-  //       <Button variant="outline" size="sm" className="mb-8 rounded-full">
-  //         <ImagePlus size={20} className="mr-2" />
-  //         Add Cover
-  //       </Button>
-  //     );
-  //   }
-  //   return (
-  //     <div className="relative mb-8">
-  //       <Image
-  //         src={post.cover ?? "/images/course.jpg"}
-  //         alt="Cover"
-  //         width={0}
-  //         height={0}
-  //         sizes="100vw"
-  //         priority
-  //         style={{
-  //           objectFit: "cover",
-  //           width: "100%",
-  //           height: "auto",
-  //         }}
-  //       />
-  //       <Button variant="light" size="icon" className="absolute top-4 right-4">
-  //         <Trash2 size={20} />
-  //       </Button>
-  //     </div>
-  //   );
-  // };
 
   if (!user) {
     return null;
@@ -245,10 +285,10 @@ export default function PostEditPage({ post }: PostEditPageProps) {
                     <Link
                       href={`/blogs/${post.slug}`}
                       target="_blank"
-                      className="hover:underline"
+                      className="hover:underline flex items-center space-x-1"
                     >
-                      Published
-                      <SquareArrowOutUpRight className="size-4" />
+                      <span>Published</span>
+                      <ExternalLink className="size-4" />
                     </Link>
                   ) : (
                     `${post.status[0].toUpperCase()}${post.status.substring(1)}`
@@ -260,12 +300,27 @@ export default function PostEditPage({ post }: PostEditPageProps) {
           <div className="flex-1"></div>
           {saveStateView()}
 
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button disabled={isSaving} className="ms-2">
-                Publish
-              </Button>
-            </AlertDialogTrigger>
+          <AlertDialog
+            open={isOpenStatusAlert}
+            onOpenChange={setOpenStatusAlert}
+          >
+            {!isContributor && (
+              <AlertDialogTrigger asChild>
+                {post.status === "draft" ? (
+                  <Button disabled={isSaving} className="ms-2">
+                    Publish
+                  </Button>
+                ) : (
+                  <Button
+                    variant="ghost"
+                    disabled={isSaving}
+                    className="ms-2 p-0 text-destructive hover:text-destructive/50 hover:bg-transparent"
+                  >
+                    Unpublish
+                  </Button>
+                )}
+              </AlertDialogTrigger>
+            )}
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>Confirm</AlertDialogTitle>
@@ -278,7 +333,7 @@ export default function PostEditPage({ post }: PostEditPageProps) {
                 <AlertDialogCancel disabled={isSaving}>
                   Cancel
                 </AlertDialogCancel>
-                <Button disabled={isSaving}>
+                <Button disabled={isSaving} onClick={handleStatusUpdate}>
                   {isSaving && (
                     <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
                   )}
@@ -287,6 +342,15 @@ export default function PostEditPage({ post }: PostEditPageProps) {
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
+
+          {post.status === "published" && (
+            <Button disabled={isSaving} className="ms-2" onClick={handleUpdate}>
+              {isSaving && (
+                <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              Update
+            </Button>
+          )}
 
           <TooltipProvider>
             <Tooltip delayDuration={300}>
@@ -322,16 +386,13 @@ export default function PostEditPage({ post }: PostEditPageProps) {
                         height={0}
                         sizes="100vw"
                         priority
-                        style={{
-                          objectFit: "cover",
-                          width: "100%",
-                          height: "auto",
-                        }}
+                        className="object-cover w-full h-auto border rounded-md"
                       />
                       <Button
-                        variant="light"
+                        variant="destructive"
                         size="icon"
                         className="absolute top-4 right-4"
+                        onClick={() => setValue("cover", undefined)}
                       >
                         <Trash2 size={20} />
                       </Button>
@@ -339,14 +400,29 @@ export default function PostEditPage({ post }: PostEditPageProps) {
                   );
                 }
                 return (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="mb-8 rounded-full"
-                  >
-                    <ImagePlus size={20} className="mr-2" />
-                    Add Cover
-                  </Button>
+                  <>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="mb-8 rounded-full"
+                      disabled={isUploading}
+                      onClick={() => coverFileRef.current?.click()}
+                    >
+                      {isUploading ? (
+                        <LoaderCircle className="mr-2 size-4 animate-spin" />
+                      ) : (
+                        <ImagePlus className="size-5 mr-2" />
+                      )}
+                      Add Cover
+                    </Button>
+                    <input
+                      ref={coverFileRef}
+                      type="file"
+                      accept="image/x-png,image/jpeg"
+                      className="hidden"
+                      onChange={handleCoverUpload}
+                    />
+                  </>
                 );
               }}
             />
@@ -381,6 +457,7 @@ export default function PostEditPage({ post }: PostEditPageProps) {
               onChange={(json, wordCount) => {
                 setValue("lexical", JSON.stringify(json));
                 setValue("wordCount", wordCount);
+                setStale(true);
                 if (post.status === "draft") {
                   handleUpdate();
                 }

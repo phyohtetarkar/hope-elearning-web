@@ -1,11 +1,12 @@
 "use client";
 
-import { DrawerBackdrop, DrawerContextProvider } from "@/components/ui/drawer";
-import { ReactNode, useContext, useEffect } from "react";
-import SideMenu from "./side-menu";
-import Header from "./header";
-import { usePathname, useRouter } from "next/navigation";
 import { AuthenticationContext } from "@/components/authentication-context-porvider";
+import { Alert } from "@/components/ui/alert";
+import { DrawerBackdrop, DrawerContextProvider } from "@/components/ui/drawer";
+import { usePathname, useRouter } from "next/navigation";
+import { ReactNode, useContext, useEffect } from "react";
+import Header from "./header";
+import SideMenu from "./side-menu";
 
 export default function AdminLayoutWrapper({
   children,
@@ -23,12 +24,49 @@ export default function AdminLayoutWrapper({
     }
   }, [user, router]);
 
+  const render = (node: ReactNode) => {
+    return (
+      <DrawerContextProvider>
+        <div className="flex h-full">
+          <SideMenu />
+          <div className="grow overflow-y-auto mt-[65px]">
+            <Header />
+            <div className="p-4 lg:p-5">{node}</div>
+          </div>
+          <DrawerBackdrop />
+        </div>
+      </DrawerContextProvider>
+    );
+  };
+
+  const isAdminOrOwner = user?.role === "owner" || user?.role === "admin";
+
   if (!user) {
     return null;
   }
 
   if (user.role === "user") {
     return null;
+  }
+
+  if (!isAdminOrOwner && pathname.startsWith("/admin/tags")) {
+    return render(<Alert variant="destructive">FORBIDDEN</Alert>);
+  }
+
+  if (!isAdminOrOwner && pathname.startsWith("/admin/categories")) {
+    return render(<Alert variant="destructive">FORBIDDEN</Alert>);
+  }
+
+  if (!isAdminOrOwner && pathname.startsWith("/admin/users")) {
+    return render(<Alert variant="destructive">FORBIDDEN</Alert>);
+  }
+
+  if (!isAdminOrOwner && pathname.startsWith("/admin/settings")) {
+    return render(<Alert variant="destructive">FORBIDDEN</Alert>);
+  }
+
+  if (!isAdminOrOwner && pathname.startsWith("/admin/subscribers")) {
+    return render(<Alert variant="destructive">FORBIDDEN</Alert>);
   }
 
   if (pathname.match(/^\/admin\/posts\/.+/)) {
@@ -39,16 +77,5 @@ export default function AdminLayoutWrapper({
     return <>{children}</>;
   }
 
-  return (
-    <DrawerContextProvider>
-      <div className="flex h-full">
-        <SideMenu />
-        <div className="grow overflow-y-auto mt-[65px]">
-          <Header />
-          <div className="p-4 lg:p-5">{children}</div>
-        </div>
-        <DrawerBackdrop />
-      </div>
-    </DrawerContextProvider>
-  );
+  return render(children);
 }

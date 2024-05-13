@@ -146,6 +146,12 @@ export interface CourseReview {
   audit: Audit;
 }
 
+export interface SiteSetting {
+  aboutUs?: string;
+  privacyPolicy?: string;
+  termsAndConditions?: string;
+}
+
 export interface AiPromptRequest {
   prompt: string;
   option: string;

@@ -15,12 +15,13 @@ import { Metadata, ResolvingMetadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { cache } from "react";
 
 interface Props {
   params: { course: string; lesson: string };
 }
 
-const getLesson = async (slug: string) => {
+const getLesson = cache(async (slug: string) => {
   const url = `${API_URL_LOCAL}/content/lessons/${slug}/trial`;
 
   const resp = await fetch(url);
@@ -33,7 +34,7 @@ const getLesson = async (slug: string) => {
     .json()
     .then((json) => json as Lesson)
     .catch((e) => undefined);
-};
+});
 
 export async function generateMetadata(
   { params }: Props,

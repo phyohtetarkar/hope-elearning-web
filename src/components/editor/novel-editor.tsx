@@ -1,5 +1,6 @@
 "use client";
 
+import { uploadImage } from "@/lib/actions";
 import { cn, debounce } from "@/lib/utils";
 import {
   EditorCommand,
@@ -11,9 +12,15 @@ import {
   EditorRoot,
   JSONContent,
 } from "novel";
-import { ImageResizer, handleCommandNavigation } from "novel/extensions";
+import { handleCommandNavigation } from "novel/extensions";
+import {
+  createImageUpload,
+  handleImageDrop,
+  handleImagePaste,
+} from "novel/plugins";
 import { useState } from "react";
 import { Separator } from "../ui/separator";
+import { useToast } from "../ui/use-toast";
 import { defaultExtensions } from "./extensions";
 import GenerativeMenuSwitch from "./generative/generative-menu-switch";
 import { ColorSelector } from "./selectors/color-selector";
@@ -35,11 +42,43 @@ export default function NovelEditor({ content, onChange }: NovelEditorProps) {
   const [openLink, setOpenLink] = useState(false);
   const [openAI, setOpenAI] = useState(false);
 
+  const { toast } = useToast();
+
   const debouncedUpdate = debounce((editor: EditorInstance) => {
     const json = editor.getJSON();
     const wordCount = editor.storage.characterCount.words();
     onChange?.(json, wordCount ?? 0);
   }, 2000);
+
+  const onUpload = async (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    //This should return a src of the uploaded image
+    return await uploadImage(formData);
+  };
+
+  const uploadFn = createImageUpload({
+    onUpload,
+    validateFn: (file) => {
+      if (!file.type.includes("image/")) {
+        toast({
+          title: "Error",
+          description: "File type not supported.",
+          variant: "destructive",
+        });
+        return false;
+      } else if (file.size / 1024 / 1024 > 1) {
+        toast({
+          title: "Error",
+          description: "File size too big (max 1MB).",
+          variant: "destructive",
+        });
+        return false;
+      }
+      return true;
+    },
+  });
 
   return (
     <EditorRoot>
@@ -49,7 +88,7 @@ export default function NovelEditor({ content, onChange }: NovelEditorProps) {
         onUpdate={({ editor }) => {
           debouncedUpdate(editor);
         }}
-        slotAfter={<ImageResizer />}
+        // slotAfter={<ImageResizer />}
         editorProps={{
           handleDOMEvents: {
             keydown: (_view, event) => handleCommandNavigation(event),
@@ -59,6 +98,9 @@ export default function NovelEditor({ content, onChange }: NovelEditorProps) {
               `prose prose-lg dark:prose-invert prose-headings:font-title font-default focus:outline-none max-w-full`
             ),
           },
+          handlePaste: (view, event) => handleImagePaste(view, event, uploadFn),
+          handleDrop: (view, event, _slice, moved) =>
+            handleImageDrop(view, event, moved, uploadFn),
         }}
       >
         <EditorCommand className="z-50 h-auto max-h-[330px]  w-72 overflow-y-auto rounded-md border bg-background px-1 py-2 shadow-md transition-all">

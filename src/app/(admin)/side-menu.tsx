@@ -1,16 +1,18 @@
 "use client";
 
+import { AuthenticationContext } from "@/components/authentication-context-porvider";
 import { DrawerContext } from "@/components/ui/drawer";
+import { cn } from "@/lib/utils";
 import { Listbox, ListboxItem, ListboxSection } from "@nextui-org/listbox";
 import {
   Edit,
+  ExternalLink,
   FolderClosed,
   Globe,
   GraduationCap,
   Hash,
   Home,
   Settings,
-  SquareArrowOutUpRight,
   X,
 } from "lucide-react";
 import Image from "next/image";
@@ -21,6 +23,7 @@ import { useContext, useEffect, useState } from "react";
 const iconSize = 20;
 
 export default function SideMenu() {
+  const { user } = useContext(AuthenticationContext);
   const { isMenuOpen, toggle } = useContext(DrawerContext);
   const pathname = usePathname();
   const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set());
@@ -29,6 +32,8 @@ export default function SideMenu() {
     const path = pathname.replace("/admin/", "");
     setSelectedKeys(new Set([path === "/admin" ? "dashboard" : path]));
   }, [pathname]);
+
+  const isAdminOrOwner = user?.role === "owner" || user?.role === "admin";
 
   return (
     <div
@@ -84,41 +89,14 @@ export default function SideMenu() {
             variant="flat"
             href="/"
             startContent={<Globe size={iconSize} />}
-            endContent={<SquareArrowOutUpRight size={iconSize} />}
+            endContent={<ExternalLink size={iconSize} />}
             color="primary"
             target="_blank"
             className="data-[selectable=true]:focus:bg-white data-[selectable=true]:focus:text-default-600 data-[focus=true]:bg-white"
           >
             View site
           </ListboxItem>
-          <ListboxSection
-            title="BLOG"
-            className="mt-3"
-            classNames={{
-              heading: "px-[0.65rem]",
-            }}
-          >
-            <ListboxItem
-              key="posts"
-              variant="flat"
-              as={Link}
-              href="/admin/posts"
-              startContent={<Edit size={iconSize} />}
-              color="primary"
-            >
-              Posts
-            </ListboxItem>
-            <ListboxItem
-              key="tags"
-              variant="flat"
-              as={Link}
-              href="/admin/tags"
-              startContent={<Hash size={iconSize} />}
-              color="primary"
-            >
-              Tags
-            </ListboxItem>
-          </ListboxSection>
+
           <ListboxSection
             title="COURSE"
             className="mt-3"
@@ -143,8 +121,39 @@ export default function SideMenu() {
               href="/admin/categories"
               startContent={<FolderClosed size={iconSize} />}
               color="primary"
+              className={cn(!isAdminOrOwner ? "hidden" : undefined)}
             >
               Categories
+            </ListboxItem>
+          </ListboxSection>
+
+          <ListboxSection
+            title="BLOG"
+            className="mt-3"
+            classNames={{
+              heading: "px-[0.65rem]",
+            }}
+          >
+            <ListboxItem
+              key="posts"
+              variant="flat"
+              as={Link}
+              href="/admin/posts"
+              startContent={<Edit size={iconSize} />}
+              color="primary"
+            >
+              Posts
+            </ListboxItem>
+            <ListboxItem
+              key="tags"
+              variant="flat"
+              as={Link}
+              href="/admin/tags"
+              startContent={<Hash size={iconSize} />}
+              color="primary"
+              className={cn(!isAdminOrOwner ? "hidden" : undefined)}
+            >
+              Tags
             </ListboxItem>
           </ListboxSection>
 
@@ -155,7 +164,10 @@ export default function SideMenu() {
             href="/admin/settings"
             startContent={<Settings size={iconSize} />}
             color="primary"
-            className="mt-auto mb-2"
+            className={cn(
+              "mt-auto mb-2",
+              !isAdminOrOwner ? "hidden" : undefined
+            )}
           >
             Settings
           </ListboxItem>

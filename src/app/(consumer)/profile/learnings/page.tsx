@@ -1,3 +1,4 @@
+import { EnrolledCourseGridItem } from "@/components/course";
 import { Alert } from "@/components/ui/alert";
 import {
   Breadcrumb,
@@ -47,8 +48,7 @@ export default async function Learnings(props: Props) {
       <>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {enrollments.contents.map((ec, i) => {
-            // return <EnrolledCourseGridItem key={i} data={ec} />;
-            return <></>;
+            return <EnrolledCourseGridItem key={i} data={ec} />;
           })}
         </div>
 

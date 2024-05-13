@@ -23,7 +23,7 @@ export function CourseGridItem({ data }: { data: Course }) {
         <div className="flex flex-col p-4">
           <Link
             href={`/courses/${data.slug}`}
-            className="text-foreground font-medium text-lg text-nowrap"
+            className="text-foreground font-medium text-lg line-clamp-2"
           >
             {data.title}
           </Link>

@@ -15,7 +15,7 @@ import {
   sendEmailVerification,
   updateProfile,
 } from "firebase/auth";
-import { Loader2 } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -142,7 +142,7 @@ function SignUpPage() {
                 disabled={isSubmitting || !!oauthLogin}
               >
                 {isSubmitting && (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
                 )}
                 Sign up
               </Button>
@@ -196,7 +196,7 @@ function SignUpPage() {
                   }}
                 >
                   {oauthLogin === "google" && (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
                   )}
                   <Image
                     src="/images/icons8-google-48.png"

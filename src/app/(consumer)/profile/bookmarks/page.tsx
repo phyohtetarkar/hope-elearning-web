@@ -1,3 +1,4 @@
+import { BookmarkCourseGridItem } from "@/components/course";
 import { Alert } from "@/components/ui/alert";
 import {
   Breadcrumb,
@@ -35,7 +36,7 @@ const getBookmarks = async ({ searchParams }: Props) => {
     .catch((e) => undefined);
 };
 
-export default async function BookMarks(props: Props) {
+export default async function Bookmarks(props: Props) {
   const bookmarks = await getBookmarks(props);
 
   const content = () => {
@@ -47,8 +48,7 @@ export default async function BookMarks(props: Props) {
       <>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {bookmarks.contents.map((bm, i) => {
-            //return <BookmarkCourseGridItem key={i} data={bm} />;
-            return <></>;
+            return <BookmarkCourseGridItem key={i} data={bm} />;
           })}
         </div>
 

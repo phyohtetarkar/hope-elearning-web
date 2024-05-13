@@ -1,3 +1,4 @@
+import Pagination from "@/components/ui/pagination";
 import {
   Table,
   TableBody,
@@ -7,14 +8,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import UserActionButtons from "./user-action-buttons";
-import Pagination from "@/components/ui/pagination";
-import UserFilter from "./users-filter";
 import { API_URL_LOCAL } from "@/lib/constants";
-import { cookies } from "next/headers";
-import { validateResponse } from "@/lib/validate-response";
 import { Page, User } from "@/lib/models";
-import { buildQueryParams } from "@/lib/utils";
+import { buildQueryParams, uppercaseFirstChar } from "@/lib/utils";
+import { validateResponse } from "@/lib/validate-response";
+import { cookies } from "next/headers";
+import UserActionButtons from "./user-action-buttons";
+import UserFilter from "./users-filter";
 
 interface Props {
   searchParams: { [key: string]: string | undefined };
@@ -68,9 +68,11 @@ export default async function Users(props: Props) {
                   <h6>{u.nickname}</h6>
                 </TableCell>
                 <TableCell className="text-sliver text-sm">{u.email}</TableCell>
-                <TableCell className="text-sliver text-sm">{u.role}</TableCell>
+                <TableCell className="text-sliver text-sm">
+                  {uppercaseFirstChar(u.role)}
+                </TableCell>
                 <TableCell>
-                  <UserActionButtons />
+                  <UserActionButtons value={u} />
                 </TableCell>
               </TableRow>
             );

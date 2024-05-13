@@ -30,7 +30,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
-import { deleteCourse, updateCourse } from "@/lib/actions";
+import {
+  deleteCourse,
+  publishCourse,
+  unpublishCourse,
+  updateCourse,
+  uploadImage,
+} from "@/lib/actions";
 import { useCategories, useStaffs } from "@/lib/hooks";
 import {
   Category,
@@ -45,14 +51,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Cloud,
   CloudUpload,
+  ExternalLink,
   LoaderCircle,
-  SquareArrowOutUpRight,
   Trash2,
   Upload,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useContext, useState } from "react";
+import { ChangeEvent, useContext, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import CourseChaptersEdit from "./course-chapters-edit";
@@ -95,6 +101,10 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
   const [isStale, setStale] = useState(false);
   const [isSaving, setSaving] = useState(false);
   const [isDeleting, setDeleting] = useState(false);
+  const [isUploading, setUploading] = useState(false);
+  const [isOpenStatusAlert, setOpenStatusAlert] = useState(false);
+
+  const coverFileRef = useRef<HTMLInputElement>(null);
 
   const { toast } = useToast();
 
@@ -109,7 +119,18 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
     setValue,
   } = useForm<CourseForm>({
     resolver: zodResolver(schema),
-    defaultValues: course,
+    defaultValues: {
+      id: course.id,
+      cover: course.cover,
+      title: course.title,
+      slug: course.slug,
+      excerpt: course.excerpt,
+      description: course.description,
+      level: course.level,
+      access: course.access,
+      category: course.category,
+      authors: course.authors ?? [],
+    },
   });
 
   const handleUpdate = async (values: CourseForm) => {
@@ -123,6 +144,11 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
         categoryId: category.id,
         authors: authors.map((a) => a.id),
         updatedAt: course.audit?.updatedAt,
+      });
+      toast({
+        title: "Success",
+        description: "Course updated",
+        variant: "success",
       });
     } catch (error) {
       setStale(true);
@@ -151,6 +177,49 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
     }
   };
 
+  const handleCoverUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+    try {
+      const files = event.target.files;
+      if (files && files.length > 0) {
+        const file = files[0];
+        setUploading(true);
+        const form = new FormData();
+        form.append("file", file);
+        const url = await uploadImage(form);
+        setValue("cover", url);
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: parseErrorResponse(error),
+        variant: "destructive",
+      });
+    } finally {
+      event.target.value = "";
+      setUploading(false);
+    }
+  };
+
+  const handleStatusUpdate = async () => {
+    try {
+      setSaving(true);
+      if (course.status === "published") {
+        await unpublishCourse(course.id);
+      } else {
+        await publishCourse(course.id);
+      }
+      setOpenStatusAlert(false);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: parseErrorResponse(error),
+        variant: "destructive",
+      });
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const saveStateView = () => {
     if (isSaving) {
       return (
@@ -170,6 +239,7 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
   }
 
   const isAdminOrOwner = user.role === "admin" || user.role === "owner";
+  const isContributor = user.role === "contributor";
 
   return (
     <div className="flex flex-col">
@@ -188,10 +258,10 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
                   <Link
                     href={`/courses/${course.slug}`}
                     target="_blank"
-                    className="flex items-center gap-1"
+                    className="flex items-center space-x-1"
                   >
-                    Published
-                    <SquareArrowOutUpRight className="size-4" />
+                    <span>Published</span>
+                    <ExternalLink className="size-4" />
                   </Link>
                 ) : (
                   `${course.status[0].toUpperCase()}${course.status.substring(
@@ -204,12 +274,14 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
         </Breadcrumb>
         <div className="flex-1"></div>
 
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button disabled={isSubmitting || isSaving} className="ms-2">
-              {course.status === "draft" ? "Publish" : "Unpublish"}
-            </Button>
-          </AlertDialogTrigger>
+        <AlertDialog open={isOpenStatusAlert} onOpenChange={setOpenStatusAlert}>
+          {!isContributor && (
+            <AlertDialogTrigger asChild>
+              <Button disabled={isSubmitting || isSaving} className="ms-2">
+                {course.status === "draft" ? "Publish" : "Unpublish"}
+              </Button>
+            </AlertDialogTrigger>
+          )}
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>Confirm</AlertDialogTitle>
@@ -220,7 +292,7 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel disabled={isSaving}>Cancel</AlertDialogCancel>
-              <Button disabled={isSaving}>
+              <Button disabled={isSaving} onClick={handleStatusUpdate}>
                 {isSaving && (
                   <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
                 )}
@@ -402,39 +474,62 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
 
                   <div className="flex flex-col">
                     <label className="font-medium mb-1">Cover photo</label>
-                    <div className="aspect-w-3 aspect-h-1 border-2 border-dashed rounded-md bg-gray-50">
+                    <div className="aspect-w-5 aspect-h-2 border-2 border-dashed rounded-md bg-gray-50">
                       <Controller
                         control={control}
                         name="cover"
                         render={({ field }) => {
                           if (field.value) {
                             return (
-                              <div className="flex justify-center p-1">
+                              <>
                                 <Image
                                   alt="Cover"
                                   src={field.value}
-                                  width={0}
-                                  height={0}
-                                  sizes="100vw"
+                                  fill
+                                  sizes="50vw"
                                   priority
-                                  className="object-cover h-full w-auto"
+                                  className="object-contain"
                                 />
-                              </div>
+
+                                <Button
+                                  variant="destructive"
+                                  size="icon"
+                                  className="absolute top-4 right-4 left-auto bottom-auto"
+                                  onClick={() => setValue("cover", undefined)}
+                                >
+                                  <Trash2 size={20} />
+                                </Button>
+                              </>
                             );
                           }
                           return (
-                            <div className="absolute inset-0 flex flex-col items-center justify-center">
-                              <Button
-                                variant="link"
-                                className="font-semibold hover:no-underline"
-                              >
-                                Upload image
-                                <Upload className="size-5 ms-2" />
-                              </Button>
-                              <span className="text-sm text-sliver text-center">
-                                PNG or JPG up to 1MB
-                              </span>
-                            </div>
+                            <>
+                              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                <Button
+                                  variant="link"
+                                  className="font-semibold hover:no-underline"
+                                  disabled={isUploading}
+                                  onClick={() => coverFileRef.current?.click()}
+                                >
+                                  Upload image
+                                  {isUploading ? (
+                                    <LoaderCircle className="ms-2 size-4 animate-spin" />
+                                  ) : (
+                                    <Upload className="size-5 ms-2" />
+                                  )}
+                                </Button>
+                                <span className="text-sm text-sliver text-center">
+                                  PNG or JPG up to 1MB
+                                </span>
+                              </div>
+                              <input
+                                ref={coverFileRef}
+                                type="file"
+                                accept="image/x-png,image/jpeg"
+                                className="hidden"
+                                onChange={handleCoverUpload}
+                              />
+                            </>
                           );
                         }}
                       />

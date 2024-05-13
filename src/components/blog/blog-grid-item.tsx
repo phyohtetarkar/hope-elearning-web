@@ -19,15 +19,16 @@ export function BlogGridItem({ data }: { data: Post }) {
             sizes="33vh"
           />
         </div>
+        {/* <Separator /> */}
         <div className="flex flex-col p-4 grow">
           <Link
             href={`/blogs/${data.slug}`}
-            className="text-foreground font-semibold text-lg text-nowrap"
+            className="text-foreground font-semibold text-lg line-clamp-2"
           >
             {data.title}
           </Link>
 
-          <div className="text-sm text-sliver">
+          <div className="text-sm text-sliver mt-1">
             {formatTimestamp(data.publishedAt)}
           </div>
 

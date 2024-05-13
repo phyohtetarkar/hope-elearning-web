@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { API_URL_LOCAL } from "@/lib/constants";
 import { Category, Course, CourseStatus, Page } from "@/lib/models";
-import { buildQueryParams, formatNumber } from "@/lib/utils";
+import { buildQueryParams, formatAbbreviate } from "@/lib/utils";
 import { validateResponse } from "@/lib/validate-response";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -107,7 +107,7 @@ export default async function Courses(props: Props) {
                   </div>
                 </TableCell>
                 <TableCell className="text-sliver text-sm">
-                  {formatNumber(BigInt(c.meta?.enrolledCount ?? 0))}
+                  {formatAbbreviate(BigInt(c.meta?.enrolledCount ?? 0))}
                 </TableCell>
                 <TableCell>
                   <CourseActionButtons course={c} />

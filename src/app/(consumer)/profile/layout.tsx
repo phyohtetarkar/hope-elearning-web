@@ -30,7 +30,7 @@ export default function ProfileLayout({ children }: { children: ReactNode }) {
 
   const content = (
     <>
-      <div className="text-sliver tmb-2 px-1 text-sm uppercase hidden lg:block ">
+      <div className="text-sliver px-1 mb-2 text-sm uppercase hidden lg:block ">
         ACCOUNT
       </div>
       <div className="flex flex-col gap-1">
@@ -60,16 +60,16 @@ export default function ProfileLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="container py-5 mb-5">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
-        <div className="lg:col-span-4 xl:col-span-3">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+        <div className="lg:col-span-1">
           <div className="border rounded">
             <div className="block lg:hidden">
               <Accordion type="multiple">
                 <AccordionItem value="menu">
-                  <AccordionTrigger className="px-3 py-2 font-semibold">
+                  <AccordionTrigger className="px-3 py-2 font-semibold text-lg">
                     Menu
                   </AccordionTrigger>
-                  <AccordionContent className="border-t">
+                  <AccordionContent className="border-t pb-0">
                     <div className="p-3">{content}</div>
                   </AccordionContent>
                 </AccordionItem>
@@ -79,7 +79,7 @@ export default function ProfileLayout({ children }: { children: ReactNode }) {
             <div className="p-3 hidden lg:block">{content}</div>
           </div>
         </div>
-        <div className="lg:col-span-8 xl:col-span-9">{children}</div>
+        <div className="lg:col-span-3">{children}</div>
       </div>
     </div>
   );

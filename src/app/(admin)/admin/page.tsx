@@ -4,7 +4,7 @@ import { API_URL_LOCAL } from "@/lib/constants";
 import { DashboardSummary } from "@/lib/models";
 import { formatAbbreviate } from "@/lib/utils";
 import { validateResponse } from "@/lib/validate-response";
-import { DollarSign, GraduationCap, Newspaper, UsersIcon } from "lucide-react";
+import { DollarSign, Edit, GraduationCap, UsersIcon } from "lucide-react";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import EnrolledLineChart from "./enrolled-line-chart";
@@ -52,7 +52,7 @@ export default async function Dashboard() {
         <Card className="shadow-none">
           <CardContent className="p-4">
             <div className="flex items-center space-x-4">
-              <Newspaper className="size-10 text-gray-600" />
+              <Edit className="size-10 text-gray-600" />
               <div className="flex flex-col">
                 <div className="text-sliver mb-1">Posts</div>
                 <h2 className="text-gray-700">

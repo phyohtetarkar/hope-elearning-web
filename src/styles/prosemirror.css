@@ -20,7 +20,7 @@
 
 /* Custom image styles */
 
-.ProseMirror img {
+.ProseMirror img, .youtube {
   transition: filter 0.1s ease-in-out;
 
   &:hover {
@@ -29,7 +29,7 @@
   }
 
   &.ProseMirror-selectednode {
-    outline: 3px solid #5abbf7;
+    outline: 2px solid #5abbf7;
     filter: brightness(90%);
   }
 }
@@ -122,7 +122,7 @@ ul[data-type="taskList"] li[data-checked="true"] > div > p {
   max-width: 400px !important;
 }
 
-.ProseMirror:not(.dragging) .ProseMirror-selectednode {
+.ProseMirror:is(.dragging) .ProseMirror-selectednode {
   outline: none !important;
   background-color: var(--novel-highlight-blue);
   transition: background-color 0.2s;

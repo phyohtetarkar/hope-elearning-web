@@ -19,7 +19,7 @@ export default function BrowseBreadcrumb() {
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink
-            className="text-primary-foreground/70 underline hover:text-primary-foreground"
+            className="text-base text-primary-foreground/70 underline hover:text-primary-foreground"
             asChild
           >
             <Link href="/">Home</Link>
@@ -30,7 +30,7 @@ export default function BrowseBreadcrumb() {
           <>
             <BreadcrumbItem>
               <BreadcrumbLink
-                className="text-primary-foreground/70 underline hover:text-primary-foreground"
+                className="text-base text-primary-foreground/70 underline hover:text-primary-foreground"
                 asChild
               >
                 <Link href="/browse">Courses</Link>
@@ -38,14 +38,14 @@ export default function BrowseBreadcrumb() {
             </BreadcrumbItem>
             <BreadcrumbSeparator className="text-primary-foreground/70" />
             <BreadcrumbItem>
-              <BreadcrumbPage className="text-nowrap text-primary-foreground">
+              <BreadcrumbPage className="text-base text-nowrap text-primary-foreground">
                 {sp.get("q")}
               </BreadcrumbPage>
             </BreadcrumbItem>
           </>
         ) : (
           <BreadcrumbItem>
-            <BreadcrumbPage className="text-nowrap text-primary-foreground">
+            <BreadcrumbPage className="text-base text-nowrap text-primary-foreground">
               All courses
             </BreadcrumbPage>
           </BreadcrumbItem>

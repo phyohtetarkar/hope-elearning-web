@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { FilePenLine, Users } from "lucide-react";
+import { Settings2, Users } from "lucide-react";
 import Link from "next/link";
 import { ReactNode } from "react";
 
@@ -62,7 +62,7 @@ export default function Settings() {
                     className="flex flex-shrink-0 rounded-full justify-center items-center bg-default"
                     style={{ width: 60, height: 60 }}
                   >
-                    {<FilePenLine size={30} className="text-dark" />}
+                    {<Settings2 size={30} className="text-dark" />}
                   </div>
                 }
                 title="Site Setting"

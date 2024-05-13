@@ -13,7 +13,7 @@ import {
   LinearScale,
   PieController,
   PointElement,
-  Tooltip
+  Tooltip,
 } from "chart.js";
 import NextNProgress from "nextjs-progressbar";
 import NProgress from "nprogress";

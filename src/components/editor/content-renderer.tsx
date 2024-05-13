@@ -10,6 +10,8 @@ import ListItem from "@tiptap/extension-list-item";
 import BulletList from "@tiptap/extension-bullet-list";
 import OrderedList from "@tiptap/extension-ordered-list";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
+import TiptapLink from "@tiptap/extension-link";
+import Underline from "@tiptap/extension-underline";
 import { generateHTML } from "@tiptap/html";
 import { useEffect, useMemo } from "react";
 import { CustomYoutube } from "./extensions/youtube";
@@ -376,6 +378,8 @@ export function ContentRenderer({ lexical }: { lexical?: string }) {
       ListItem,
       BulletList,
       OrderedList,
+      TiptapLink,
+      Underline,
       HorizontalRule,
       CustomYoutube,
     ]);

@@ -10,7 +10,7 @@ import { firebaseAuth } from "@/lib/firebase.config";
 import { parseErrorResponse } from "@/lib/parse-error-response";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { inMemoryPersistence, signInWithEmailAndPassword } from "firebase/auth";
-import { Loader2 } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -114,7 +114,7 @@ function LoginPage() {
                 disabled={isSubmitting || !!oauthLogin}
               >
                 {isSubmitting && (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
                 )}
                 Login
               </Button>
@@ -168,7 +168,7 @@ function LoginPage() {
                   }}
                 >
                   {oauthLogin === "google" && (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
                   )}
                   <Image
                     src="/images/icons8-google-48.png"

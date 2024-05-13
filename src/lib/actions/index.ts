@@ -2,8 +2,12 @@ export * from "./auth/apply-auth-cookies";
 export * from "./auth/clear-auth-cookies";
 export * from "./auth/send-verification-email";
 
+export * from "./user/update-user-role";
+
 export * from "./post/create-post";
 export * from "./post/delete-post";
+export * from "./post/publish-post";
+export * from "./post/unpublish-post";
 export * from "./post/update-post";
 
 export * from "./tag/create-tag";
@@ -16,6 +20,8 @@ export * from "./category/update-category";
 
 export * from "./course/create-course";
 export * from "./course/delete-course";
+export * from "./course/publish-course";
+export * from "./course/unpublish-course";
 export * from "./course/update-course";
 
 export * from "./course/create-chapter";
@@ -41,3 +47,5 @@ export * from "./enrollment/update-resume-lesson";
 
 export * from "./ai/generate-gemini-completion";
 export * from "./ai/generate-openai-completion";
+
+export * from "./upload-image";
