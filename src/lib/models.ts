@@ -26,6 +26,7 @@ export interface User {
   role: UserRole;
   email?: string;
   image?: string;
+  headline?: string;
 }
 
 export interface Tag {

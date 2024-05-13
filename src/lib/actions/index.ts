@@ -3,6 +3,7 @@ export * from "./auth/clear-auth-cookies";
 export * from "./auth/send-verification-email";
 
 export * from "./user/update-user-role";
+export * from "./user/update-user-profile";
 
 export * from "./post/create-post";
 export * from "./post/delete-post";

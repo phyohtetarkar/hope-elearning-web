@@ -1,19 +1,23 @@
 "use client";
 
+import { AuthenticationContext } from "@/components/authentication-context-porvider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import Link from "next/link";
+import { useContext } from "react";
 
 export default function ProfilePage() {
+  const { user } = useContext(AuthenticationContext);
+
   return (
     <Card className="shadow-none mb-3">
       <CardContent className="px-6 py-4">
         <div className="flex gap-3 items-center">
           <div className="flex-shrink-0">
             <Image
-              src="/images/profile.png"
+              src={user?.image ?? "/images/profile.png"}
               width={60}
               height={60}
               alt="User image"
@@ -22,8 +26,8 @@ export default function ProfilePage() {
             />
           </div>
           <div className="truncate">
-            <h6 className="mb-0">Hector</h6>
-            <span className="text-sliver text-sm">hectorgibbons@gmail.com</span>
+            <h6 className="mb-0">{user?.nickname}</h6>
+            <span className="text-sliver text-sm">{user?.email}</span>
           </div>
           <div className="ms-auto">
             <Button variant="outline" className="border-primary" asChild>
@@ -32,13 +36,6 @@ export default function ProfilePage() {
               </Link>
             </Button>
           </div>
-          {/* <div className="ms-auto block lg:hidden">
-            <Button variant="primary" size="icon" asChild>
-              <span>
-                <Edit size={20} />
-              </span>
-            </Button>
-          </div> */}
         </div>
         <Separator className="mt-3" />
         <div className="text-sliver mt-3 mb-3">Overview</div>
