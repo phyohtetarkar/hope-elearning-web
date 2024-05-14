@@ -10,10 +10,12 @@ import {
 } from "@/components/ui/table";
 import { API_URL_LOCAL } from "@/lib/constants";
 import { Page, Post, PostStatus } from "@/lib/models";
-import { buildQueryParams, formatAbbreviate } from "@/lib/utils";
+import {
+  buildQueryParams,
+  formatAbbreviate,
+  formatRelativeTimestamp,
+} from "@/lib/utils";
 import { validateResponse } from "@/lib/validate-response";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import { cookies } from "next/headers";
 import PostActionButtons from "./post-action-buttons";
 import PostCreateButton from "./post-create-button";
@@ -41,7 +43,6 @@ const getPosts = async ({ searchParams }: Props) => {
 
 export default async function Posts(props: Props) {
   const data = await getPosts(props);
-  dayjs.extend(relativeTime);
 
   const statusView = (status: PostStatus) => {
     if (status === "draft") {
@@ -81,7 +82,7 @@ export default async function Posts(props: Props) {
                     <span className="text-sliver text-sm mb-1">
                       By&nbsp;{p.authors?.map((u) => u.nickname).join(", ")}
                       &nbsp;-&nbsp;
-                      {dayjs(p.audit?.createdAt).fromNow()}
+                      {formatRelativeTimestamp(p.audit?.createdAt)}
                     </span>
                     {statusView(p.status)}
                   </div>

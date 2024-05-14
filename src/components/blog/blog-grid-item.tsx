@@ -1,5 +1,9 @@
 import { Post } from "@/lib/models";
-import { formatAbbreviate, formatTimestamp, wordPerMinute } from "@/lib/utils";
+import {
+  formatAbbreviate,
+  formatRelativeTimestamp,
+  wordPerMinute,
+} from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent, CardFooter } from "../ui/card";
@@ -29,7 +33,7 @@ export function BlogGridItem({ data }: { data: Post }) {
           </Link>
 
           <div className="text-sm text-sliver mt-1">
-            {formatTimestamp(data.publishedAt)}
+            {formatRelativeTimestamp(data.publishedAt)}
           </div>
 
           <p className="font-light line-clamp-2 mt-2">{data.excerpt}</p>

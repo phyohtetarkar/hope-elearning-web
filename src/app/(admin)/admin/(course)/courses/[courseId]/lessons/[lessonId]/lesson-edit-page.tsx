@@ -37,18 +37,13 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
 import { deleteLesson, updateLesson } from "@/lib/actions";
-import { Lesson } from "@/lib/models";
+import { Audit, Lesson } from "@/lib/models";
 import { parseErrorResponse } from "@/lib/parse-error-response";
 import { debounce, setStringToSlug } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Cloud,
-  CloudUpload,
-  EllipsisVertical,
-  LoaderCircle,
-} from "lucide-react";
+import { Cloud, CloudUpload, LoaderCircle, Settings } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -72,15 +67,11 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
   const [openSetting, setOpenSetting] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
 
+  const auditRef = useRef<Audit>();
+
   const { toast } = useToast();
 
-  const {
-    control,
-    register,
-    formState: { errors, isSubmitting },
-    handleSubmit,
-    setValue,
-  } = useForm<LessonForm>({
+  const { control, setValue, getValues } = useForm<LessonForm>({
     resolver: zodResolver(schema),
     defaultValues: {
       id: lesson.id,
@@ -91,22 +82,47 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
     },
   });
 
-  const handleUpdate = async (values: LessonForm) => {
+  useEffect(() => {
+    auditRef.current = lesson.audit;
+  }, [lesson]);
+
+  const handleUpdate = async () => {
     if (isSaving) {
       setStale(true);
+      return;
+    }
+
+    if (isDeleting) {
       return;
     }
 
     try {
       setSaving(true);
       setStale(false);
+
+      const values = getValues();
+      const audit = auditRef.current;
+
       const body = {
         ...values,
         courseId: lesson.course?.id,
         slug: !values.slug?.trim() ? lesson.slug : values.slug,
-        updatedAt: lesson?.audit?.updatedAt,
+        updatedAt: audit?.updatedAt,
       };
+
+      setValue("slug", body["slug"], { shouldValidate: true });
+
       await updateLesson(lesson.course?.id ?? "", body);
+
+      // console.log("update lesson");
+      // await new Promise((resolve) => setTimeout(() => resolve(true), 3000));
+      if (lesson.status === "published") {
+        toast({
+          title: "Success",
+          description: "Lesson updated",
+          variant: "success",
+        });
+      }
     } catch (error) {
       setStale(true);
       toast({
@@ -137,6 +153,10 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
   const debouncedUpdate = debounce(handleUpdate, 2000);
 
   const saveStateView = () => {
+    if (lesson.status === "published") {
+      return null;
+    }
+
     if (isSaving) {
       return (
         <LoaderCircle className="flex-shrink-0 animate-spin text-sliver" />
@@ -172,11 +192,19 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
             </BreadcrumbList>
           </Breadcrumb>
           <div className="flex-1"></div>
-          <Button>Update</Button>
+          {saveStateView()}
+          {lesson.status === "published" && (
+            <Button disabled={isSaving || isDeleting} onClick={handleUpdate}>
+              {isSaving && (
+                <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              Update
+            </Button>
+          )}
           <DropdownMenu>
             <DropdownMenuTrigger className="outline-none" asChild>
               <Button variant="default" size="icon">
-                <EllipsisVertical className="size-5" />
+                <Settings className="size-5" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="shadow-xl">
@@ -227,6 +255,7 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
                         const slug = setStringToSlug(value);
                         setValue("slug", slug);
                         if (lesson.status === "draft") {
+                          debouncedUpdate(undefined);
                         }
                       }}
                     />
@@ -236,9 +265,10 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
             </div>
             <NovelEditor
               content={lesson.lexical ? JSON.parse(lesson.lexical) : undefined}
-              onChange={(json) => {
+              onDebouncedChange={(json, wordCount) => {
                 setValue("lexical", JSON.stringify(json));
                 if (lesson.status === "draft") {
+                  handleUpdate();
                 }
               }}
             />
@@ -246,7 +276,15 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
         </div>
       </div>
 
-      <Dialog open={openSetting} onOpenChange={setOpenSetting}>
+      <Dialog
+        open={openSetting}
+        onOpenChange={(open) => {
+          setOpenSetting(open);
+          if (isStale && lesson.status === "draft") {
+            handleUpdate();
+          }
+        }}
+      >
         <DialogContent onInteractOutside={(evt) => evt.preventDefault()}>
           <DialogHeader>
             <DialogTitle>Lesson settings</DialogTitle>
@@ -269,6 +307,7 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
                       setValue("slug", slug, {
                         shouldValidate: true,
                       });
+                      setStale(slug !== lesson.slug);
                     }}
                     error={error?.message}
                   />
@@ -285,7 +324,10 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
                     <Switch
                       id="trial"
                       checked={field.value ?? false}
-                      onCheckedChange={(v) => setValue("trial", v)}
+                      onCheckedChange={(v) => {
+                        setValue("trial", v);
+                        setStale(v !== lesson.trial);
+                      }}
                     />
                     <label htmlFor="trial" className="font-medium">
                       Trial
@@ -298,8 +340,13 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
 
           <DialogFooter>
             <DialogClose asChild>
-              <Button type="button" className="mt-2" disabled={isSubmitting}>
-                Done
+              <Button
+                type="button"
+                className="mt-2"
+                variant="default"
+                disabled={isSaving}
+              >
+                Close
               </Button>
             </DialogClose>
           </DialogFooter>

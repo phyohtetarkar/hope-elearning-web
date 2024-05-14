@@ -33,10 +33,15 @@ const extensions = [...defaultExtensions, slashCommand];
 
 interface NovelEditorProps {
   content?: JSONContent;
-  onChange?: (content: JSONContent, wordCount: number) => void;
+  onChange?: (editor: EditorInstance) => void;
+  onDebouncedChange?: (content: JSONContent, wordCount: number) => void;
 }
 
-export default function NovelEditor({ content, onChange }: NovelEditorProps) {
+export default function NovelEditor({
+  content,
+  onChange,
+  onDebouncedChange,
+}: NovelEditorProps) {
   const [openNode, setOpenNode] = useState(false);
   const [openColor, setOpenColor] = useState(false);
   const [openLink, setOpenLink] = useState(false);
@@ -47,7 +52,7 @@ export default function NovelEditor({ content, onChange }: NovelEditorProps) {
   const debouncedUpdate = debounce((editor: EditorInstance) => {
     const json = editor.getJSON();
     const wordCount = editor.storage.characterCount.words();
-    onChange?.(json, wordCount ?? 0);
+    onDebouncedChange?.(json, wordCount ?? 0);
   }, 2000);
 
   const onUpload = async (file: File) => {
@@ -86,6 +91,7 @@ export default function NovelEditor({ content, onChange }: NovelEditorProps) {
         initialContent={content}
         extensions={extensions}
         onUpdate={({ editor }) => {
+          onChange?.(editor);
           debouncedUpdate(editor);
         }}
         // slotAfter={<ImageResizer />}

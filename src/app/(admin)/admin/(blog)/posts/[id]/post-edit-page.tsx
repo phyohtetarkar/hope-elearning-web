@@ -49,7 +49,7 @@ import {
   uploadImage,
 } from "@/lib/actions";
 import { useStaffs, useTags } from "@/lib/hooks";
-import { Post, PostVisibility, Tag, User } from "@/lib/models";
+import { Audit, Post, PostVisibility, Tag, User } from "@/lib/models";
 import { parseErrorResponse } from "@/lib/parse-error-response";
 import { cn, debounce, formatTimestamp, setStringToSlug } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -66,7 +66,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { ChangeEvent, useContext, useRef, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -99,6 +99,7 @@ interface PostEditPageProps {
 export default function PostEditPage({ post }: PostEditPageProps) {
   const { user } = useContext(AuthenticationContext);
   const { toast } = useToast();
+  const auditRef = useRef<Audit>();
 
   const [isOpenSettings, setOpenSettings] = useState(false);
   const [isOpenStatusAlert, setOpenStatusAlert] = useState(false);
@@ -112,6 +113,10 @@ export default function PostEditPage({ post }: PostEditPageProps) {
 
   const { tags, isLoading: tagLoading } = useTags();
   const { users, isLoading: userLoading } = useStaffs();
+
+  useEffect(() => {
+    auditRef.current = post.audit;
+  }, [post]);
 
   const {
     control,
@@ -142,19 +147,27 @@ export default function PostEditPage({ post }: PostEditPageProps) {
       return;
     }
 
+    if (isDeleting) {
+      return;
+    }
+
     try {
       setSaving(true);
       setStale(false);
-      const { slug, authors, tags, ...body } = getValues();
+      const { slug, authors, tags, ...values } = getValues();
 
-      await updatePost({
-        ...body,
+      const audit = auditRef.current;
+
+      const body = {
+        ...values,
         slug: !slug.trim() ? post.slug : slug,
         authors: authors.length > 0 ? authors.map((v) => v.id) : undefined,
         tags: tags.map((v) => v.id),
-        updatedAt: post.audit?.updatedAt,
-      });
-      // console.log("update post");
+        updatedAt: audit?.updatedAt,
+      };
+      await updatePost(body);
+      setValue("slug", body["slug"], { shouldValidate: true });
+
       // await new Promise((resolve) => setTimeout(() => resolve(true), 3000));
       if (post.status === "published") {
         toast({
@@ -231,6 +244,13 @@ export default function PostEditPage({ post }: PostEditPageProps) {
         await publishPost(post.id);
       }
       setOpenStatusAlert(false);
+      toast({
+        title: "Success",
+        description: `Post ${
+          post.status === "draft" ? "published" : "unpublished"
+        }`,
+        variant: "success",
+      });
     } catch (error) {
       toast({
         title: "Error",
@@ -307,9 +327,7 @@ export default function PostEditPage({ post }: PostEditPageProps) {
             {!isContributor && (
               <AlertDialogTrigger asChild>
                 {post.status === "draft" ? (
-                  <Button disabled={isSaving} className="ms-2">
-                    Publish
-                  </Button>
+                  <Button disabled={isSaving}>Publish</Button>
                 ) : (
                   <Button
                     variant="ghost"
@@ -344,7 +362,10 @@ export default function PostEditPage({ post }: PostEditPageProps) {
           </AlertDialog>
 
           {post.status === "published" && (
-            <Button disabled={isSaving} className="ms-2" onClick={handleUpdate}>
+            <Button
+              disabled={isSaving || isDeleting}
+              onClick={() => handleUpdate()}
+            >
               {isSaving && (
                 <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
               )}
@@ -354,7 +375,7 @@ export default function PostEditPage({ post }: PostEditPageProps) {
 
           <TooltipProvider>
             <Tooltip delayDuration={300}>
-              <TooltipTrigger className="ms-auto">
+              <TooltipTrigger>
                 <Button
                   variant="default"
                   asChild
@@ -444,7 +465,7 @@ export default function PostEditPage({ post }: PostEditPageProps) {
                         const slug = setStringToSlug(value);
                         setValue("slug", slug);
                         if (post.status === "draft") {
-                          debouncedUpdate(undefined);
+                          debouncedUpdate(post);
                         }
                       }}
                     />
@@ -454,10 +475,9 @@ export default function PostEditPage({ post }: PostEditPageProps) {
             </div>
             <NovelEditor
               content={post.lexical ? JSON.parse(post.lexical) : undefined}
-              onChange={(json, wordCount) => {
+              onDebouncedChange={(json, wordCount) => {
                 setValue("lexical", JSON.stringify(json));
                 setValue("wordCount", wordCount);
-                setStale(true);
                 if (post.status === "draft") {
                   handleUpdate();
                 }

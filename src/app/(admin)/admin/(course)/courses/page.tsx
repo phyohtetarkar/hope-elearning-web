@@ -10,10 +10,12 @@ import {
 } from "@/components/ui/table";
 import { API_URL_LOCAL } from "@/lib/constants";
 import { Category, Course, CourseStatus, Page } from "@/lib/models";
-import { buildQueryParams, formatAbbreviate } from "@/lib/utils";
+import {
+  buildQueryParams,
+  formatAbbreviate,
+  formatRelativeTimestamp,
+} from "@/lib/utils";
 import { validateResponse } from "@/lib/validate-response";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import { cookies } from "next/headers";
 import CourseActionButtons from "./course-action-buttons";
 import CourseCreateButton from "./course-create-button";
@@ -61,7 +63,6 @@ export default async function Courses(props: Props) {
     coursesPromise,
     categoriesPromise,
   ]);
-  dayjs.extend(relativeTime);
 
   const statusView = (status: CourseStatus) => {
     if (status === "draft") {
@@ -101,7 +102,7 @@ export default async function Courses(props: Props) {
                     <span className="text-sliver text-sm mb-1">
                       By&nbsp;{c.authors?.map((u) => u.nickname).join(", ")}
                       &nbsp;-&nbsp;
-                      {dayjs(c.audit?.createdAt).fromNow()}
+                      {formatRelativeTimestamp(c.audit?.createdAt)}
                     </span>
                     {statusView(c.status)}
                   </div>

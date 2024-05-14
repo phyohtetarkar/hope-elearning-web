@@ -39,6 +39,7 @@ import {
 } from "@/lib/actions";
 import { useCategories, useStaffs } from "@/lib/hooks";
 import {
+  Audit,
   Category,
   Course,
   CourseAccess,
@@ -48,17 +49,10 @@ import {
 import { parseErrorResponse } from "@/lib/parse-error-response";
 import { setStringToSlug } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Cloud,
-  CloudUpload,
-  ExternalLink,
-  LoaderCircle,
-  Trash2,
-  Upload,
-} from "lucide-react";
+import { ExternalLink, LoaderCircle, Trash2, Upload } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { ChangeEvent, useContext, useRef, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import CourseChaptersEdit from "./course-chapters-edit";
@@ -106,6 +100,8 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
 
   const coverFileRef = useRef<HTMLInputElement>(null);
 
+  const auditRef = useRef<Audit>();
+
   const { toast } = useToast();
 
   const { categories, isLoading: categoryLoading } = useCategories();
@@ -133,17 +129,22 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
     },
   });
 
+  useEffect(() => {
+    auditRef.current = course.audit;
+  }, [course]);
+
   const handleUpdate = async (values: CourseForm) => {
     try {
       setSaving(true);
       setStale(false);
       const { slug, authors, category, ...body } = values;
+      const audit = auditRef.current;
       await updateCourse({
         ...body,
         slug: !slug ? course.slug : slug,
         categoryId: category.id,
         authors: authors.map((a) => a.id),
-        updatedAt: course.audit?.updatedAt,
+        updatedAt: audit?.updatedAt,
       });
       toast({
         title: "Success",
@@ -209,6 +210,13 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
         await publishCourse(course.id);
       }
       setOpenStatusAlert(false);
+      toast({
+        title: "Success",
+        description: `Course ${
+          course.status === "draft" ? "published" : "unpublished"
+        }`,
+        variant: "success",
+      });
     } catch (error) {
       toast({
         title: "Error",
@@ -218,20 +226,6 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
     } finally {
       setSaving(false);
     }
-  };
-
-  const saveStateView = () => {
-    if (isSaving) {
-      return (
-        <LoaderCircle className="flex-shrink-0 animate-spin text-sliver" />
-      );
-    }
-
-    if (isStale) {
-      return <CloudUpload className="flex-shrink-0 text-sliver" />;
-    }
-
-    return <Cloud className="flex-shrink-0 text-success" />;
   };
 
   if (!user) {

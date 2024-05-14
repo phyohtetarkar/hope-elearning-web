@@ -3,7 +3,12 @@ import Pagination from "@/components/ui/pagination";
 import { Separator } from "@/components/ui/separator";
 import { API_URL_LOCAL } from "@/lib/constants";
 import { Page, Post, Tag } from "@/lib/models";
-import { buildQueryParams, formatTimestamp, wordPerMinute } from "@/lib/utils";
+import {
+  buildQueryParams,
+  formatRelativeTimestamp,
+  formatTimestamp,
+  wordPerMinute,
+} from "@/lib/utils";
 import { Dot } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -75,7 +80,7 @@ export default async function Blogs(props: Props) {
                 {b.title}
               </Link>
               <span className="text-sm mt-1 text-sliver">
-                {formatTimestamp(b.publishedAt)}
+                {formatRelativeTimestamp(b.publishedAt)}
                 <Dot className="size-4 inline" />
                 {`${wordPerMinute(b.wordCount)} min read`}
               </span>

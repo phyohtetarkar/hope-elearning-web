@@ -2,7 +2,11 @@ import { ContentRenderer } from "@/components/editor";
 import { Alert } from "@/components/ui/alert";
 import { API_URL_LOCAL } from "@/lib/constants";
 import { Post } from "@/lib/models";
-import { formatAbbreviate, formatTimestamp, wordPerMinute } from "@/lib/utils";
+import {
+  formatAbbreviate,
+  formatRelativeTimestamp,
+  wordPerMinute,
+} from "@/lib/utils";
 import { UserIcon } from "lucide-react";
 import { Metadata, ResolvingMetadata } from "next";
 import Image from "next/image";
@@ -121,7 +125,7 @@ export default async function BlogPost({ params }: Props) {
             By {post.authors?.map((a) => a.nickname).join(", ")}
           </span>
           <span className="text-sm text-sliver">
-            {formatTimestamp(post.publishedAt)}
+            {formatRelativeTimestamp(post.publishedAt)}
           </span>
         </div>
       </div>

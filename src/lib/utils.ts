@@ -1,6 +1,9 @@
 import { clsx, type ClassValue } from "clsx";
 import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 import { twMerge } from "tailwind-merge";
+
+dayjs.extend(relativeTime);
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -26,7 +29,31 @@ export function formatTimestamp(timestamp?: number | string, withTime = false) {
   if (!timestamp) {
     return "";
   }
-  let date = dayjs(timestamp);
+
+  const date = dayjs(timestamp);
+  if (withTime) {
+    return date.format("MMM DD, YYYY hh:mm A");
+  }
+
+  return date.format("MMM DD, YYYY");
+}
+
+export function formatRelativeTimestamp(
+  timestamp?: number | string,
+  withTime = false
+) {
+  if (!timestamp) {
+    return "";
+  }
+
+  const date = dayjs(timestamp);
+
+  const diff = dayjs().diff(date, "day", false);
+
+  if (diff <= 7) {
+    return date.fromNow();
+  }
+
   if (withTime) {
     return date.format("MMM DD, YYYY hh:mm A");
   }
