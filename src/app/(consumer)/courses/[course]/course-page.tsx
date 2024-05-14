@@ -12,32 +12,29 @@ import { Card, CardContent } from "@/components/ui/card";
 import Rating from "@/components/ui/rating";
 import { Separator } from "@/components/ui/separator";
 import { TabItem, Tabs } from "@/components/ui/tabs";
-import { ToastAction } from "@/components/ui/toast";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useToast } from "@/components/ui/use-toast";
-import { bookmarkCourse, enrollCourse, removeBookmark } from "@/lib/actions";
 import { Course, CourseReview, EnrolledCourse } from "@/lib/models";
-import { parseErrorResponse } from "@/lib/parse-error-response";
 import { formatNumber, uppercaseFirstChar } from "@/lib/utils";
 import {
   BarChart,
   BookOpen,
   DollarSign,
   FolderClosed,
-  LoaderCircle,
   LockKeyhole,
   Share2,
+  UserIcon,
   Users,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import BookmarkCourseButton from "./bookmark-course-button";
 import CourseReviewEdit from "./course-review-edit";
+import EnrollCourseButton from "./enroll-course-button";
 
 interface CoursePageProps {
   course: Course;
@@ -54,65 +51,6 @@ export default function CoursePage({
   review,
   relatedCourses,
 }: CoursePageProps) {
-  const [savingState, setSavingState] = useState<"enrollment" | "bookmark">();
-
-  const { toast } = useToast();
-
-  const handleEnrollment = async () => {
-    try {
-      setSavingState("enrollment");
-      await enrollCourse(course.id, `/courses/${course.slug}`);
-      toast({
-        title: "Success",
-        description: "Course enrollment success",
-        variant: "success",
-        action: (
-          <ToastAction altText="Start learning course" asChild>
-            <Link
-              href={`/learn/${course.slug}/lessons/${enrolledCourse?.resumeLesson?.slug}`}
-            >
-              Resume
-            </Link>
-          </ToastAction>
-        ),
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: parseErrorResponse(error),
-        variant: "destructive",
-      });
-    } finally {
-      setSavingState(undefined);
-    }
-  };
-
-  const handleBookmark = async () => {
-    try {
-      setSavingState("bookmark");
-      if (!isBookmarked) {
-        await bookmarkCourse(course.id, `/courses/${course.slug}`);
-      } else {
-        await removeBookmark(course.id, `/courses/${course.slug}`);
-      }
-      toast({
-        title: "Success",
-        description: isBookmarked
-          ? "Removed from bookmark"
-          : "Added to bookmark",
-        variant: "success",
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: parseErrorResponse(error),
-        variant: "destructive",
-      });
-    } finally {
-      setSavingState(undefined);
-    }
-  };
-
   return (
     <>
       <div className="bg-primary py-6 lg:py-16">
@@ -121,7 +59,7 @@ export default function CoursePage({
             <div className="flex flex-col lg:col-span-8 order-2 lg:order-1">
               <Link
                 href={`/categories/${course.category?.slug}`}
-                className="text-sm text-primary-foreground underline px-1 mb-1"
+                className="text-sm text-primary-foreground/70 underline ps-0.5 mb-1"
               >
                 {course.category?.name}
               </Link>
@@ -203,9 +141,9 @@ export default function CoursePage({
                                   return (
                                     <div
                                       key={i}
-                                      className="flex items-center gap-2 py-3 px-2"
+                                      className="flex items-center gap-2 py-4 px-2"
                                     >
-                                      <h6 className="text-sm">{l.title}</h6>
+                                      <div className="text-base">{l.title}</div>
                                       <Link
                                         href={`/courses/${course.slug}/lessons/${l.slug}`}
                                         className="ms-auto text-anchor underline"
@@ -220,7 +158,7 @@ export default function CoursePage({
                                     key={i}
                                     className="flex items-center gap-2 py-3 px-2"
                                   >
-                                    <h6 className="text-sm">{l.title}</h6>
+                                    <div className="text-base">{l.title}</div>
                                     <LockKeyhole className="text-sliver size-5 ms-auto" />
                                   </div>
                                 );
@@ -271,40 +209,19 @@ export default function CoursePage({
                     )}
                   </Button>
                 ) : (
-                  <Button
+                  <EnrollCourseButton
                     className="mb-2"
-                    onClick={handleEnrollment}
-                    disabled={!!savingState}
+                    revalidate={`/courses/${course.slug}`}
                   >
-                    {savingState === "enrollment" && (
-                      <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
-                    )}
                     Enroll
-                  </Button>
+                  </EnrollCourseButton>
                 )}
-                {isBookmarked ? (
-                  <Button
-                    variant="outline"
-                    onClick={handleBookmark}
-                    disabled={!!savingState}
-                  >
-                    {savingState === "bookmark" && (
-                      <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
-                    )}
-                    Remove bookmark
-                  </Button>
-                ) : (
-                  <Button
-                    variant="outline"
-                    onClick={handleBookmark}
-                    disabled={!!savingState}
-                  >
-                    {savingState === "bookmark" && (
-                      <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
-                    )}
-                    Bookmark
-                  </Button>
-                )}
+
+                <BookmarkCourseButton
+                  course={course}
+                  isBookmarked={isBookmarked}
+                  revalidate={`/courses/${course.slug}`}
+                />
 
                 <Separator className="my-5" />
 
@@ -343,18 +260,24 @@ export default function CoursePage({
 
                 <Separator className="my-5" />
 
-                <h4 className="fw-bold mb-4">Authors</h4>
+                <h4 className="fw-bold mb-4">Creators</h4>
                 <div className="flex flex-col space-y-3">
                   {course.authors?.map((a, i) => {
                     return (
                       <div key={i} className="flex items-center space-x-2">
-                        <Image
-                          alt="Profile"
-                          src={a.image ?? "/images/profile.png"}
-                          width={56}
-                          height={56}
-                          className="rounded-full"
-                        />
+                        {a.image ? (
+                          <Image
+                            alt="Profile"
+                            src={a.image}
+                            width={56}
+                            height={56}
+                            className="rounded-full border"
+                          />
+                        ) : (
+                          <div className="flex items-center justify-center size-[56px] bg-gray-200 border-3 border-white rounded-full">
+                            <UserIcon className="size-7 text-gray-700" />
+                          </div>
+                        )}
                         <h6>{a.nickname}</h6>
                       </div>
                     );

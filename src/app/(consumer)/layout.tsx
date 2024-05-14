@@ -7,11 +7,13 @@ export default async function ConsumerLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex flex-col h-full">
+    <div className="relative">
       <Header />
-      <div className="flex flex-col grow mt-[65px] overflow-y-auto">
-        <main className="grow">{children}</main>
-        <Footer />
+      <div className="fixed inset-0 top-[65px] overflow-y-auto">
+        <div className="flex flex-col h-full">
+          <main className="grow">{children}</main>
+          <Footer />
+        </div>
       </div>
     </div>
   );

@@ -10,16 +10,18 @@ export function CourseGridItem({ data }: { data: Course }) {
   return (
     <Card className="overflow-hidden shadow-none">
       <CardContent className="p-0">
-        <div className="aspect-w-16 aspect-h-9">
-          <Image
-            src={data.cover ?? "/images/placeholder.jpeg"}
-            className="bg-primary object-cover"
-            alt=""
-            priority
-            fill
-            sizes="33vh"
-          />
-        </div>
+        <Link href={`/courses/${data.slug}`}>
+          <div className="aspect-w-16 aspect-h-9">
+            <Image
+              src={data.cover ?? "/images/placeholder.jpeg"}
+              className="bg-primary object-cover"
+              alt=""
+              priority
+              fill
+              sizes="33vh"
+            />
+          </div>
+        </Link>
         <div className="flex flex-col p-4">
           <Link
             href={`/courses/${data.slug}`}
@@ -29,7 +31,7 @@ export function CourseGridItem({ data }: { data: Course }) {
           </Link>
           <div className="flex items-center text-sm mb-2 mt-1">
             <div className="text-sliver">
-              {formatAbbreviate(BigInt(data.meta?.enrolledCount ?? 0))} Enrolled
+              {formatAbbreviate(BigInt(data.meta?.enrolledCount ?? 0))} enrolled
             </div>
             <div className="mx-2 text-sliver">&bull;</div>
             <div className="text-primary">{uppercaseFirstChar(data.level)}</div>
@@ -38,7 +40,7 @@ export function CourseGridItem({ data }: { data: Course }) {
       </CardContent>
       <Separator />
       <CardFooter className="px-4 py-3.5 bg-gray-50">
-        <Rating rating={4} />
+        <Rating rating={Number(data.meta?.rating ?? 0)} />
         <div className="flex-grow"></div>
         <div className="text-sm text-sliver font-medium">
           {uppercaseFirstChar(data.access)}

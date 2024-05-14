@@ -101,7 +101,7 @@ export default function UserActionButtons({ value }: { value: User }) {
         }}
       >
         <DialogContent onInteractOutside={(evt) => evt.preventDefault()}>
-          <DialogHeader>
+          <DialogHeader className="mb-2">
             <DialogTitle>Update Role</DialogTitle>
           </DialogHeader>
 
@@ -120,7 +120,7 @@ export default function UserActionButtons({ value }: { value: User }) {
                 className="flex-shrink-0"
               />
               <div className="flex flex-col">
-                <label htmlFor="role-user" className="font-medium">
+                <label htmlFor="role-user" className="font-semibold">
                   User
                 </label>
                 <p className="text-sliver">
@@ -135,7 +135,7 @@ export default function UserActionButtons({ value }: { value: User }) {
                 className="flex-shrink-0"
               />
               <div className="flex flex-col">
-                <label htmlFor="role-contributor" className="font-medium">
+                <label htmlFor="role-contributor" className="font-semibold">
                   Contributor
                 </label>
                 <p className="text-sliver">
@@ -150,7 +150,7 @@ export default function UserActionButtons({ value }: { value: User }) {
                 className="flex-shrink-0"
               />
               <div className="flex flex-col">
-                <label htmlFor="role-author" className="font-medium">
+                <label htmlFor="role-author" className="font-semibold">
                   Author
                 </label>
                 <p className="text-sliver">
@@ -166,7 +166,7 @@ export default function UserActionButtons({ value }: { value: User }) {
                 disabled={user?.role !== "owner"}
               />
               <div className="flex flex-col">
-                <label htmlFor="role-admin" className="font-medium">
+                <label htmlFor="role-admin" className="font-semibold">
                   Admin
                 </label>
                 <p className="text-sliver">

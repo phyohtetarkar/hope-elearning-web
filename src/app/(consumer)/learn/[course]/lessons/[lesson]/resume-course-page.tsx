@@ -9,18 +9,17 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Checkbox } from "@/components/ui/checkbox";
-import { DrawerContext } from "@/components/ui/drawer";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
 import { Lesson } from "@/lib/models";
 import { parseErrorResponse } from "@/lib/parse-error-response";
-import { formatTimestamp } from "@/lib/utils";
+import { formatRelativeTimestamp } from "@/lib/utils";
 import { JSONContent } from "@tiptap/core";
-import { LoaderCircle, Menu } from "lucide-react";
-import { useContext, useMemo, useState } from "react";
+import { LoaderCircle } from "lucide-react";
+import { useMemo, useState } from "react";
+import DrawerToggleButton from "./drawer-toggle-button";
 
 export default function ResumeCoursePage({ lesson }: { lesson: Lesson }) {
-  const { isMenuOpen, toggle } = useContext(DrawerContext);
   const { toast } = useToast();
 
   const [isSaving, setSaving] = useState(false);
@@ -74,14 +73,7 @@ export default function ResumeCoursePage({ lesson }: { lesson: Lesson }) {
           <Breadcrumb className="mb-5">
             <BreadcrumbList>
               <BreadcrumbItem className="lg:hidden">
-                <div
-                  role="button"
-                  className="flex items-center gap-2 text-primary font-semibold"
-                  onClick={toggle}
-                >
-                  <Menu />
-                  Menu
-                </div>
+                <DrawerToggleButton />
               </BreadcrumbItem>
               <BreadcrumbSeparator className="lg:hidden" />
               <BreadcrumbItem>{lesson.chapter?.title}</BreadcrumbItem>
@@ -96,7 +88,7 @@ export default function ResumeCoursePage({ lesson }: { lesson: Lesson }) {
 
           <Separator className="mt-16 mb-4" />
 
-          <div className="flex items-center space-x-2 mb-10">
+          <div className="flex items-center space-x-2 pb-16">
             {isSaving ? (
               <LoaderCircle className="size-4 animate-spin text-primary" />
             ) : (
@@ -121,8 +113,8 @@ export default function ResumeCoursePage({ lesson }: { lesson: Lesson }) {
               </>
             )}
             <div className="flex-grow"></div>
-            <div className="text-sliver">
-              Last edited: {formatTimestamp(lesson.audit?.updatedAt)}
+            <div className="text-sliver text-sm">
+              Last edited: {formatRelativeTimestamp(lesson.audit?.updatedAt)}
             </div>
           </div>
           {/* <div className="flex justify-between pb-10">
@@ -139,20 +131,19 @@ export default function ResumeCoursePage({ lesson }: { lesson: Lesson }) {
         <div className="absolute inset-0 lg:overflow-y-auto lg:scrollbar-hide p-4">
           <h6 className="text-sm">On this lesson</h6>
           <Separator className="my-3" />
-          <ul>
-            {headings.map((h, i) => {
-              return (
-                <li key={i}>
-                  <a
-                    href={`#${h.replaceAll(/\s+/g, "-").toLowerCase()}`}
-                    className="text-sliver hover:text-black text-sm"
-                  >
-                    {h}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
+          <div className="px-4">
+            <ol className="list-decimal">
+              {headings.map((h, i) => {
+                return (
+                  <li key={i} className="text-sliver hover:text-black text-sm mb-1">
+                    <a href={`#${h.replaceAll(/\s+/g, "-").toLowerCase()}`}>
+                      {h}
+                    </a>
+                  </li>
+                );
+              })}
+            </ol>
+          </div>
         </div>
       </div>
     </div>

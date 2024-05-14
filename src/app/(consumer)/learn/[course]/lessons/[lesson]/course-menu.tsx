@@ -90,11 +90,11 @@ export default function CourseMenu({
         isMenuOpen ? "translate-x-0" : `-translate-x-[360px]`
       } transition-transform ease-out min-w-[200px] max-w-[360px] lg:max-w-[320px] fixed lg:static inset-y-0 w-full z-50 flex flex-col lg:translate-x-0`}
     >
-      <div className="flex flex-col grow p-4 overflow-y-auto scrollbar-custom bg-white mr-[40px] lg:mr-0 border-r">
+      <div className="flex flex-col grow p-4 overflow-y-auto scrollbar-custom bg-gray-50 mr-[40px] lg:mr-0 border-r">
         <h5 className="mb-5">{course.title}</h5>
 
         <div className="text-sm text-sliver mb-1">
-          {enrolledCourse.progress} completed
+          {enrolledCourse.progress}% completed
         </div>
         <Progress
           value={enrolledCourse.progress}
@@ -115,16 +115,13 @@ export default function CourseMenu({
                   <h6>{c.title}</h6>
                 </AccordionTrigger>
                 <AccordionContent>
-                  <div className="flex flex-col divide-y">
+                  <div className="flex flex-col">
                     {c.lessons?.map((l, i) => {
                       return (
                         <div
                           key={i}
                           className={cn(
                             "flex items-center gap-2 py-3",
-                            params.lesson === l.slug
-                              ? "rounded-md bg-muted"
-                              : undefined
                           )}
                         >
                           {isCompleted(l) ? (
@@ -137,7 +134,7 @@ export default function CourseMenu({
                             className={cn(
                               "hover:text-primary",
                               params.lesson === l.slug
-                                ? "text-primary"
+                                ? "text-primary font-medium"
                                 : undefined
                             )}
                             onClick={(evt) => {

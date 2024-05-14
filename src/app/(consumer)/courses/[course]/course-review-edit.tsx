@@ -53,7 +53,7 @@ export default function CourseReviewEdit({
 
   const handleWriteReview = async (values: ReviewForm) => {
     try {
-      await writeCourseReview(course.id, values);
+      await writeCourseReview(course.id, values, `/courses/${course.slug}`);
       toast({
         title: "Success",
         description: "Your review submitted",
@@ -71,7 +71,7 @@ export default function CourseReviewEdit({
   return (
     <Card className="shadow-none">
       <CardHeader className="px-4 py-3">
-        <h4>Leave a review</h4>
+        <h4>{review ? "Your review" : "Leave a review"}</h4>
       </CardHeader>
       <Separator />
       <CardContent className="p-4">

@@ -13,16 +13,18 @@ export function BlogGridItem({ data }: { data: Post }) {
   return (
     <Card className="overflow-hidden shadow-none flex flex-col">
       <CardContent className="p-0 flex flex-col grow">
-        <div className="aspect-w-16 aspect-h-9">
-          <Image
-            src={data.cover ?? "/images/placeholder.jpeg"}
-            className="bg-primary object-cover"
-            alt=""
-            priority
-            fill
-            sizes="33vh"
-          />
-        </div>
+        <Link href={`/blogs/${data.slug}`}>
+          <div className="aspect-w-16 aspect-h-9">
+            <Image
+              src={data.cover ?? "/images/placeholder.jpeg"}
+              className="bg-primary object-cover"
+              alt=""
+              priority
+              fill
+              sizes="33vh"
+            />
+          </div>
+        </Link>
         {/* <Separator /> */}
         <div className="flex flex-col p-4 grow">
           <Link

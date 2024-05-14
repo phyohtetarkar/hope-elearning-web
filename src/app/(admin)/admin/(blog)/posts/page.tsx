@@ -79,7 +79,7 @@ export default async function Posts(props: Props) {
                 <TableCell>
                   <div className="flex flex-col">
                     <h6 className="mb-0.5">{p.title ?? "(Untitled)"}</h6>
-                    <span className="text-sliver text-sm mb-1">
+                    <span className="text-sliver text-sm mb-2">
                       By&nbsp;{p.authors?.map((u) => u.nickname).join(", ")}
                       &nbsp;-&nbsp;
                       {formatRelativeTimestamp(p.audit?.createdAt)}

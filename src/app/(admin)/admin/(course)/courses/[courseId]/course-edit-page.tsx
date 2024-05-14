@@ -298,7 +298,7 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
 
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button variant="destructive" size="icon">
+            <Button disabled={isSubmitting || isSaving} variant="destructive" size="icon">
               <Trash2 className="size-5" />
             </Button>
           </AlertDialogTrigger>

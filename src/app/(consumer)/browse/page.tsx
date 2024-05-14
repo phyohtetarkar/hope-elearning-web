@@ -15,7 +15,9 @@ const getCourses = async (props: Props) => {
 
   const url = `${API_URL_LOCAL}/content/courses${query}`;
 
-  const resp = await fetch(url);
+  const resp = await fetch(url, {
+    cache: "no-store",
+  });
 
   return resp
     .json()
@@ -61,9 +63,7 @@ export default async function BrowseCourses(props: Props) {
           <div className="lg:col-span-1">
             <CourseFilter />
           </div>
-          <div className="lg:col-span-3">
-            {content()}
-          </div>
+          <div className="lg:col-span-3">{content()}</div>
         </div>
       </div>
     </>

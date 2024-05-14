@@ -1,356 +1,26 @@
 "use client";
-import hljs from "highlight.js";
-import Heading from "@tiptap/extension-heading";
+import { cn } from "@/lib/utils";
+import { mergeAttributes } from "@tiptap/core";
 import Bold from "@tiptap/extension-bold";
-import Document from "@tiptap/extension-document";
-import Paragraph from "@tiptap/extension-paragraph";
-import CodeBlock from "@tiptap/extension-code-block-lowlight";
-import Text from "@tiptap/extension-text";
-import ListItem from "@tiptap/extension-list-item";
 import BulletList from "@tiptap/extension-bullet-list";
-import OrderedList from "@tiptap/extension-ordered-list";
+import CodeBlock from "@tiptap/extension-code-block-lowlight";
+import Document from "@tiptap/extension-document";
+import Heading from "@tiptap/extension-heading";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import TiptapLink from "@tiptap/extension-link";
+import ListItem from "@tiptap/extension-list-item";
+import OrderedList from "@tiptap/extension-ordered-list";
+import Paragraph from "@tiptap/extension-paragraph";
+import Text from "@tiptap/extension-text";
 import Underline from "@tiptap/extension-underline";
 import { generateHTML } from "@tiptap/html";
-import { useEffect, useMemo } from "react";
+import hljs from "highlight.js";
+import { useEffect, useMemo, useRef } from "react";
 import { CustomYoutube } from "./extensions/youtube";
-import { mergeAttributes, Node, textblockTypeInputRule } from "@tiptap/core";
 
-const json = {
-  type: "doc",
-  content: [
-    {
-      type: "heading",
-      attrs: {
-        level: 2,
-      },
-      content: [
-        {
-          type: "text",
-          text: "Java: A Brief Introduction",
-        },
-      ],
-    },
-    {
-      type: "paragraph",
-      content: [
-        {
-          type: "text",
-          marks: [
-            {
-              type: "bold",
-            },
-          ],
-          text: "Java",
-        },
-        {
-          type: "text",
-          text: ' is a high-level, class-based, object-oriented programming language that is designed to have as few implemedntation dependencies as possible. It is a general-purpose programming language intended to let programmers "write once, run anywhere" (WORA), measssning that compiled Java code can run on all platforms that support Java without the need to recompile.',
-        },
-      ],
-    },
-    {
-      type: "paragraph",
-      content: [
-        {
-          type: "text",
-          marks: [
-            {
-              type: "bold",
-            },
-          ],
-          text: "Syntax:",
-        },
-        {
-          type: "text",
-          text: ' Java has a C-like syntax. Here\'s a simple "Hello, world!" program in Java:',
-        },
-      ],
-    },
-    {
-      type: "codeBlock",
-      attrs: {
-        language: "java",
-      },
-      content: [
-        {
-          type: "text",
-          text: 'public class HelloWorld {\n    public static void main(String[] args) {\n        System.out.println("Hello, world!");\n    }\n}',
-        },
-      ],
-    },
-    {
-      type: "paragraph",
-      content: [
-        {
-          type: "text",
-          marks: [
-            {
-              type: "bold",
-            },
-          ],
-          text: "Features:",
-        },
-        {
-          type: "text",
-          text: " Java is a powerful language with a vast array of features, including:",
-        },
-      ],
-    },
-    {
-      type: "bulletList",
-      attrs: {
-        tight: true,
-      },
-      content: [
-        {
-          type: "listItem",
-          content: [
-            {
-              type: "paragraph",
-              content: [
-                {
-                  type: "text",
-                  marks: [
-                    {
-                      type: "bold",
-                    },
-                  ],
-                  text: "Object-oriented:",
-                },
-                {
-                  type: "text",
-                  text: " Java is an object-oriented language, which means that it uses objects to represent data and operations.",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          type: "listItem",
-          content: [
-            {
-              type: "paragraph",
-              content: [
-                {
-                  type: "text",
-                  marks: [
-                    {
-                      type: "bold",
-                    },
-                  ],
-                  text: "Platform independent:",
-                },
-                {
-                  type: "text",
-                  text: " Java code can run on any platform that supports the Java Virtual Machine (JVM).",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          type: "listItem",
-          content: [
-            {
-              type: "paragraph",
-              content: [
-                {
-                  type: "text",
-                  marks: [
-                    {
-                      type: "bold",
-                    },
-                  ],
-                  text: "Secure:",
-                },
-                {
-                  type: "text",
-                  text: " Java has a strong security model that helps to protect programs from malicious attacks.",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          type: "listItem",
-          content: [
-            {
-              type: "paragraph",
-              content: [
-                {
-                  type: "text",
-                  marks: [
-                    {
-                      type: "bold",
-                    },
-                  ],
-                  text: "Robust:",
-                },
-                {
-                  type: "text",
-                  text: " Java is a robust language that is designed to be reliable and efficient.",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          type: "listItem",
-          content: [
-            {
-              type: "paragraph",
-              content: [
-                {
-                  type: "text",
-                  marks: [
-                    {
-                      type: "bold",
-                    },
-                  ],
-                  text: "High-performance:",
-                },
-                {
-                  type: "text",
-                  text: " Java is a high-performance language that can be used to develop a wide range of applications.",
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      type: "paragraph",
-      content: [
-        {
-          type: "text",
-          marks: [
-            {
-              type: "bold",
-            },
-          ],
-          text: "Applications:",
-        },
-        {
-          type: "text",
-          text: " Java is a versatile language that can be used to develop a wide range of applications, including:",
-        },
-      ],
-    },
-    {
-      type: "bulletList",
-      attrs: {
-        tight: true,
-      },
-      content: [
-        {
-          type: "listItem",
-          content: [
-            {
-              type: "paragraph",
-              content: [
-                {
-                  type: "text",
-                  marks: [
-                    {
-                      type: "bold",
-                    },
-                  ],
-                  text: "Web applications:",
-                },
-                {
-                  type: "text",
-                  text: " Java is a popular language for developing web applications.",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          type: "listItem",
-          content: [
-            {
-              type: "paragraph",
-              content: [
-                {
-                  type: "text",
-                  marks: [
-                    {
-                      type: "bold",
-                    },
-                  ],
-                  text: "Mobile applications:",
-                },
-                {
-                  type: "text",
-                  text: " Java is used to develop mobile applications for Android and other platforms.",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          type: "listItem",
-          content: [
-            {
-              type: "paragraph",
-              content: [
-                {
-                  type: "text",
-                  marks: [
-                    {
-                      type: "bold",
-                    },
-                  ],
-                  text: "Desktop applications:",
-                },
-                {
-                  type: "text",
-                  text: " Java can be used to develop desktop applications for Windows, macOS, and Linux.",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          type: "listItem",
-          content: [
-            {
-              type: "paragraph",
-              content: [
-                {
-                  type: "text",
-                  marks: [
-                    {
-                      type: "bold",
-                    },
-                  ],
-                  text: "Enterprise applications:",
-                },
-                {
-                  type: "text",
-                  text: " Java is used to develop enterprise applications for businesses.",
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      type: "youtube",
-      attrs: {
-        src: "https://www.youtube.com/watch?v=rtsSDThDwPo",
-        start: 0,
-        width: 0,
-        height: 0,
-      },
-    },
-  ],
-};
 export function ContentRenderer({ lexical }: { lexical?: string }) {
+  const highlightedRef = useRef(false);
+  const articleRef = useRef<HTMLElement>(null);
   const output = useMemo(() => {
     if (!lexical) {
       return "";
@@ -365,7 +35,9 @@ export function ContentRenderer({ lexical }: { lexical?: string }) {
           return [
             `h${level}`,
             mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
-              id: node.text?.replaceAll(/\s+/g, "-").toLowerCase(),
+              id: node.content.firstChild?.text
+                ?.replaceAll(/\s+/g, "-")
+                .toLowerCase(),
             }),
             0,
           ];
@@ -373,7 +45,14 @@ export function ContentRenderer({ lexical }: { lexical?: string }) {
       }),
       Text,
       Paragraph,
-      CodeBlock,
+      CodeBlock.configure({
+        HTMLAttributes: {
+          class: cn(
+            "!rounded bg-gray-800 text-gray-200 border p-5 font-mono font-medium"
+          ),
+          spellCheck: false,
+        },
+      }),
       Bold,
       ListItem,
       BulletList,
@@ -386,11 +65,18 @@ export function ContentRenderer({ lexical }: { lexical?: string }) {
   }, [lexical]);
 
   useEffect(() => {
-    hljs.highlightAll();
+    if (highlightedRef.current || !output) {
+      return;
+    }
+    articleRef.current?.querySelectorAll("code").forEach((block) => {
+      hljs.highlightElement(block);
+    });
+    highlightedRef.current = true;
   }, [output]);
 
   return (
     <article
+      ref={articleRef}
       className="prose max-w-none prose-pre:rounded tiptap"
       dangerouslySetInnerHTML={{ __html: output }}
     ></article>

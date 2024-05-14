@@ -10,12 +10,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { API_URL_LOCAL } from "@/lib/constants";
-import { Lesson } from "@/lib/models";
+import { EnrolledCourse, Lesson } from "@/lib/models";
 import { Metadata, ResolvingMetadata } from "next";
+import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { cache } from "react";
+import EnrollCourseButton from "../../enroll-course-button";
 
 interface Props {
   params: { course: string; lesson: string };
@@ -24,7 +26,9 @@ interface Props {
 const getLesson = cache(async (slug: string) => {
   const url = `${API_URL_LOCAL}/content/lessons/${slug}/trial`;
 
-  const resp = await fetch(url);
+  const resp = await fetch(url, {
+    cache: "no-store",
+  });
 
   if (resp.status === 204) {
     return undefined;
@@ -35,6 +39,31 @@ const getLesson = cache(async (slug: string) => {
     .then((json) => json as Lesson)
     .catch((e) => undefined);
 });
+
+const getEnrolledCourse = async (courseId: string) => {
+  const cookieStore = cookies();
+
+  if (!cookieStore.has("access_token")) {
+    return undefined;
+  }
+
+  const url = `${API_URL_LOCAL}/enrollments/${courseId}`;
+
+  const resp = await fetch(url, {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
+
+  if (!resp.ok) {
+    return undefined;
+  }
+
+  return resp
+    .json()
+    .then((json) => json as EnrolledCourse)
+    .catch(() => undefined);
+};
 
 export async function generateMetadata(
   { params }: Props,
@@ -84,6 +113,8 @@ export default async function LessonDetail({ params }: Props) {
     redirect(`/courses/${params.course}`);
   }
 
+  const enrolledCourse = await getEnrolledCourse(lesson.courseId);
+
   return (
     <div className="container max-w-3xl py-6">
       <Breadcrumb className="mb-4">
@@ -116,7 +147,26 @@ export default async function LessonDetail({ params }: Props) {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h3>{lesson.title}</h3>
 
-        <Button>Enroll course</Button>
+        {enrolledCourse ? (
+          <Button asChild>
+            {enrolledCourse.resumeLesson?.slug ? (
+              <Link
+                href={`/learn/${enrolledCourse.course.slug}/lessons/${enrolledCourse.resumeLesson.slug}`}
+              >
+                Resume course
+              </Link>
+            ) : (
+              <Link href={`/learn/${lesson.course?.slug}`}>Resume course</Link>
+            )}
+          </Button>
+        ) : (
+          <EnrollCourseButton
+            course={lesson.course}
+            revalidate={`/courses/${params.course}/lessons/${params.lesson}`}
+          >
+            Enroll course
+          </EnrollCourseButton>
+        )}
       </div>
       <Separator className="mt-4 mb-8" />
       <ContentRenderer lexical={lesson.lexical} />

@@ -152,7 +152,7 @@ export default function Header() {
       isBordered
       isBlurred={false}
       maxWidth="full"
-      className="fixed top-0"
+      className="fixed top-0 z-0"
       classNames={{
         wrapper: "px-4",
       }}
