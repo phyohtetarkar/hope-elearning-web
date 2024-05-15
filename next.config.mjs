@@ -30,6 +30,16 @@ const nextConfig = {
         destination: "/admin/courses/:id",
         permanent: true,
       },
+      {
+        source: "/courses",
+        destination: "/browse",
+        permanent: true,
+      },
+      {
+        source: "/tags",
+        destination: "/blogs",
+        permanent: true,
+      },
     ];
   },
 };

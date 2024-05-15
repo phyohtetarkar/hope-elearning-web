@@ -2,7 +2,7 @@ import { Alert } from "@/components/ui/alert";
 import { Card, CardContent } from "@/components/ui/card";
 import { API_URL } from "@/lib/constants";
 import { Category, Page } from "@/lib/models";
-import { buildQueryParams, formatNumber } from "@/lib/utils";
+import { buildQueryParams, pluralize } from "@/lib/utils";
 import { validateResponse } from "@/lib/validate-response";
 import { cookies } from "next/headers";
 import Link from "next/link";
@@ -40,7 +40,7 @@ export default async function Categories() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {data.contents.length === 0 && (
             <div className="col-span-4">
-              <Alert> No categories found</Alert>
+              <Alert>No categories found</Alert>
             </div>
           )}
           {data.contents.map((c, i) => {
@@ -50,10 +50,7 @@ export default async function Categories() {
                   <CardContent className="p-4 text-center">
                     <h4 className="text-primary mb-1">{c.name}</h4>
                     <div className="text-sliver">
-                      {formatNumber(BigInt(c.courseCount ?? 0))}
-                      {c.courseCount === "0" || c.courseCount === "1"
-                        ? " course"
-                        : " courses"}
+                      {pluralize(Number(c.courseCount ?? 0), "course")}
                     </div>
                   </CardContent>
                 </Card>

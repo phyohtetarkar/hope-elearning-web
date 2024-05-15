@@ -5,6 +5,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { bookmarkCourse, removeBookmark } from "@/lib/actions";
 import { Course } from "@/lib/models";
 import { parseErrorResponse } from "@/lib/parse-error-response";
+import { cn } from "@/lib/utils";
 import { LoaderCircle } from "lucide-react";
 import { useState } from "react";
 
@@ -55,7 +56,7 @@ export default function BookmarkCourseButton({
           variant="outline"
           onClick={handleBookmark}
           disabled={isLoading}
-          className={className}
+          className={cn("text-destructive hover:text-destructive", className)}
         >
           {isLoading && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
           Remove bookmark

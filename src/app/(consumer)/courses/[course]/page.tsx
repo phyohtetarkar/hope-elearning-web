@@ -14,10 +14,11 @@ const getCourse = cache(async (slug: string) => {
   const url = `${API_URL_LOCAL}/content/courses/${slug}`;
 
   const resp = await fetch(url, {
-    cache: "no-store",
+    next: { revalidate: 10 },
+    cache: 'no-store',
   });
 
-  if (resp.status === 204) {
+  if (!resp.ok || resp.status === 204) {
     return undefined;
   }
 

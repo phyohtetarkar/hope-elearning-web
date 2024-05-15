@@ -1,12 +1,12 @@
-import "./globals.css";
 import "../styles/codeblock.scss";
+import "./globals.css";
 
-import type { Metadata, Viewport } from "next";
+import { AuthenticationContextProvider } from "@/components/authentication-context-porvider";
 import Providers from "@/components/providers";
 import { API_URL_LOCAL } from "@/lib/constants";
-import { cookies } from "next/headers";
 import { User } from "@/lib/models";
-import { AuthenticationContextProvider } from "@/components/authentication-context-porvider";
+import type { Metadata, Viewport } from "next";
+import { cookies } from "next/headers";
 
 export const viewport: Viewport = {
   themeColor: {
@@ -28,6 +28,7 @@ const getUser = async () => {
     headers: {
       Cookie: cookies().toString(),
     },
+    next: { revalidate: 10 },
   });
 
   return resp.ok ? ((await resp.json()) as User) : null;

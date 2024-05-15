@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { ProfilePlaceholder } from "@/components/ui/profile-placeholder";
 import Rating from "@/components/ui/rating";
 import { Separator } from "@/components/ui/separator";
 import { TabItem, Tabs } from "@/components/ui/tabs";
@@ -27,7 +28,6 @@ import {
   FolderClosed,
   LockKeyhole,
   Share2,
-  UserIcon,
   Users,
 } from "lucide-react";
 import Image from "next/image";
@@ -101,7 +101,7 @@ export default function CoursePage({
                 className="object-cover p-1"
                 alt="Cover"
                 fill
-                sizes="100vh"
+                sizes="50vh"
                 priority
               />
             </div>
@@ -180,11 +180,11 @@ export default function CoursePage({
           <div className="lg:col-span-4 order-1 lg:order-2">
             <Card className="shadow-none">
               <CardContent className="p-4 flex flex-col">
-                <div className="flex gap-2 items-center justify-between mb-4">
+                <div className="flex gap-2 items-center justify-between mb-7">
                   <h3 className="fw-bold">
                     {uppercaseFirstChar(course.access)}
                   </h3>
-                  <TooltipProvider>
+                  {/* <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button variant="default" size="icon">
@@ -194,10 +194,10 @@ export default function CoursePage({
 
                       <TooltipContent>Share this course</TooltipContent>
                     </Tooltip>
-                  </TooltipProvider>
+                  </TooltipProvider> */}
                 </div>
                 {enrolledCourse ? (
-                  <Button className="mb-2" asChild>
+                  <Button asChild>
                     {enrolledCourse.resumeLesson?.slug ? (
                       <Link
                         href={`/learn/${course.slug}/lessons/${enrolledCourse.resumeLesson.slug}`}
@@ -210,7 +210,6 @@ export default function CoursePage({
                   </Button>
                 ) : (
                   <EnrollCourseButton
-                    className="mb-2"
                     revalidate={`/courses/${course.slug}`}
                   >
                     Enroll
@@ -221,6 +220,7 @@ export default function CoursePage({
                   course={course}
                   isBookmarked={isBookmarked}
                   revalidate={`/courses/${course.slug}`}
+                  className="mt-2"
                 />
 
                 <Separator className="my-5" />
@@ -264,7 +264,7 @@ export default function CoursePage({
                 <div className="flex flex-col space-y-3">
                   {course.authors?.map((a, i) => {
                     return (
-                      <div key={i} className="flex items-center space-x-2">
+                      <div key={i} className="flex items-center space-x-3">
                         {a.image ? (
                           <Image
                             alt="Profile"
@@ -274,9 +274,7 @@ export default function CoursePage({
                             className="rounded-full border"
                           />
                         ) : (
-                          <div className="flex items-center justify-center size-[56px] bg-gray-200 border-3 border-white rounded-full">
-                            <UserIcon className="size-7 text-gray-700" />
-                          </div>
+                          <ProfilePlaceholder className="size-[54px] border" />
                         )}
                         <h6>{a.nickname}</h6>
                       </div>

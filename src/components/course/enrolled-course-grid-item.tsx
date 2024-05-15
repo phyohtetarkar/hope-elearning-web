@@ -6,6 +6,12 @@ import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Progress } from "../ui/progress";
 import { Separator } from "../ui/separator";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 
 export function EnrolledCourseGridItem({ data }: { data: EnrolledCourse }) {
   return (
@@ -52,12 +58,13 @@ export function EnrolledCourseGridItem({ data }: { data: EnrolledCourse }) {
         </div>
       </CardContent>
       <Separator />
-      <CardFooter className="p-4 bg-gray-50">
+      <CardFooter className="p-4 bg-gray-50 flex space-x-3">
         <Progress
           className="h-3"
           indicatorClass="bg-success"
           value={data.progress}
         />
+        <div className="text-sm text-sliver">{data.progress}%</div>
       </CardFooter>
     </Card>
   );

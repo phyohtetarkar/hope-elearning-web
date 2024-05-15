@@ -1,14 +1,31 @@
+import { API_URL_LOCAL } from "@/lib/constants";
+import { User } from "@/lib/models";
+import { cookies } from "next/headers";
 import Footer from "./footer";
 import Header from "./header";
+
+const getUser = async () => {
+  const url = `${API_URL_LOCAL}/profile`;
+  const resp = await fetch(url, {
+    headers: {
+      Cookie: cookies().toString(),
+    },
+    next: { revalidate: 10 },
+  });
+
+  return resp.ok ? ((await resp.json()) as User) : null;
+};
 
 export default async function ConsumerLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await getUser();
+
   return (
     <div className="relative">
-      <Header />
+      <Header user={user} />
       <div className="fixed inset-0 top-[65px] overflow-y-auto">
         <div className="flex flex-col h-full">
           <main className="grow">{children}</main>

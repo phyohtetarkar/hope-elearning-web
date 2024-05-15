@@ -1,5 +1,6 @@
 import { API_URL_LOCAL } from "@/lib/constants";
 import { Lesson } from "@/lib/models";
+import { validateResponse } from "@/lib/validate-response";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import ResumeCoursePage from "./resume-course-page";
@@ -12,6 +13,8 @@ const getLesson = async (course: string, lesson: string) => {
       Cookie: cookies().toString(),
     },
   });
+
+  validateResponse(resp);
 
   if (resp.status === 204) {
     return undefined;

@@ -117,6 +117,7 @@ export default async function LessonDetail({ params }: Props) {
 
   return (
     <div className="container max-w-3xl py-6">
+      <h2 className="mb-1">{lesson.course?.title}</h2>
       <Breadcrumb className="mb-4">
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -128,7 +129,9 @@ export default async function LessonDetail({ params }: Props) {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage className="text-nowrap">Preview</BreadcrumbPage>
+            <BreadcrumbPage>
+              {lesson.chapter?.title}
+            </BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>

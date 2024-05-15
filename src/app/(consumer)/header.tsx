@@ -1,6 +1,5 @@
 "use client";
 
-import { AuthenticationContext } from "@/components/authentication-context-porvider";
 import { YoutubeIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,7 +10,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { ProfilePlaceholder } from "@/components/ui/profile-placeholder";
 import { clearAuthCookies } from "@/lib/actions";
+import { User } from "@/lib/models";
 import {
   Navbar,
   NavbarBrand,
@@ -21,14 +22,12 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
 } from "@nextui-org/navbar";
-import { UserIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import HeaderSearchField from "./header-search-field";
 
-export default function Header() {
-  const { user } = useContext(AuthenticationContext);
+export default function Header({ user }: { user?: User | null }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const socials = (
@@ -108,9 +107,10 @@ export default function Header() {
         <NavbarContent as="div" justify="end" className="flex lg:hidden">
           <DropdownMenu>
             <DropdownMenuTrigger className="outline-none">
-              <div className="flex items-center justify-center size-[36px] bg-gray-200 border rounded-full">
-                <UserIcon className="size-6 text-gray-700" />
-              </div>
+              <ProfilePlaceholder
+                className="size-[40px] border"
+                iconClass="size-6"
+              />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="shadow-xl">
               <DropdownMenuLabel className="font-semibold">

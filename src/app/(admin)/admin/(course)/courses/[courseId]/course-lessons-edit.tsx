@@ -74,7 +74,7 @@ const LessonItem = ({ course, value }: { course: Course; value: Lesson }) => {
     <div
       ref={setNodeRef}
       style={style}
-      className="flex items-center gap-2 bg-white rounded p-2 active:z-10"
+      className="flex items-center gap-2 bg-white rounded-md p-2 active:z-10"
     >
       <Menu
         className="size-5 cursor-move outline-none text-gray-500 flex-shrink-0"

@@ -1,4 +1,5 @@
 import Pagination from "@/components/ui/pagination";
+import { ProfilePlaceholder } from "@/components/ui/profile-placeholder";
 import {
   Table,
   TableBody,
@@ -13,6 +14,7 @@ import { Page, User } from "@/lib/models";
 import { buildQueryParams, uppercaseFirstChar } from "@/lib/utils";
 import { validateResponse } from "@/lib/validate-response";
 import { cookies } from "next/headers";
+import Image from "next/image";
 import UserActionButtons from "./user-action-buttons";
 import UserFilter from "./users-filter";
 
@@ -64,7 +66,18 @@ export default async function Users(props: Props) {
           {data.contents.map((u, i) => {
             return (
               <TableRow key={u.id}>
-                <TableCell>
+                <TableCell className="flex items-center space-x-3">
+                  {u.image ? (
+                    <Image
+                      alt="Profile"
+                      src={u.image}
+                      width={46}
+                      height={46}
+                      className="rounded-full border"
+                    />
+                  ) : (
+                    <ProfilePlaceholder className="border" />
+                  )}
                   <h6>{u.nickname}</h6>
                 </TableCell>
                 <TableCell className="text-sliver text-sm">{u.email}</TableCell>

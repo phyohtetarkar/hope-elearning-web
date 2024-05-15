@@ -151,3 +151,15 @@ export function buildQueryParams(params: any) {
 
   return query;
 }
+
+export function pluralize(
+  count: number | bigint,
+  label: string,
+  plural?: string
+) {
+  if (count > 1) {
+    `${formatNumber(count)} ${plural ? plural : label + "s"}`;
+  }
+
+  return `${formatNumber(count)} ${label}`;
+}

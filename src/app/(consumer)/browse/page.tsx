@@ -16,7 +16,7 @@ const getCourses = async (props: Props) => {
   const url = `${API_URL_LOCAL}/content/courses${query}`;
 
   const resp = await fetch(url, {
-    cache: "no-store",
+    next: { revalidate: 10 },
   });
 
   return resp

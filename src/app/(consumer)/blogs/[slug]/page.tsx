@@ -1,14 +1,17 @@
 import { ContentRenderer } from "@/components/editor";
 import { Alert } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { ProfilePlaceholder } from "@/components/ui/profile-placeholder";
 import { API_URL_LOCAL } from "@/lib/constants";
-import { Post } from "@/lib/models";
+import { Post, User } from "@/lib/models";
 import {
   formatAbbreviate,
   formatRelativeTimestamp,
   wordPerMinute,
 } from "@/lib/utils";
-import { UserIcon } from "lucide-react";
+import { LockKeyhole } from "lucide-react";
 import { Metadata, ResolvingMetadata } from "next";
+import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import { cache } from "react";
@@ -24,11 +27,27 @@ const getPost = cache(async (slug: string) => {
     cache: "no-store",
   });
 
+  if (!resp.ok || resp.status === 204) {
+    return undefined;
+  }
+
   return resp
     .json()
     .then((json) => json as Post)
     .catch((e) => undefined);
 });
+
+const getUser = async () => {
+  const url = `${API_URL_LOCAL}/profile`;
+  const resp = await fetch(url, {
+    headers: {
+      Cookie: cookies().toString(),
+    },
+    next: { revalidate: 10 },
+  });
+
+  return resp.ok ? ((await resp.json()) as User) : null;
+};
 
 export async function generateMetadata(
   { params }: Props,
@@ -66,7 +85,10 @@ export async function generateMetadata(
 }
 
 export default async function BlogPost({ params }: Props) {
-  const post = await getPost(params.slug);
+  const postPromise = getPost(params.slug);
+  const userPromise = getUser();
+
+  const [post, user] = await Promise.all([postPromise, userPromise]);
 
   if (!post) {
     return (
@@ -77,6 +99,8 @@ export default async function BlogPost({ params }: Props) {
   }
 
   const authorsView = () => {
+    const authorCount = post.authors?.length ?? 0;
+
     return (
       <div className="flex items-center gap-3 mb-4 -ml-[3px]">
         <div
@@ -90,16 +114,14 @@ export default async function BlogPost({ params }: Props) {
 
             if (!a.image) {
               return (
-                <div
+                <ProfilePlaceholder
                   key={i}
-                  className="absolute flex items-center justify-center size-[54px] bg-gray-200 border-3 border-white rounded-full"
+                  className="absolute size-[54px] border-3 border-white"
                   style={{
                     left: left,
                     zIndex: authorCount - i,
                   }}
-                >
-                  <UserIcon className="size-7 text-gray-700" />
-                </div>
+                />
               );
             }
 
@@ -128,11 +150,75 @@ export default async function BlogPost({ params }: Props) {
             {formatRelativeTimestamp(post.publishedAt)}
           </span>
         </div>
+
+        <div className="flex-grow"></div>
+        {/* <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="default" size="icon">
+                <Share2 className="text-gray-600 size-5" />
+              </Button>
+            </TooltipTrigger>
+
+            <TooltipContent>Share</TooltipContent>
+          </Tooltip>
+        </TooltipProvider> */}
       </div>
     );
   };
 
-  const authorCount = post.authors?.length ?? 0;
+  const content = () => {
+    if (post.visibility === "member" && !user) {
+      return (
+        <div className="rounded bg-primary px-5 py-8 flex flex-col items-center">
+          <LockKeyhole className="text-primary-foreground/80 mb-2 size-7" />
+          <p className="mb-4 text-primary-foreground/80">
+            You need to sign in to view this content.
+          </p>
+          <Button className="bg-white hover:bg-gray-50 text-black" asChild>
+            <Link href={`/login`}>Sign In</Link>
+          </Button>
+        </div>
+      );
+    }
+
+    if (
+      post.visibility === "paid_member" &&
+      (!user || user.expiredAt < new Date().getTime())
+    ) {
+      return (
+        <div className="rounded bg-primary px-5 py-8 flex flex-col items-center">
+          <LockKeyhole className="text-primary-foreground/80 mb-2 size-7" />
+          <p className="mb-4 text-primary-foreground/80">
+            You need to subscribe to view this content.
+          </p>
+          <Button className="bg-white hover:bg-gray-50 text-black" asChild>
+            <Link href={`/subscriptions`}>Subscribe</Link>
+          </Button>
+        </div>
+      );
+    }
+
+    return (
+      <>
+        <ContentRenderer lexical={post.lexical} />
+
+        <div className="flex flex-wrap gap-2 mt-8">
+          {post.tags?.map((t) => {
+            return (
+              <Link
+                key={t.id}
+                href={`/tags/${t.slug}`}
+                className="bg-gray-200 rounded-full text-sm px-3 py-1"
+              >
+                {t.name}
+              </Link>
+            );
+          })}
+        </div>
+      </>
+    );
+  };
 
   return (
     <div className="container max-w-3xl py-5 mb-10">
@@ -160,21 +246,7 @@ export default async function BlogPost({ params }: Props) {
         />
       </div>
 
-      <ContentRenderer lexical={post.lexical} />
-
-      <div className="flex flex-wrap gap-2 mt-8">
-        {post.tags?.map((t) => {
-          return (
-            <Link
-              key={t.id}
-              href={`/tags/${t.slug}`}
-              className="bg-gray-200 rounded-full text-sm px-3 py-1"
-            >
-              {t.name}
-            </Link>
-          );
-        })}
-      </div>
+      {content()}
 
       {/* <Separator className="mt-6 mb-4" />
 

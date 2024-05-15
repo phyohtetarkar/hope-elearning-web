@@ -12,6 +12,7 @@ import Pagination from "@/components/ui/pagination";
 import { API_URL_LOCAL } from "@/lib/constants";
 import { EnrolledCourse, Page } from "@/lib/models";
 import { buildQueryParams } from "@/lib/utils";
+import { validateResponse } from "@/lib/validate-response";
 import { cookies } from "next/headers";
 import Link from "next/link";
 
@@ -30,6 +31,8 @@ const getEnrollments = async ({ searchParams }: Props) => {
     },
   });
 
+  validateResponse(resp);
+
   return resp
     .json()
     .then((json) => json as Page<EnrolledCourse>)
@@ -40,7 +43,7 @@ export default async function Learnings(props: Props) {
   const enrollments = await getEnrollments(props);
 
   const content = () => {
-    if (!enrollments?.contents.length) {
+    if (!enrollments || enrollments.contents.length === 0) {
       return <Alert>No courses enrolled</Alert>;
     }
 

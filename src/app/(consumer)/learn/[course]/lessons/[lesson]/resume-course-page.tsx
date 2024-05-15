@@ -1,5 +1,6 @@
 "use client";
 
+import { AuthenticationContext } from "@/components/authentication-context-porvider";
 import { ContentRenderer } from "@/components/editor";
 import {
   Breadcrumb,
@@ -8,21 +9,30 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
+import { addCompletedLesson, removeCompletedLesson } from "@/lib/actions";
 import { Lesson } from "@/lib/models";
 import { parseErrorResponse } from "@/lib/parse-error-response";
 import { formatRelativeTimestamp } from "@/lib/utils";
 import { JSONContent } from "@tiptap/core";
-import { LoaderCircle } from "lucide-react";
-import { useMemo, useState } from "react";
+import { LoaderCircle, LockKeyhole } from "lucide-react";
+import Link from "next/link";
+import { useContext, useEffect, useMemo, useState } from "react";
 import DrawerToggleButton from "./drawer-toggle-button";
 
 export default function ResumeCoursePage({ lesson }: { lesson: Lesson }) {
   const { toast } = useToast();
+  const { user } = useContext(AuthenticationContext);
 
   const [isSaving, setSaving] = useState(false);
+  const [isCompleted, setCompleted] = useState(false);
+
+  useEffect(() => {
+    setCompleted(lesson.completed ?? false);
+  }, [lesson]);
 
   const headings = useMemo(() => {
     try {
@@ -47,9 +57,15 @@ export default function ResumeCoursePage({ lesson }: { lesson: Lesson }) {
   const handleCompleted = async () => {
     try {
       setSaving(true);
+      const courseId = lesson.courseId;
+      const lessonId = lesson.id;
+      const path = `/learn/${lesson.course?.slug}/lessons/${lesson.slug}`;
       if (lesson.completed) {
+        await removeCompletedLesson(courseId, lessonId, path);
       } else {
+        await addCompletedLesson(courseId, lessonId, path);
       }
+      setCompleted(!lesson.completed);
     } catch (error) {
       toast({
         title: "Error",
@@ -66,57 +82,87 @@ export default function ResumeCoursePage({ lesson }: { lesson: Lesson }) {
     } catch (error) {}
   };
 
+  const content = () => {
+    const course = lesson.course;
+    if (
+      course?.access === "premium" &&
+      (user?.expiredAt ?? 0) < new Date().getTime()
+    ) {
+      return (
+        <div className="rounded bg-primary px-5 py-8 flex flex-col items-center">
+          <LockKeyhole className="text-primary-foreground/80 mb-2 size-7" />
+          <p className="mb-4 text-primary-foreground/80">
+            You need to subscribe to view this content.
+          </p>
+          <Button className="bg-white hover:bg-gray-50 text-black" asChild>
+            <Link href={`/subscriptions`}>Subscribe</Link>
+          </Button>
+        </div>
+      );
+    }
+
+    return (
+      <>
+        <Breadcrumb className="mb-5">
+          <BreadcrumbList>
+            <BreadcrumbItem className="lg:hidden">
+              <DrawerToggleButton />
+            </BreadcrumbItem>
+            <BreadcrumbSeparator className="lg:hidden" />
+            <BreadcrumbItem>{lesson.chapter?.title}</BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{lesson.title}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+
+        <ContentRenderer lexical={lesson.lexical} />
+
+        <Separator className="mt-16 mb-4" />
+
+        <div className="flex items-center space-x-2 pb-16">
+          {isSaving ? (
+            <LoaderCircle className="size-4 animate-spin text-primary" />
+          ) : (
+            <>
+              <Checkbox
+                id="completed-check"
+                className="rounded"
+                checked={isCompleted}
+                onCheckedChange={(checked) => {
+                  if (checked === "indeterminate") {
+                    return;
+                  }
+                  handleCompleted();
+                }}
+              />
+              <label
+                htmlFor="completed-check"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                {isCompleted ? "Unmark completed" : "Mark as completed"}
+              </label>
+            </>
+          )}
+          <div className="flex-grow"></div>
+          <div className="text-sliver text-sm">
+            Last edited: {formatRelativeTimestamp(lesson.audit?.updatedAt)}
+          </div>
+        </div>
+      </>
+    );
+  };
+
+  if (!user) {
+    return null;
+  }
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-10 h-full">
       <div className="lg:col-span-8 relative">
         <div className="absolute inset-0 lg:overflow-y-auto lg:scrollbar-hide p-4 lg:px-6">
-          <Breadcrumb className="mb-5">
-            <BreadcrumbList>
-              <BreadcrumbItem className="lg:hidden">
-                <DrawerToggleButton />
-              </BreadcrumbItem>
-              <BreadcrumbSeparator className="lg:hidden" />
-              <BreadcrumbItem>{lesson.chapter?.title}</BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage>{lesson.title}</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-
-          <ContentRenderer lexical={lesson.lexical} />
-
-          <Separator className="mt-16 mb-4" />
-
-          <div className="flex items-center space-x-2 pb-16">
-            {isSaving ? (
-              <LoaderCircle className="size-4 animate-spin text-primary" />
-            ) : (
-              <>
-                <Checkbox
-                  id="completed-check"
-                  className="rounded"
-                  checked={lesson.completed ?? false}
-                  onCheckedChange={async (checked) => {
-                    if (checked === "indeterminate") {
-                      return;
-                    }
-                    await handleCompleted();
-                  }}
-                />
-                <label
-                  htmlFor="completed-check"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  {lesson.completed ? "Unmark completed" : "Mark as completed"}
-                </label>
-              </>
-            )}
-            <div className="flex-grow"></div>
-            <div className="text-sliver text-sm">
-              Last edited: {formatRelativeTimestamp(lesson.audit?.updatedAt)}
-            </div>
-          </div>
+          {content()}
           {/* <div className="flex justify-between pb-10">
             <Button variant="default" asChild>
               <Link href={`/learn`}>Previous</Link>
@@ -129,13 +175,16 @@ export default function ResumeCoursePage({ lesson }: { lesson: Lesson }) {
       </div>
       <div className="lg:col-span-2 relative border-l hidden lg:block">
         <div className="absolute inset-0 lg:overflow-y-auto lg:scrollbar-hide p-4">
-          <h6 className="text-sm">On this lesson</h6>
+          <h6 className="text-sm">On this content</h6>
           <Separator className="my-3" />
           <div className="px-4">
             <ol className="list-decimal">
               {headings.map((h, i) => {
                 return (
-                  <li key={i} className="text-sliver hover:text-black text-sm mb-1">
+                  <li
+                    key={i}
+                    className="text-sliver hover:text-black text-sm mb-1"
+                  >
                     <a href={`#${h.replaceAll(/\s+/g, "-").toLowerCase()}`}>
                       {h}
                     </a>

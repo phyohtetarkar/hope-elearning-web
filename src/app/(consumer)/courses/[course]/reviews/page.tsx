@@ -1,10 +1,10 @@
 import { API_URL_LOCAL } from "@/lib/constants";
 import { Course, CourseReview, Page } from "@/lib/models";
 import { buildQueryParams } from "@/lib/utils";
+import { Metadata, ResolvingMetadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import CourseReviewsPage from "./course-reviews-page";
-import { Metadata, ResolvingMetadata } from "next";
 
 interface Props {
   params: { course: string };
@@ -14,7 +14,9 @@ interface Props {
 const getCourse = async (slug: string) => {
   const url = `${API_URL_LOCAL}/content/courses/${slug}`;
 
-  const resp = await fetch(url);
+  const resp = await fetch(url, {
+    next: { revalidate: 10 },
+  });
 
   if (resp.status === 204) {
     return undefined;

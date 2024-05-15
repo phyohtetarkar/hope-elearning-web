@@ -1,4 +1,4 @@
-import { CourseGridItem } from "@/components/course";
+import { BlogGridItem } from "@/components/blog";
 import { Alert } from "@/components/ui/alert";
 import {
   Breadcrumb,
@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import Pagination from "@/components/ui/pagination";
 import { API_URL_LOCAL } from "@/lib/constants";
-import { Category, Course, Page } from "@/lib/models";
+import { Page, Post, Tag } from "@/lib/models";
 import { buildQueryParams, pluralize } from "@/lib/utils";
 import { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
@@ -21,8 +21,8 @@ interface Props {
   searchParams: { [key: string]: string | undefined };
 }
 
-const getCategory = async (slug: string) => {
-  const url = `${API_URL_LOCAL}/content/categories/${slug}`;
+const getTag = async (slug: string) => {
+  const url = `${API_URL_LOCAL}/content/tags/${slug}`;
 
   const resp = await fetch(url, {
     next: { revalidate: 10 },
@@ -34,18 +34,18 @@ const getCategory = async (slug: string) => {
 
   return resp
     .json()
-    .then((json) => json as Category)
+    .then((json) => json as Tag)
     .catch((e) => undefined);
 };
 
-const getCourses = async (categoryId: number, page?: string) => {
+const getPosts = async (tagId: number, page?: string) => {
   const query = buildQueryParams({
-    category: categoryId,
+    tag: tagId,
     page: page,
     limit: 15,
   });
 
-  const url = `${API_URL_LOCAL}/content/courses${query}`;
+  const url = `${API_URL_LOCAL}/content/posts${query}`;
 
   const resp = await fetch(url, {
     next: { revalidate: 10 },
@@ -53,7 +53,7 @@ const getCourses = async (categoryId: number, page?: string) => {
 
   return resp
     .json()
-    .then((json) => json as Page<Course>)
+    .then((json) => json as Page<Post>)
     .catch((e) => undefined);
 };
 
@@ -62,18 +62,18 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   try {
-    const category = await getCategory(params.slug);
-    
+    const tag = await getTag(params.slug);
+
     const previousImages = (await parent).openGraph?.images || [];
 
-    if (category) {
-      const title = `Categories | ${category.name}`
-      const desc = pluralize(Number(category.courseCount ?? 0), "course");
+    if (tag) {
+      const title = `Tags | ${tag.name}`;
+      const desc = pluralize(Number(tag.postCount ?? 0), "post");
       return {
         title: title,
         description: desc,
         openGraph: {
-          url: `${process.env.NEXT_PUBLIC_BASE_URL}/categories/${category.slug}`,
+          url: `${process.env.NEXT_PUBLIC_BASE_URL}/tags/${tag.slug}`,
           title: title,
           description: desc,
           images: [...previousImages],
@@ -95,31 +95,31 @@ export async function generateMetadata(
 }
 
 export default async function Topic(props: Props) {
-  const category = await getCategory(props.params.slug);
+  const tag = await getTag(props.params.slug);
 
-  if (!category) {
-    redirect("/categories");
+  if (!tag) {
+    redirect("/blogs");
   }
 
-  const courses = await getCourses(category.id, props.searchParams["page"]);
+  const posts = await getPosts(tag.id, props.searchParams["page"]);
 
   const content = () => {
-    if (!courses?.contents.length) {
-      return <Alert>No courses found</Alert>;
+    if (!posts?.contents.length) {
+      return <Alert>No posts found</Alert>;
     }
 
     return (
       <>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {courses.contents.map((c) => {
-            return <CourseGridItem key={c.id} data={c} />;
+          {posts.contents.map((p) => {
+            return <BlogGridItem key={p.id} data={p} />;
           })}
         </div>
 
         <div className="flex justify-center lg:justify-end mt-10 xl:mt-8">
           <Pagination
-            totalPage={courses?.totalPage ?? 0}
-            currentPage={courses?.currentPage ?? 0}
+            totalPage={posts?.totalPage ?? 0}
+            currentPage={posts?.currentPage ?? 0}
           />
         </div>
       </>
@@ -146,13 +146,13 @@ export default async function Topic(props: Props) {
                   className="text-base text-primary-foreground/70 underline hover:text-primary-foreground"
                   asChild
                 >
-                  <Link href="/categories">Categories</Link>
+                  <Link href="/blogs">Blogs</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="text-primary-foreground/70" />
               <BreadcrumbItem>
                 <BreadcrumbPage className="text-base text-nowrap text-primary-foreground">
-                  {category.name}
+                  {tag.name}
                 </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>

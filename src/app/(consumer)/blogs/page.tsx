@@ -6,7 +6,6 @@ import { Page, Post, Tag } from "@/lib/models";
 import {
   buildQueryParams,
   formatRelativeTimestamp,
-  formatTimestamp,
   wordPerMinute,
 } from "@/lib/utils";
 import { Dot } from "lucide-react";
@@ -23,7 +22,7 @@ const getPosts = async ({ searchParams }: Props) => {
   const url = `${API_URL_LOCAL}/content/posts${query}`;
 
   const resp = await fetch(url, {
-    cache: "no-store",
+    next: { revalidate: 10 },
   });
 
   return resp

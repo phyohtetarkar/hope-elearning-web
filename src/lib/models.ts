@@ -27,6 +27,7 @@ export interface User {
   email?: string;
   image?: string;
   headline?: string;
+  expiredAt: number;
 }
 
 export interface Tag {
