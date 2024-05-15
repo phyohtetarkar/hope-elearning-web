@@ -1,6 +1,5 @@
 import { Course } from "@/lib/models";
 import { formatAbbreviate, uppercaseFirstChar } from "@/lib/utils";
-import { Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../ui/button";
@@ -21,16 +20,6 @@ export function BookmarkCourseGridItem({ data }: { data: Course }) {
             fill
             sizes="33vh"
           />
-          <Button
-            variant="destructive"
-            size="icon"
-            className="ms-auto rounded-none"
-            asChild
-          >
-            <span>
-              <Trash2 size={20} />
-            </span>
-          </Button>
         </div>
         <div className="flex flex-col p-4">
           <Link
@@ -39,13 +28,14 @@ export function BookmarkCourseGridItem({ data }: { data: Course }) {
           >
             {data.title}
           </Link>
-          <div className="flex items-center text-sm mb-2 mt-1">
+          <div className="flex items-center text-sm mb-3 mt-1">
             <div className="text-sliver">
               {formatAbbreviate(BigInt(data.meta?.enrolledCount ?? 0))} Enrolled
             </div>
             <div className="mx-2 text-sliver">&bull;</div>
             <div className="text-primary">{uppercaseFirstChar(data.level)}</div>
           </div>
+          <Button variant="destructive">Remove</Button>
         </div>
       </CardContent>
       <Separator />

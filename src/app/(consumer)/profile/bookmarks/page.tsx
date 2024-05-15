@@ -12,6 +12,7 @@ import Pagination from "@/components/ui/pagination";
 import { API_URL_LOCAL } from "@/lib/constants";
 import { Course, Page } from "@/lib/models";
 import { buildQueryParams } from "@/lib/utils";
+import { validateResponse } from "@/lib/validate-response";
 import { cookies } from "next/headers";
 import Link from "next/link";
 
@@ -29,6 +30,8 @@ const getBookmarks = async ({ searchParams }: Props) => {
       Cookie: cookies().toString(),
     },
   });
+
+  validateResponse(resp);
 
   return resp
     .json()

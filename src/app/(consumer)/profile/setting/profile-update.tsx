@@ -1,15 +1,15 @@
 "use client";
 
-import { AuthenticationContext } from "@/components/authentication-context-porvider";
 import { Input } from "@/components/forms";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { updateUserProfile } from "@/lib/actions";
+import { User } from "@/lib/models";
 import { parseErrorResponse } from "@/lib/parse-error-response";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircle } from "lucide-react";
+
 import Image from "next/image";
-import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -24,8 +24,7 @@ const schema = z.object({
 
 type ProfileUpdateForm = z.infer<typeof schema>;
 
-export default function ProfileUpdate() {
-  const { user } = useContext(AuthenticationContext);
+export default function ProfileUpdate({ user }: { user?: User | null }) {
   const { toast } = useToast();
 
   const {
@@ -49,6 +48,11 @@ export default function ProfileUpdate() {
         handleSubmit(async (values) => {
           try {
             await updateUserProfile(values);
+            toast({
+              title: "Success",
+              description: "Profile updated",
+              variant: "success",
+            });
           } catch (error) {
             toast({
               title: "Error",
@@ -61,14 +65,6 @@ export default function ProfileUpdate() {
     >
       <div className="grid grid-cols-12 mb-5">
         <div className="lg:col-span-8 col-span-12 me-2 md:order-2 order-2">
-          <Input
-            label="Headline"
-            id="headlineInput"
-            type="text"
-            wrapperClass="mb-4"
-            placeholder="Enter headline"
-            {...register("headline")}
-          />
           <div className="grid grid-cols-12">
             <div className="lg:col-span-6 lg:me-2 col-span-12">
               <Input
@@ -92,7 +88,14 @@ export default function ProfileUpdate() {
               />
             </div>
           </div>
-
+          <Input
+            label="Headline"
+            id="headlineInput"
+            type="text"
+            wrapperClass="mb-4"
+            placeholder="Enter headline"
+            {...register("headline")}
+          />
           <Button type="submit" color="primary" disabled={isSubmitting}>
             {isSubmitting && (
               <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
@@ -108,7 +111,7 @@ export default function ProfileUpdate() {
                 src={user?.image ?? "/images/profile.png"}
                 width={128}
                 height={128}
-                alt="User image"
+                alt="Profile"
                 sizes="33vw"
                 className="rounded-full object-cover"
                 priority
