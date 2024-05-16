@@ -265,10 +265,11 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
             </div>
             <NovelEditor
               content={lesson.lexical ? JSON.parse(lesson.lexical) : undefined}
-              onDebouncedChange={(json, wordCount) => {
+              onChange={(editor) => {
+                const json = editor.getJSON();
                 setValue("lexical", JSON.stringify(json));
                 if (lesson.status === "draft") {
-                  handleUpdate();
+                  debouncedUpdate(undefined);
                 }
               }}
             />

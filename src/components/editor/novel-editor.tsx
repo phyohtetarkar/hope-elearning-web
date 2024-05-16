@@ -92,7 +92,7 @@ export default function NovelEditor({
         extensions={extensions}
         onUpdate={({ editor }) => {
           onChange?.(editor);
-          debouncedUpdate(editor);
+          // debouncedUpdate(editor);
         }}
         // slotAfter={<ImageResizer />}
         editorProps={{

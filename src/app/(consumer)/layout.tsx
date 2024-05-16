@@ -24,9 +24,9 @@ export default async function ConsumerLayout({
   const user = await getUser();
 
   return (
-    <div className="relative">
+    <div className="relative h-full">
       <Header user={user} />
-      <div className="fixed inset-0 top-[65px] overflow-y-auto">
+      <div className="pt-[65px] h-full">
         <div className="flex flex-col h-full">
           <main className="grow">{children}</main>
           <Footer />

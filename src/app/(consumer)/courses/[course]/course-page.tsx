@@ -13,12 +13,6 @@ import { ProfilePlaceholder } from "@/components/ui/profile-placeholder";
 import Rating from "@/components/ui/rating";
 import { Separator } from "@/components/ui/separator";
 import { TabItem, Tabs } from "@/components/ui/tabs";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { Course, CourseReview, EnrolledCourse } from "@/lib/models";
 import { formatNumber, uppercaseFirstChar } from "@/lib/utils";
 import {
@@ -27,7 +21,6 @@ import {
   DollarSign,
   FolderClosed,
   LockKeyhole,
-  Share2,
   Users,
 } from "lucide-react";
 import Image from "next/image";
@@ -57,12 +50,12 @@ export default function CoursePage({
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
             <div className="flex flex-col lg:col-span-8 order-2 lg:order-1">
-              <Link
+              {/* <Link
                 href={`/categories/${course.category?.slug}`}
                 className="text-sm text-primary-foreground/70 underline ps-0.5 mb-1"
               >
                 {course.category?.name}
-              </Link>
+              </Link> */}
               <h2 className="text-primary-foreground mb-5">{course.title}</h2>
               <p className="text-primary-foreground font-light mb-5">
                 {course.excerpt}
@@ -95,7 +88,7 @@ export default function CoursePage({
                 </div>
               </div>
             </div>
-            <div className="aspect-w-16 aspect-h-9 bg-white rounded-md lg:col-span-4 order-1 lg:order-2">
+            <div className="aspect-w-16 aspect-h-9 bg-white drop-shadow-xl rounded-md lg:col-span-4 order-1 lg:order-2">
               <Image
                 src={course.cover ?? "/images/placeholder.jpeg"}
                 className="object-cover p-1"
@@ -210,6 +203,7 @@ export default function CoursePage({
                   </Button>
                 ) : (
                   <EnrollCourseButton
+                    course={course}
                     revalidate={`/courses/${course.slug}`}
                   >
                     Enroll
@@ -269,9 +263,10 @@ export default function CoursePage({
                           <Image
                             alt="Profile"
                             src={a.image}
-                            width={56}
-                            height={56}
-                            className="rounded-full border"
+                            width={0}
+                            height={0}
+                            sizes="33vh"
+                            className="rounded-full border size-[54px] bg-gray-200"
                           />
                         ) : (
                           <ProfilePlaceholder className="size-[54px] border" />

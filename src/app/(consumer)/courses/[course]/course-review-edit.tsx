@@ -121,7 +121,7 @@ export default function CourseReviewEdit({
             placeholder="Write your review"
             className="mb-4"
             rows={4}
-            maxLength={4000}
+            maxLength={2000}
             {...register("message")}
           />
 

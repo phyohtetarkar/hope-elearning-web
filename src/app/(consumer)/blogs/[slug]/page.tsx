@@ -59,19 +59,21 @@ export async function generateMetadata(
     const previousImages = (await parent).openGraph?.images || [];
 
     if (post) {
+      const title = post.title ?? "(Untitled)";
+      const desc = `${wordPerMinute(post.wordCount)} min read`;
       return {
-        title: post.title,
-        description: `${wordPerMinute(post.wordCount)} min read`,
+        title: title,
+        description: desc,
         openGraph: {
           url: `${process.env.NEXT_PUBLIC_BASE_URL}/blogs/${post.slug}`,
-          title: post.title,
-          description: post.excerpt,
+          title: title,
+          description: desc,
           images: [`${post.cover ?? ""}`, ...previousImages],
           type: "website",
         },
         twitter: {
-          title: post.title,
-          description: `${wordPerMinute(post.wordCount)} min read`,
+          title: title,
+          description: desc,
           card: "summary_large_image",
           images: [`${post.cover ?? ""}`, ...previousImages],
         },
@@ -129,14 +131,15 @@ export default async function BlogPost({ params }: Props) {
               <Image
                 key={i}
                 src={a.image}
-                className="absolute object-cover rounded-full border-3 border-white"
+                className="absolute size-[54px] object-cover rounded-full border-3 border-white bg-gray-200"
                 alt="Cover"
                 sizes="30vh"
-                width={54}
-                height={54}
+                width={0}
+                height={0}
                 priority
                 style={{
                   left: left,
+                  zIndex: authorCount - i,
                 }}
               />
             );
@@ -222,7 +225,7 @@ export default async function BlogPost({ params }: Props) {
 
   return (
     <div className="container max-w-3xl py-5 mb-10">
-      <h2 className="text-center">{post.title}</h2>
+      <h2 className="text-center">{post.title ?? "(Untitled)"}</h2>
       <div className="flex items-center justify-center mb-7 mt-2">
         <div className="text-sliver">
           {wordPerMinute(post.wordCount)} min read

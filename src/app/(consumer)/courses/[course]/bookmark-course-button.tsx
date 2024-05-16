@@ -58,7 +58,7 @@ export default function BookmarkCourseButton({
           disabled={isLoading}
           className={cn("text-destructive hover:text-destructive", className)}
         >
-          {isLoading && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
+          {isLoading && <LoaderCircle className="mr-2 size-4 animate-spin" />}
           Remove bookmark
         </Button>
       ) : (
@@ -68,7 +68,7 @@ export default function BookmarkCourseButton({
           disabled={isLoading}
           className={className}
         >
-          {isLoading && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
+          {isLoading && <LoaderCircle className="mr-2 size-4 animate-spin" />}
           Bookmark
         </Button>
       )}

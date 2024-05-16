@@ -84,8 +84,8 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           }}
         />
       </Suspense>
-      <NextUIProvider className="h-full">{children}</NextUIProvider>
       <Toaster />
+      <NextUIProvider className="h-full">{children}</NextUIProvider>
     </>
   );
 }

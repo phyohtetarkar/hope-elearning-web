@@ -90,7 +90,7 @@ export default async function Home() {
             </div>
             <div className="">
               <div className="lg:ms-auto lg:max-w-[450px]">
-                <div className="aspect-w-3 aspect-h-2">
+                <div className="aspect-w-3 aspect-h-2 z-0">
                   <Image
                     src="/images/undraw_teaching.svg"
                     alt=""

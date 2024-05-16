@@ -53,7 +53,7 @@ export default function Header() {
                   alt="Avatar"
                   fill
                   sizes="50vh"
-                  className="rounded-full border-1 object-cover"
+                  className="rounded-full border-1 object-cover bg-gray-200"
                   priority
                 />
               </div>

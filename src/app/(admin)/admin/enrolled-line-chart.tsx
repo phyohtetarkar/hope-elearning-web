@@ -2,8 +2,11 @@
 import { Select } from "@/components/forms";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { makeApiRequest } from "@/lib/make-api-request";
+import { MonthlyEnrollmentDto } from "@/lib/models";
 import { Chart, ChartConfiguration, ChartData } from "chart.js";
 import { useEffect, useMemo, useState } from "react";
+import useSWR from "swr";
 
 const _months = [
   "Jan",
@@ -24,6 +27,27 @@ function EnrolledLineChart() {
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
   const [year, setYear] = useState(new Date().getFullYear());
 
+  const { data, error, isLoading } = useSWR(
+    `/admin/dashboard/enrollments/${year}`,
+    async (url) => {
+      const resp = await makeApiRequest({
+        url,
+        options: {
+          credentials: "include",
+        },
+      });
+
+      if (!resp.ok) {
+        return undefined;
+      }
+
+      return (await resp.json()) as MonthlyEnrollmentDto;
+    },
+    {
+      revalidateOnFocus: false,
+    }
+  );
+
   const years = useMemo(() => {
     const start = 2024;
     const now = new Date().getFullYear();
@@ -42,6 +66,14 @@ function EnrolledLineChart() {
       return;
     }
 
+    const list = _months.map((m, i) => {
+      if (!data) {
+        return 0;
+      }
+
+      return data.data[`${i + 1}`] ?? 0;
+    });
+
     const chartData: ChartData<"line"> = {
       labels: _months,
       datasets: [
@@ -49,7 +81,7 @@ function EnrolledLineChart() {
           backgroundColor: "rgba(80, 72, 229, 0.1)",
           borderColor: "rgb(80, 72, 229)",
           pointBackgroundColor: "rgb(255, 255, 255)",
-          data: [10, 11, 22, 33, 10, 0, 22, 0, 0, 0, 0, 0],
+          data: list,
           tension: 0.1,
           fill: true,
           borderWidth: 2,
@@ -96,7 +128,7 @@ function EnrolledLineChart() {
       // window.removeEventListener("resize", handleResize);
       chart?.destroy();
     };
-  }, [canvas]);
+  }, [canvas, data]);
 
   return (
     <Card className="shadow-none h-full">
@@ -107,6 +139,7 @@ function EnrolledLineChart() {
           <div>
             <Select
               className=""
+              value={year}
               onChange={(evt) => setYear(parseInt(evt.target.value))}
             >
               <option disabled>Year</option>

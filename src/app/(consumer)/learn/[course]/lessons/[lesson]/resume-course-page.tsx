@@ -20,7 +20,7 @@ import { formatRelativeTimestamp } from "@/lib/utils";
 import { JSONContent } from "@tiptap/core";
 import { LoaderCircle, LockKeyhole } from "lucide-react";
 import Link from "next/link";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import DrawerToggleButton from "./drawer-toggle-button";
 
 export default function ResumeCoursePage({ lesson }: { lesson: Lesson }) {
@@ -28,11 +28,7 @@ export default function ResumeCoursePage({ lesson }: { lesson: Lesson }) {
   const { user } = useContext(AuthenticationContext);
 
   const [isSaving, setSaving] = useState(false);
-  const [isCompleted, setCompleted] = useState(false);
-
-  useEffect(() => {
-    setCompleted(lesson.completed ?? false);
-  }, [lesson]);
+  const [isCompleted, setCompleted] = useState(lesson.completed ?? false);
 
   const headings = useMemo(() => {
     try {
@@ -103,7 +99,7 @@ export default function ResumeCoursePage({ lesson }: { lesson: Lesson }) {
 
     return (
       <>
-        <Breadcrumb className="mb-5">
+        <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem className="lg:hidden">
               <DrawerToggleButton />
@@ -116,6 +112,8 @@ export default function ResumeCoursePage({ lesson }: { lesson: Lesson }) {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
+
+        <Separator className="my-4" />
 
         <ContentRenderer lexical={lesson.lexical} />
 
@@ -159,8 +157,8 @@ export default function ResumeCoursePage({ lesson }: { lesson: Lesson }) {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-10 h-full">
-      <div className="lg:col-span-8 relative">
+    <div className="grid grid-cols-1 lg:grid-cols-12 h-full">
+      <div className="lg:col-span-9 relative">
         <div className="absolute inset-0 lg:overflow-y-auto lg:scrollbar-hide p-4 lg:px-6">
           {content()}
           {/* <div className="flex justify-between pb-10">
@@ -173,10 +171,10 @@ export default function ResumeCoursePage({ lesson }: { lesson: Lesson }) {
           </div> */}
         </div>
       </div>
-      <div className="lg:col-span-2 relative border-l hidden lg:block">
+      <div className="lg:col-span-3 relative border-l hidden lg:block">
         <div className="absolute inset-0 lg:overflow-y-auto lg:scrollbar-hide p-4">
           <h6 className="text-sm">On this content</h6>
-          <Separator className="my-3" />
+          <Separator className="my-4" />
           <div className="px-4">
             <ol className="list-decimal">
               {headings.map((h, i) => {

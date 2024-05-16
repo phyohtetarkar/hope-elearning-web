@@ -8,8 +8,8 @@ import { Separator } from "../ui/separator";
 
 export function CourseGridItem({ data }: { data: Course }) {
   return (
-    <Card className="overflow-hidden shadow-none">
-      <CardContent className="p-0">
+    <Card className="overflow-hidden shadow-none flex flex-col">
+      <CardContent className="p-0 flex flex-col grow">
         <Link href={`/courses/${data.slug}`}>
           <div className="aspect-w-16 aspect-h-9">
             <Image

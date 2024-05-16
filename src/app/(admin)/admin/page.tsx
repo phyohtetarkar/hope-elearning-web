@@ -11,7 +11,7 @@ import EnrolledLineChart from "./enrolled-line-chart";
 import EnrolledPieChart from "./enrolled-pie-chart";
 
 const getData = async () => {
-  const url = `${API_URL_LOCAL}/admin/dashboard`;
+  const url = `${API_URL_LOCAL}/admin/dashboard/summary`;
 
   const resp = await fetch(url, {
     headers: {

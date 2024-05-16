@@ -31,7 +31,7 @@ export function BlogGridItem({ data }: { data: Post }) {
             href={`/blogs/${data.slug}`}
             className="text-foreground font-semibold text-lg line-clamp-2"
           >
-            {data.title}
+            {data.title ?? "(Untitled)"}
           </Link>
 
           <div className="text-sm text-sliver mt-1">

@@ -61,7 +61,7 @@ export default async function ResumeCourseLayout({ params, children }: Props) {
 
   return (
     <DrawerContextProvider>
-      <div className="flex h-full">
+      <div className="lg:fixed lg:inset-0 lg:top-[65px] flex z-50">
         <CourseMenu course={course} enrolledCourse={enrolledCourse} />
         <div className="grow">{children}</div>
         <DrawerBackdrop />

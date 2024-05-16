@@ -137,8 +137,11 @@ export interface DashboardSummary {
   postCount: number;
   subscriberCount: number;
   userCount: number;
-  monthlyEnrollments: { [key: string]: number };
   enrolledByLevel: { [key: string]: number };
+}
+
+export interface MonthlyEnrollmentDto {
+  data: { [key: string]: number | undefined };
 }
 
 export interface CourseReview {

@@ -6,21 +6,6 @@ import { uppercaseFirstChar } from "@/lib/utils";
 import { Chart, ChartConfiguration, ChartData } from "chart.js";
 import { useEffect, useState } from "react";
 
-const _weekDays = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-
 function EnrolledPieChart({ summary }: { summary: DashboardSummary }) {
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
 

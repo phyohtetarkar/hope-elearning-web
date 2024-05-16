@@ -76,7 +76,7 @@ export default async function Blogs(props: Props) {
                 href={`/blogs/${b.slug}`}
                 className="font-semibold text-xl line-clamp-2"
               >
-                {b.title}
+                {b.title ?? "(Untitled)"}
               </Link>
               <span className="text-sm mt-1 text-sliver">
                 {formatRelativeTimestamp(b.publishedAt)}

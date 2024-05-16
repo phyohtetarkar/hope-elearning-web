@@ -18,7 +18,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "E-Learning",
+  title: "Hope E-Learning",
   description: "Start a new career in the software developing industry.",
 };
 
@@ -46,7 +46,7 @@ export default async function RootLayout({
       <head>
         <meta charSet="utf-8" />
       </head>
-      <body className="h-full m-0 overflow-hidden">
+      <body className="h-full m-0">
         <AuthenticationContextProvider user={user}>
           <Providers>{children}</Providers>
         </AuthenticationContextProvider>

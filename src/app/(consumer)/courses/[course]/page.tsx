@@ -14,8 +14,7 @@ const getCourse = cache(async (slug: string) => {
   const url = `${API_URL_LOCAL}/content/courses/${slug}`;
 
   const resp = await fetch(url, {
-    next: { revalidate: 10 },
-    cache: 'no-store',
+    cache: "no-store",
   });
 
   if (!resp.ok || resp.status === 204) {
@@ -126,17 +125,17 @@ export async function generateMetadata(
     if (course) {
       return {
         title: course.title,
-        description: course.excerpt,
+        description: course.category?.name,
         openGraph: {
           url: `${process.env.NEXT_PUBLIC_BASE_URL}/courses/${course.slug}`,
           title: course.title,
-          description: course.excerpt,
+          description: course.category?.name,
           images: [`${course.cover ?? ""}`, ...previousImages],
           type: "website",
         },
         twitter: {
           title: course.title,
-          description: course.excerpt,
+          description: course.category?.name,
           card: "summary_large_image",
           images: [`${course.cover ?? ""}`, ...previousImages],
         },

@@ -60,7 +60,7 @@ export default function Header({ user }: { user?: User | null }) {
                   fill
                   sizes="50vh"
                   priority
-                  className="rounded-full border object-cover"
+                  className="rounded-full border object-cover bg-gray-200"
                 />
               </div>
             </DropdownMenuTrigger>
@@ -152,7 +152,7 @@ export default function Header({ user }: { user?: User | null }) {
       isBordered
       isBlurred={false}
       maxWidth="full"
-      className="fixed top-0 z-0"
+      className="fixed top-0"
       classNames={{
         wrapper: "px-4",
       }}
@@ -211,7 +211,7 @@ export default function Header({ user }: { user?: User | null }) {
 
       {accountView()}
 
-      <NavbarMenu className="gap-4 px-4 backdrop-blur-xl bg-white/95">
+      <NavbarMenu className="gap-4 px-4 backdrop-blur-xl bg-white/95 z-50">
         <NavbarMenuItem>
           <Link
             href={"/browse"}

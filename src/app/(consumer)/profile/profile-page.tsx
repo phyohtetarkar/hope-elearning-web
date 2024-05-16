@@ -18,11 +18,11 @@ export default function ProfilePage() {
           <div className="flex-shrink-0">
             <Image
               src={user?.image ?? "/images/profile.png"}
-              width={60}
-              height={60}
+              width={0}
+              height={0}
               alt="User image"
               sizes="50vh"
-              className="rounded-full object-cover"
+              className="rounded-full object-cover size-[60px] border bg-gray-200"
             />
           </div>
           <div className="truncate">

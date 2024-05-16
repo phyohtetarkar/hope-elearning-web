@@ -183,6 +183,12 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
       const files = event.target.files;
       if (files && files.length > 0) {
         const file = files[0];
+        const fileSize = file.size / (1024 * 1024);
+
+        if (fileSize > 1) {
+          throw "File size too big (max 1MB).";
+        }
+
         setUploading(true);
         const form = new FormData();
         form.append("file", file);
@@ -396,6 +402,7 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
                     placeholder="Short description"
                     rows={4}
                     className="resize-none"
+                    maxLength={1000}
                     {...register("excerpt")}
                   />
 

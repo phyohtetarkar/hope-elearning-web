@@ -71,9 +71,10 @@ export default async function Users(props: Props) {
                     <Image
                       alt="Profile"
                       src={u.image}
-                      width={46}
-                      height={46}
-                      className="rounded-full border"
+                      width={0}
+                      height={0 }
+                      sizes="33vh"
+                      className="rounded-full border size-[46px] bg-gray-200"
                     />
                   ) : (
                     <ProfilePlaceholder className="border" />

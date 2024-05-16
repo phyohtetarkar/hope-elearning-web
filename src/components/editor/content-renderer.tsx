@@ -1,32 +1,33 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { mergeAttributes } from "@tiptap/core";
+import Blockquote from "@tiptap/extension-blockquote";
 import Bold from "@tiptap/extension-bold";
 import BulletList from "@tiptap/extension-bullet-list";
-import CodeBlock from "@tiptap/extension-code-block-lowlight";
+import Code from "@tiptap/extension-code";
 import Document from "@tiptap/extension-document";
 import Heading from "@tiptap/extension-heading";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
+import Image from "@tiptap/extension-image";
 import TiptapLink from "@tiptap/extension-link";
 import ListItem from "@tiptap/extension-list-item";
 import OrderedList from "@tiptap/extension-ordered-list";
 import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
 import Underline from "@tiptap/extension-underline";
-import { generateHTML } from "@tiptap/html";
-import hljs from "highlight.js";
-import { useEffect, useMemo, useRef } from "react";
+import { EditorContent, useEditor } from "@tiptap/react";
+import { CustomCodeBlock } from "./extensions/codeblock";
 import { CustomYoutube } from "./extensions/youtube";
 
 export function ContentRenderer({ lexical }: { lexical?: string }) {
-  const highlightedRef = useRef(false);
-  const articleRef = useRef<HTMLElement>(null);
-  const output = useMemo(() => {
-    if (!lexical) {
-      return "";
-    }
-
-    return generateHTML(JSON.parse(lexical), [
+  const editor = useEditor({
+    editorProps: {
+      editable: () => false,
+      attributes: {
+        class: "prose max-w-none prose-pre:rounded tiptap",
+      },
+    },
+    extensions: [
       Document,
       Heading.extend({
         renderHTML({ node, HTMLAttributes }) {
@@ -35,9 +36,7 @@ export function ContentRenderer({ lexical }: { lexical?: string }) {
           return [
             `h${level}`,
             mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
-              id: node.content.firstChild?.text
-                ?.replaceAll(/\s+/g, "-")
-                .toLowerCase(),
+              id: node.textContent.replaceAll(/\s+/g, "-").toLowerCase(),
             }),
             0,
           ];
@@ -45,12 +44,13 @@ export function ContentRenderer({ lexical }: { lexical?: string }) {
       }),
       Text,
       Paragraph,
-      CodeBlock.configure({
+      CustomCodeBlock,
+      Code.configure({
         HTMLAttributes: {
           class: cn(
-            "!rounded bg-gray-800 text-gray-200 border p-5 font-mono font-medium"
+            "rounded-lg bg-gray-100 text-danger-600 px-1.5 py-1 font-mono font-medium"
           ),
-          spellCheck: false,
+          spellcheck: "false",
         },
       }),
       Bold,
@@ -59,26 +59,25 @@ export function ContentRenderer({ lexical }: { lexical?: string }) {
       OrderedList,
       TiptapLink,
       Underline,
+      Blockquote,
+      Image.configure({
+        HTMLAttributes: {
+          class: cn("rounded-md border"),
+        },
+      }),
       HorizontalRule,
       CustomYoutube,
-    ]);
-  }, [lexical]);
+    ],
+    content: lexical ? JSON.parse(lexical) : undefined,
+  });
 
-  useEffect(() => {
-    if (highlightedRef.current || !output) {
-      return;
-    }
-    articleRef.current?.querySelectorAll("code").forEach((block) => {
-      hljs.highlightElement(block);
-    });
-    highlightedRef.current = true;
-  }, [output]);
+  return <EditorContent editor={editor} />;
 
-  return (
-    <article
-      ref={articleRef}
-      className="prose max-w-none prose-pre:rounded tiptap"
-      dangerouslySetInnerHTML={{ __html: output }}
-    ></article>
-  );
+  // return (
+  //   <article
+  //     ref={articleRef}
+  //     className="prose max-w-none prose-pre:rounded tiptap"
+  //     dangerouslySetInnerHTML={{ __html: output }}
+  //   ></article>
+  // );
 }

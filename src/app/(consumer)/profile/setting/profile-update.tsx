@@ -2,14 +2,16 @@
 
 import { Input } from "@/components/forms";
 import { Button } from "@/components/ui/button";
+import { ProfilePlaceholder } from "@/components/ui/profile-placeholder";
 import { useToast } from "@/components/ui/use-toast";
-import { updateUserProfile } from "@/lib/actions";
+import { updateUserProfile, uploadImage } from "@/lib/actions";
 import { User } from "@/lib/models";
 import { parseErrorResponse } from "@/lib/parse-error-response";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircle } from "lucide-react";
 
 import Image from "next/image";
+import { ChangeEvent, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -17,50 +19,97 @@ const schema = z.object({
   nickname: z.string().min(1, {
     message: "Please enter nickname",
   }),
-  headline: z.string(),
-  email: z.string(),
+  headline: z.string().optional(),
+  email: z.string().optional(),
   username: z.string(),
 });
 
 type ProfileUpdateForm = z.infer<typeof schema>;
 
-export default function ProfileUpdate({ user }: { user?: User | null }) {
+export default function ProfileUpdate({ user }: { user: User }) {
+  const [isUploading, setUploading] = useState(false);
   const { toast } = useToast();
+  const imageFileRef = useRef<HTMLInputElement>(null);
 
   const {
     register,
     formState: { errors, isSubmitting },
     handleSubmit,
+    setValue,
+    getValues,
   } = useForm<ProfileUpdateForm>({
     resolver: zodResolver(schema),
     defaultValues: {
-      nickname: user?.nickname,
-      headline: user?.headline,
-      email: user?.email,
-      username: user?.username,
+      nickname: user.nickname,
+      headline: user.headline,
+      email: user.email,
+      username: user.username,
     },
   });
+
+  const handleUpdate = async (values: ProfileUpdateForm) => {
+    try {
+      await updateUserProfile(values);
+      toast({
+        title: "Success",
+        description: "Profile updated",
+        variant: "success",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: parseErrorResponse(error),
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleCoverUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+    try {
+      const files = event.target.files;
+      if (files && files.length > 0) {
+        const file = files[0];
+        const fileSize = file.size / (1024 * 1024);
+
+        if (fileSize > 1) {
+          throw "File size too big (max 1MB).";
+        }
+
+        setUploading(true);
+        const form = new FormData();
+        form.append("file", file);
+        const url = await uploadImage(form);
+        await updateUserProfile({
+          nickname: user.nickname,
+          headline: user.headline,
+          email: user.email,
+          username: user.username,
+          image: url,
+        });
+
+        toast({
+          title: "Success",
+          description: "Profile image updated",
+          variant: "success",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: parseErrorResponse(error),
+        variant: "destructive",
+      });
+    } finally {
+      event.target.value = "";
+      setUploading(false);
+    }
+  };
 
   return (
     <form
       onSubmit={(evt) => {
         evt.preventDefault();
-        handleSubmit(async (values) => {
-          try {
-            await updateUserProfile(values);
-            toast({
-              title: "Success",
-              description: "Profile updated",
-              variant: "success",
-            });
-          } catch (error) {
-            toast({
-              title: "Error",
-              description: parseErrorResponse(error),
-              variant: "destructive",
-            });
-          }
-        })();
+        handleSubmit(handleUpdate)();
       }}
     >
       <div className="grid grid-cols-12 mb-5">
@@ -94,6 +143,7 @@ export default function ProfileUpdate({ user }: { user?: User | null }) {
             type="text"
             wrapperClass="mb-4"
             placeholder="Enter headline"
+            maxLength={500}
             {...register("headline")}
           />
           <Button type="submit" color="primary" disabled={isSubmitting}>
@@ -105,21 +155,51 @@ export default function ProfileUpdate({ user }: { user?: User | null }) {
         </div>
 
         <div className="lg:col-span-4 col-span-12 flex justify-center lg:order-2 mb-2">
-          <div>
-            <div className="relative overflow-hidden rounded-full">
+          <div
+            role="button"
+            className="relative overflow-hidden rounded-full size-[128px] mt-4 lg:mt-0"
+            onClick={() => {
+              if (isUploading) {
+                return;
+              }
+              imageFileRef.current?.click();
+            }}
+          >
+            {user.image ? (
               <Image
-                src={user?.image ?? "/images/profile.png"}
-                width={128}
-                height={128}
+                src={user.image}
+                width={0}
+                height={0}
                 alt="Profile"
                 sizes="33vw"
-                className="rounded-full object-cover"
+                className="rounded-full size-[128px] object-cover border bg-gray-200"
                 priority
               />
-              <div className="absolute bg-black bg-opacity-50 text-white text-center w-full bottom-0">
-                Edit
-              </div>
+            ) : (
+              <ProfilePlaceholder
+                className="size-[128px]"
+                iconClass="size-[70px]"
+              />
+            )}
+            <div className="absolute bg-black bg-opacity-50 text-white text-center inset-x-0 bottom-0 py-1">
+              Edit
             </div>
+            {isUploading && (
+              <>
+                <div className="absolute inset-0 bg-black/30"></div>
+                <div className="absolute top-[50%] right-[50%] translate-x-[50%] translate-y-[-50%]">
+                  <LoaderCircle className="size-6 animate-spin text-gray-200" />
+                </div>
+              </>
+            )}
+
+            <input
+              ref={imageFileRef}
+              type="file"
+              accept="image/x-png,image/jpeg"
+              className="hidden"
+              onChange={handleCoverUpload}
+            />
           </div>
         </div>
       </div>

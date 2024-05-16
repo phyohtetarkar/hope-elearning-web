@@ -125,9 +125,9 @@ export default function CourseMenu({
                           )}
                         >
                           {isCompleted(l) ? (
-                            <CheckCircle className="text-success size-5" />
+                            <CheckCircle className="text-success size-5 flex-shrink-0" />
                           ) : (
-                            <Circle className="text-default size-5" />
+                            <Circle className="text-default size-5 flex-shrink-0" />
                           )}
                           <Link
                             href={`/learn/${course.slug}/lessons/${l.slug}`}

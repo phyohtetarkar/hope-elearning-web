@@ -210,6 +210,12 @@ export default function PostEditPage({ post }: PostEditPageProps) {
       const files = event.target.files;
       if (files && files.length > 0) {
         const file = files[0];
+        const fileSize = file.size / (1024 * 1024);
+
+        if (fileSize > 1) {
+          throw "File size too big (max 1MB).";
+        }
+
         setUploading(true);
         const form = new FormData();
         form.append("file", file);
@@ -465,7 +471,7 @@ export default function PostEditPage({ post }: PostEditPageProps) {
                         const slug = setStringToSlug(value);
                         setValue("slug", slug);
                         if (post.status === "draft") {
-                          debouncedUpdate(post);
+                          debouncedUpdate(undefined);
                         }
                       }}
                     />
@@ -475,11 +481,13 @@ export default function PostEditPage({ post }: PostEditPageProps) {
             </div>
             <NovelEditor
               content={post.lexical ? JSON.parse(post.lexical) : undefined}
-              onDebouncedChange={(json, wordCount) => {
+              onChange={(editor) => {
+                const json = editor.getJSON();
+                const wordCount = editor.storage.characterCount.words();
                 setValue("lexical", JSON.stringify(json));
                 setValue("wordCount", wordCount);
                 if (post.status === "draft") {
-                  handleUpdate();
+                  debouncedUpdate(undefined);
                 }
               }}
             />
@@ -663,6 +671,7 @@ export default function PostEditPage({ post }: PostEditPageProps) {
               className="resize-none"
               placeholder="Short description"
               rows={3}
+              maxLength={1000}
               {...register("excerpt", {
                 onChange: (evt) => {
                   setStale(true);
