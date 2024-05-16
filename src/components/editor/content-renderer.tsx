@@ -62,7 +62,7 @@ export function ContentRenderer({ lexical }: { lexical?: string }) {
       Blockquote,
       Image.configure({
         HTMLAttributes: {
-          class: cn("rounded-md border"),
+          class: cn("rounded-md border mx-auto"),
         },
       }),
       HorizontalRule,

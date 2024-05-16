@@ -6,7 +6,8 @@ import Providers from "@/components/providers";
 import { API_URL_LOCAL } from "@/lib/constants";
 import { User } from "@/lib/models";
 import type { Metadata, Viewport } from "next";
-import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
+import { cookies, headers } from "next/headers";
 
 export const viewport: Viewport = {
   themeColor: {
@@ -40,6 +41,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const user = await getUser();
+
+  if (headers().get("revalidate") === "true") {
+    revalidatePath("/", "layout");
+    console.log("revalidated");
+  }
 
   return (
     <html lang="en" className="h-full">

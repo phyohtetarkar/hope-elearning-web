@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
 import * as jose from "jose";
+import { NextRequest, NextResponse } from "next/server";
 import { exchangeAccessToken } from "./lib/exchange-access-token";
 
 const isPrivatePath = (pathname: string) => {
@@ -43,14 +43,22 @@ export async function middleware(request: NextRequest) {
   } catch (error) {}
 
   if (!payload && privatePath) {
-    const resp = NextResponse.redirect(new URL("/login", request.url));
+    const resp = NextResponse.redirect(new URL("/login", request.url), {
+      headers: {
+        revalidate: "true",
+      },
+    });
     resp.cookies.delete("access_token");
     resp.cookies.delete("refresh_token");
     return resp;
   }
 
   if (!payload) {
-    const resp = NextResponse.next();
+    const resp = NextResponse.next({
+      headers: {
+        revalidate: "true",
+      },
+    });
     resp.cookies.delete("access_token");
     resp.cookies.delete("refresh_token");
     return resp;
@@ -77,14 +85,22 @@ export async function middleware(request: NextRequest) {
     const refreshResult = await exchangeAccessToken(rt);
 
     if (!refreshResult && privatePath) {
-      const resp = NextResponse.redirect(new URL("/login", request.url));
+      const resp = NextResponse.redirect(new URL("/login", request.url), {
+        headers: {
+          revalidate: "true",
+        },
+      });
       resp.cookies.delete("access_token");
       resp.cookies.delete("refresh_token");
       return resp;
     }
 
     if (!refreshResult) {
-      const resp = NextResponse.next();
+      const resp = NextResponse.next({
+        headers: {
+          revalidate: "true",
+        },
+      });
       resp.cookies.delete("access_token");
       resp.cookies.delete("refresh_token");
       return resp;

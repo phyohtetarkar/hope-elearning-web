@@ -30,6 +30,11 @@ export interface User {
   expiredAt: number;
 }
 
+export interface UserMeta {
+  enrollmentCount: number;
+  bookmarkCount: number;
+}
+
 export interface Tag {
   id: number;
   slug: string;

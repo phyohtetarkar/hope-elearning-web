@@ -14,7 +14,7 @@ const getTopCourses = async () => {
   const url = `${API_URL_LOCAL}/content/courses${query}`;
 
   const resp = await fetch(url, {
-    next: { revalidate: 10 },
+    cache: "no-store",
   });
 
   return resp
@@ -29,7 +29,7 @@ const getRecentPosts = async () => {
   const url = `${API_URL_LOCAL}/content/posts${query}`;
 
   const resp = await fetch(url, {
-    next: { revalidate: 10 },
+    cache: "no-store",
   });
 
   return resp
