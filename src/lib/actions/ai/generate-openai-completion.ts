@@ -118,7 +118,7 @@ export async function generateOpenaiCompletion(values: AiPromptRequest) {
 
       stream.done();
     } catch (error: any) {
-      stream.error(error.message);
+      stream.error(error?.message);
     }
   })();
 
