@@ -116,7 +116,7 @@ export default async function LessonDetail({ params }: Props) {
   const enrolledCourse = await getEnrolledCourse(lesson.courseId);
 
   return (
-    <div className="container max-w-3xl py-6">
+    <div className="container max-w-3xl 2xl:max-w-4xl py-6">
       <h2 className="mb-1">{lesson.course?.title}</h2>
       <Breadcrumb className="mb-4">
         <BreadcrumbList>

@@ -17,7 +17,7 @@ import Text from "@tiptap/extension-text";
 import Underline from "@tiptap/extension-underline";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { CustomCodeBlock } from "./extensions/codeblock";
-import { CustomYoutube } from "./extensions/youtube";
+import { Youtube } from "novel/extensions";
 
 export function ContentRenderer({ lexical }: { lexical?: string }) {
   const editor = useEditor({
@@ -66,7 +66,12 @@ export function ContentRenderer({ lexical }: { lexical?: string }) {
         },
       }),
       HorizontalRule,
-      CustomYoutube,
+      Youtube.configure({
+        HTMLAttributes: {
+          class: cn("rounded border border-muted"),
+        },
+        inline: false,
+      }),
     ],
     content: lexical ? JSON.parse(lexical) : undefined,
   });

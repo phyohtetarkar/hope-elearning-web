@@ -5,15 +5,16 @@ import {
   Heading1,
   Heading2,
   Heading3,
+  ImageIcon,
   List,
   ListOrdered,
-  MessageSquarePlus,
   Text,
   TextQuote,
 } from "lucide-react";
 import { createSuggestionItems } from "novel/extensions";
 //   import { startImageUpload } from "novel/plugins";
 import { Command, renderItems } from "novel/extensions";
+import { YoutubeIcon } from "../icons";
 
 export const suggestionItems = createSuggestionItems([
   {
@@ -125,6 +126,55 @@ export const suggestionItems = createSuggestionItems([
         .deleteRange(range)
         .toggleCodeBlock({ language: "plaintext" })
         .run(),
+  },
+  // {
+  //   title: "Image",
+  //   description: "Upload an image from your computer.",
+  //   searchTerms: ["photo", "picture", "media"],
+  //   icon: <ImageIcon size={18} />,
+  //   command: ({ editor, range }) => {
+  //     editor.chain().focus().deleteRange(range).run();
+  //     // upload image
+  //     const input = document.createElement("input");
+  //     input.type = "file";
+  //     input.accept = "image/*";
+  //     input.onchange = async () => {
+  //       if (input.files?.length) {
+  //         const file = input.files[0];
+  //         const pos = editor.view.state.selection.from;
+  //         uploadFn(file, editor.view, pos);
+  //       }
+  //     };
+  //     input.click();
+  //   },
+  // },
+  {
+    title: "Youtube",
+    description: "Embed a Youtube video.",
+    searchTerms: ["video", "youtube", "embed"],
+    icon: <YoutubeIcon className="size-[18px]" />,
+    command: ({ editor, range }) => {
+      const videoLink = prompt("Please enter Youtube Video Link");
+      //From https://regexr.com/3dj5t
+      const ytregex = new RegExp(
+        /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/
+      );
+
+      if (videoLink && ytregex.test(videoLink)) {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .setYoutubeVideo({
+            src: videoLink,
+          })
+          .run();
+      } else {
+        if (videoLink !== null) {
+          alert("Please enter a correct Youtube Video Link");
+        }
+      }
+    },
   },
   {
     title: "Divider",

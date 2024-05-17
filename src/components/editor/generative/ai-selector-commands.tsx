@@ -1,4 +1,9 @@
-import React from "react";
+import {
+  CommandGroup,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+} from "@/components/ui/command";
 import {
   ArrowDownWideNarrow,
   CheckCheck,
@@ -7,8 +12,7 @@ import {
   WrapText,
 } from "lucide-react";
 import { useEditor } from "novel";
-import { getPrevText } from "novel/extensions";
-import { CommandGroup, CommandItem, CommandList, CommandSeparator } from "@/components/ui/command";
+import { getPrevText } from "novel/utils";
 
 const options = [
   {
@@ -47,9 +51,10 @@ const AISelectorCommands = ({ onSelect }: AISelectorCommandsProps) => {
         {options.map((option) => (
           <CommandItem
             onSelect={(value) => {
-              const slice = editor!.state.selection.content();
-              const text = editor!.storage.markdown.serializer.serialize(
-                slice.content,
+              if (!editor) return;
+              const slice = editor.state.selection.content();
+              const text = editor.storage.markdown.serializer.serialize(
+                slice.content
               );
               onSelect(text, value);
             }}
@@ -66,12 +71,14 @@ const AISelectorCommands = ({ onSelect }: AISelectorCommandsProps) => {
       <CommandGroup heading="Use AI to do more">
         <CommandItem
           onSelect={() => {
-            const text = getPrevText(editor!, { chars: 5000 });
+            if (!editor) return;
+            const pos = editor.state.selection.from;
+
+            const text = getPrevText(editor, pos);
             onSelect(text, "continue");
           }}
           value="continue"
           className="gap-2 px-4"
-          
         >
           <StepForward className="h-4 w-4 text-purple-500" />
           Continue writing

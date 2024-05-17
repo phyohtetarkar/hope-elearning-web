@@ -224,7 +224,7 @@ export default async function BlogPost({ params }: Props) {
   };
 
   return (
-    <div className="container max-w-3xl py-5 mb-10">
+    <div className="container max-w-3xl 2xl:max-w-4xl py-5 mb-10">
       <h2 className="text-center">{post.title ?? "(Untitled)"}</h2>
       <div className="flex items-center justify-center mb-7 mt-2">
         <div className="text-sliver">

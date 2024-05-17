@@ -2,29 +2,30 @@ import { cn } from "@/lib/utils";
 import { CharacterCount } from "@tiptap/extension-character-count";
 import {
   AIHighlight,
+  GlobalDragHandle,
   Placeholder,
   StarterKit,
   TaskItem,
   TaskList,
   TiptapImage,
   TiptapLink,
+  Youtube,
 } from "novel/extensions";
 import { UploadImagesPlugin } from "novel/plugins";
 import { CustomCodeBlock } from "./extensions/codeblock";
-import { CustomYoutube } from "./extensions/youtube";
 
 // You can overwrite the placeholder with your own configuration
 const aiHighlight = AIHighlight;
 
 const placeholder = Placeholder.configure({});
 
-// const tiptapLink = TiptapLink.configure({
-//   HTMLAttributes: {
-//     class: cn(
-//       "text-muted-foreground underline underline-offset-[3px] hover:text-primary transition-colors cursor-pointer"
-//     ),
-//   },
-// });
+const tiptapLink = TiptapLink.configure({
+  HTMLAttributes: {
+    class: cn(
+      "text-muted-foreground underline underline-offset-[3px] hover:text-anchor transition-colors cursor-pointer"
+    ),
+  },
+});
 
 const taskList = TaskList.configure({
   HTMLAttributes: {
@@ -49,15 +50,28 @@ const tiptapImage = TiptapImage.extend({
   addProseMirrorPlugins() {
     return [
       UploadImagesPlugin({
-        imageClass: cn("opacity-40 rounded-md border"),
+        imageClass: cn("opacity-40 rounded border"),
       }),
     ];
   },
 }).configure({
   allowBase64: false,
   HTMLAttributes: {
-    class: cn("rounded-md border"),
+    class: cn("rounded border"),
   },
+});
+
+// const updatedImage = UpdatedImage.configure({
+//   HTMLAttributes: {
+//     class: cn("rounded border"),
+//   },
+// });
+
+const youtube = Youtube.configure({
+  HTMLAttributes: {
+    class: cn("rounded border border-muted"),
+  },
+  inline: false,
 });
 
 const starterKit = StarterKit.configure({
@@ -105,16 +119,18 @@ const starterKit = StarterKit.configure({
 export const defaultExtensions = [
   starterKit,
   placeholder,
-  TiptapLink,
+  tiptapLink,
   tiptapImage,
   taskList,
   taskItem,
   aiHighlight,
   CustomCodeBlock,
-  CustomYoutube.configure({
-    nocookie: true,
-    width: 0,
-    height: 0,
-  }),
+  // CustomYoutube.configure({
+  //   nocookie: true,
+  //   width: 0,
+  //   height: 0,
+  // }),
+  youtube,
   CharacterCount,
+  GlobalDragHandle,
 ];

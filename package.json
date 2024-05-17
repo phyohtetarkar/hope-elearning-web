@@ -56,7 +56,7 @@
     "lucide-react": "^0.364.0",
     "next": "^14.2.2",
     "nextjs-progressbar": "^0.0.16",
-    "novel": "^0.3.1",
+    "novel": "^0.4.1",
     "react": "^18.2.0",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18.2.0",
@@ -67,8 +67,8 @@
     "swr": "^2.2.5",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
-    "ts-pattern": "^5.1.0",
-    "zod": "^3.22.4"
+    "ts-pattern": "^5.1.1",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.2",

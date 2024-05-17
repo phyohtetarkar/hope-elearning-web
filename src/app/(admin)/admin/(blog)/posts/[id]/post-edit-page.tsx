@@ -398,7 +398,7 @@ export default function PostEditPage({ post }: PostEditPageProps) {
           </TooltipProvider>
         </nav>
         <div className="grow fixed inset-0 overflow-y-auto mt-[65px]">
-          <div className="container max-w-3xl mt-7 mb-10">
+          <div className="container max-w-3xl 2xl:max-w-4xl mt-7 mb-10">
             <Controller
               control={control}
               name="cover"
