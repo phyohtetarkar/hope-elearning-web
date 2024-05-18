@@ -20,7 +20,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: "Hope E-Learning",
-  description: "Start a new career in the software developing industry.",
+  description: process.env.NEXT_PUBLIC_APP_DESC,
 };
 
 const getUser = async () => {

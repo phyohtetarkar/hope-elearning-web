@@ -1,11 +1,5 @@
-import { ContentRenderer } from "@/components/editor";
 import { API_URL_LOCAL } from "@/lib/constants";
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "About Us",
-  description: process.env.NEXT_PUBLIC_APP_DESC,
-};
+import AboutUsPage from "./about-us-page";
 
 const getAboutUs = async () => {
   const url = `${API_URL_LOCAL}/content/site-settings/about-us`;
@@ -21,11 +15,5 @@ const getAboutUs = async () => {
 
 export default async function AboutUs() {
   const aboutUs = await getAboutUs();
-
-  return (
-    <div className="container max-w-3xl 2xl:max-w-4xl py-5 mb-10">
-      <h1 className="mb-6">About Us</h1>
-      <ContentRenderer lexical={aboutUs} />
-    </div>
-  );
+  return <AboutUsPage value={aboutUs} />;
 }

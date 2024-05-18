@@ -1,5 +1,7 @@
 import { cn } from "@/lib/utils";
+import { mergeAttributes } from "@tiptap/core";
 import { CharacterCount } from "@tiptap/extension-character-count";
+import Heading from "@tiptap/extension-heading";
 import {
   AIHighlight,
   GlobalDragHandle,
@@ -18,6 +20,24 @@ import { CustomCodeBlock } from "./extensions/codeblock";
 const aiHighlight = AIHighlight;
 
 const placeholder = Placeholder.configure({});
+
+const heading = Heading.extend({
+  renderHTML({ node, HTMLAttributes }) {
+    const hasLevel = this.options.levels.includes(node.attrs.level);
+    const level = hasLevel ? node.attrs.level : this.options.levels[0];
+
+    if (!this.editor?.isEditable) {
+      return [
+        `h${level}`,
+        mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
+          id: node.textContent.replaceAll(/\s+/g, "-").toLowerCase(),
+        }),
+        0,
+      ];
+    }
+    return [`h${level}`, 0];
+  },
+});
 
 const tiptapLink = TiptapLink.configure({
   HTMLAttributes: {
@@ -57,7 +77,7 @@ const tiptapImage = TiptapImage.extend({
 }).configure({
   allowBase64: false,
   HTMLAttributes: {
-    class: cn("rounded border"),
+    class: cn("rounded border mx-auto"),
   },
 });
 
@@ -114,6 +134,7 @@ const starterKit = StarterKit.configure({
     width: 4,
   },
   gapcursor: false,
+  heading: false,
 });
 
 export const defaultExtensions = [
@@ -121,6 +142,7 @@ export const defaultExtensions = [
   placeholder,
   tiptapLink,
   tiptapImage,
+  heading,
   taskList,
   taskItem,
   aiHighlight,

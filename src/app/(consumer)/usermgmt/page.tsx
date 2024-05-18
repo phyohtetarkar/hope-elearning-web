@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import VerifyEmailPage from "./verify-email-page";
+import ResetPasswordPage from "./reset-password-page";
 
 export default function UserManagement({
   searchParams
@@ -21,9 +22,9 @@ export default function UserManagement({
     redirect("/");
   }
 
-//   if (mode === "resetPassword") {
-//     return <ResetPasswordPage oobCode={oobCode} />;
-//   }
+  if (mode === "resetPassword") {
+    return <ResetPasswordPage oobCode={oobCode} />;
+  }
 
   return <VerifyEmailPage oobCode={oobCode} />;
 }

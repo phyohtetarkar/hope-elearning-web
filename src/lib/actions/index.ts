@@ -49,4 +49,6 @@ export * from "./enrollment/update-resume-lesson";
 export * from "./ai/generate-gemini-completion";
 export * from "./ai/generate-openai-completion";
 
+export * from "./setting/update-site-setting";
+
 export * from "./upload-image";

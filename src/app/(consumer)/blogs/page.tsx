@@ -9,12 +9,18 @@ import {
   wordPerMinute,
 } from "@/lib/utils";
 import { Dot } from "lucide-react";
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
 interface Props {
   searchParams: { [key: string]: string | undefined };
 }
+
+export const metadata: Metadata = {
+  title: "Blog",
+  description: process.env.NEXT_PUBLIC_APP_DESC,
+};
 
 const getPosts = async ({ searchParams }: Props) => {
   const query = buildQueryParams({ page: searchParams["page"], limit: 10 });
@@ -59,7 +65,7 @@ export default async function Blogs(props: Props) {
       return (
         <div key={b.id}>
           <div className="flex flex-col lg:flex-row gap-4">
-            <div>
+            <Link href={`/blogs/${b.slug}`}>
               <div className="aspect-w-16 aspect-h-9 w-full lg:w-[200px]">
                 <Image
                   src={b.cover ?? `/images/placeholder.jpeg`}
@@ -70,7 +76,7 @@ export default async function Blogs(props: Props) {
                   className="object-cover border rounded-md"
                 />
               </div>
-            </div>
+            </Link>
             <div className="flex flex-col">
               <Link
                 href={`/blogs/${b.slug}`}

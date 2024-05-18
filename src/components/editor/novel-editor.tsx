@@ -37,7 +37,7 @@ interface NovelEditorProps {
   onDebouncedChange?: (content: JSONContent, wordCount: number) => void;
 }
 
-export default function NovelEditor({
+function NovelEditor({
   content,
   onChange,
   onDebouncedChange,
@@ -161,3 +161,5 @@ export default function NovelEditor({
     </EditorRoot>
   );
 }
+
+export default NovelEditor;

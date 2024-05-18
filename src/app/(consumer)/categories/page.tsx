@@ -4,8 +4,14 @@ import { API_URL } from "@/lib/constants";
 import { Category, Page } from "@/lib/models";
 import { buildQueryParams, pluralize } from "@/lib/utils";
 import { validateResponse } from "@/lib/validate-response";
+import { Metadata } from "next";
 import { cookies } from "next/headers";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Categories",
+  description: process.env.NEXT_PUBLIC_APP_DESC,
+};
 
 const getCategories = async () => {
   const query = buildQueryParams({

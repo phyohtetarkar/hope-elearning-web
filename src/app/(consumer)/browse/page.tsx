@@ -5,10 +5,16 @@ import { API_URL_LOCAL } from "@/lib/constants";
 import { Course, Page } from "@/lib/models";
 import { buildQueryParams } from "@/lib/utils";
 import BrowseBreadcrumb from "./browse-breadcrumb";
+import { Metadata } from "next";
 
 interface Props {
   searchParams: { [key: string]: string | undefined };
 }
+
+export const metadata: Metadata = {
+  title: "Browse Courses",
+  description: process.env.NEXT_PUBLIC_APP_DESC,
+};
 
 const getCourses = async (props: Props) => {
   const query = buildQueryParams({ ...props.searchParams, limit: 15 });
