@@ -3,6 +3,7 @@
 import { AuthenticationContext } from "@/components/authentication-context-porvider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { ProfilePlaceholder } from "@/components/ui/profile-placeholder";
 import { Separator } from "@/components/ui/separator";
 import { UserMeta } from "@/lib/models";
 import { formatNumber } from "@/lib/utils";
@@ -18,14 +19,14 @@ export default function ProfilePage({ meta }: { meta?: UserMeta }) {
       <CardContent className="p-4">
         <div className="flex gap-3 items-center">
           <div className="flex-shrink-0">
-            <Image
-              src={user?.image ?? "/images/profile.png"}
+            {user?.image ? <Image
+              src={user?.image}
               width={0}
               height={0}
               alt="User image"
               sizes="50vh"
               className="rounded-full object-cover size-[60px] border bg-gray-200"
-            />
+            /> : <ProfilePlaceholder className="size-[60px]" iconClass="size-8" />}
           </div>
           <div className="truncate">
             <h6 className="mb-0">{user?.nickname}</h6>

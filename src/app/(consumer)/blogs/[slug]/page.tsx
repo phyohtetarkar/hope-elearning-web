@@ -5,6 +5,7 @@ import { ProfilePlaceholder } from "@/components/ui/profile-placeholder";
 import { API_URL_LOCAL } from "@/lib/constants";
 import { Post, User } from "@/lib/models";
 import {
+  cn,
   formatAbbreviate,
   formatRelativeTimestamp,
   wordPerMinute,
@@ -105,22 +106,17 @@ export default async function BlogPost({ params }: Props) {
 
     return (
       <div className="flex items-center gap-3 mb-4 -ml-[3px]">
-        <div
-          className="relative h-[54px]"
-          style={{
-            minWidth: 76,
-          }}
-        >
-          {post.authors?.map((a, i, ary) => {
-            const left = i * 27;
-
+        <div className="flex flex-shrink-0">
+          {post.authors?.map((a, i) => {
             if (!a.image) {
               return (
                 <ProfilePlaceholder
                   key={i}
-                  className="absolute size-[54px] border-3 border-white"
+                  className={cn(
+                    "size-[54px] border-3 border-white",
+                    i > 0 ? "ml-[-27px]" : undefined
+                  )}
                   style={{
-                    left: left,
                     zIndex: authorCount - i,
                   }}
                 />
@@ -131,14 +127,16 @@ export default async function BlogPost({ params }: Props) {
               <Image
                 key={i}
                 src={a.image}
-                className="absolute size-[54px] object-cover rounded-full border-3 border-white bg-gray-200"
+                className={cn(
+                  "size-[54px] object-cover rounded-full border-3 border-white bg-gray-200",
+                  i > 0 ? "ml-[-27px]" : undefined
+                )}
                 alt="Cover"
                 sizes="30vh"
                 width={0}
                 height={0}
                 priority
                 style={{
-                  left: left,
                   zIndex: authorCount - i,
                 }}
               />

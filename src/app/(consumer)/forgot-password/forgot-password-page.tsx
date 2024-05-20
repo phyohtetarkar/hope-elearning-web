@@ -3,13 +3,15 @@
 import { Input } from "@/components/forms";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
 import { firebaseAuth } from "@/lib/firebase.config";
 import { parseErrorResponse } from "@/lib/parse-error-response";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { LoaderCircle } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -88,6 +90,16 @@ function ForgotPasswordPage() {
               </Button>
             </form>
           </CardContent>
+          <Separator />
+          <CardFooter className="justify-center py-3.5">
+            Already have an account?
+            <Link
+              href="/login"
+              className="ms-1 font-medium text-anchor hover:text-opacity-80"
+            >
+              Login
+            </Link>
+          </CardFooter>
         </Card>
       </div>
     </div>

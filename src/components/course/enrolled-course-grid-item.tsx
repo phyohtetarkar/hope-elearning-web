@@ -1,28 +1,116 @@
+"use client";
+
+import { removeEnrollment } from "@/lib/actions";
 import { EnrolledCourse } from "@/lib/models";
+import { parseErrorResponse } from "@/lib/parse-error-response";
 import { uppercaseFirstChar } from "@/lib/utils";
+import { LoaderCircle, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../ui/alert-dialog";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Progress } from "../ui/progress";
 import { Separator } from "../ui/separator";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
+import { useToast } from "../ui/use-toast";
 
 export function EnrolledCourseGridItem({ data }: { data: EnrolledCourse }) {
+  const [isLoading, setLoading] = useState(false);
+  const [isAlertOpen, setAlertOpen] = useState(false);
+  const { toast } = useToast();
+
+  const handleRemove = async () => {
+    try {
+      setLoading(true);
+      await removeEnrollment(data.course.id, "/profile/learnings");
+      toast({
+        title: "Success",
+        description: "Removed enrollment",
+        variant: "success",
+      });
+      setAlertOpen(false);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: parseErrorResponse(error),
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Card className="overflow-hidden shadow-none flex flex-col">
       <CardContent className="p-0 flex flex-col grow">
-        <Link href={`/courses/${data.course.slug}`}>
-          <div className="aspect-w-16 aspect-h-9">
-            <Image
-              src={data.course.cover ?? "/images/placeholder.jpeg"}
-              className="bg-primary object-cover"
-              alt=""
-              priority
-              fill
-              sizes="33vh"
-            />
-          </div>
-        </Link>
+        <div className="relative">
+          <Link href={`/courses/${data.course.slug}`}>
+            <div className="aspect-w-16 aspect-h-9">
+              <Image
+                src={data.course.cover ?? "/images/placeholder.jpeg"}
+                className="bg-primary object-cover"
+                alt=""
+                priority
+                fill
+                sizes="33vh"
+              />
+            </div>
+          </Link>
+
+          <TooltipProvider>
+            <AlertDialog open={isAlertOpen} onOpenChange={setAlertOpen}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    disabled={isLoading}
+                    variant="destructive"
+                    size="icon"
+                    onClick={() => setAlertOpen(true)}
+                    className="shadow-lg absolute top-2 right-2"
+                  >
+                    <Trash2 className="size-5" />
+                  </Button>
+                </TooltipTrigger>
+
+                <TooltipContent>Remove enrollment</TooltipContent>
+              </Tooltip>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Confirm remove</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Are you sure to unenroll: &ldquo;{data.course.title}&ldquo;?
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel disabled={isLoading}>
+                    Cancel
+                  </AlertDialogCancel>
+                  <Button onClick={handleRemove} disabled={isLoading}>
+                    {isLoading && (
+                      <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                    )}
+                    Proceed
+                  </Button>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </TooltipProvider>
+        </div>
         <div className="flex flex-col grow p-4">
           <Link
             href={`/courses/${data.course.slug}`}

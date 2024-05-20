@@ -81,6 +81,7 @@ export default function SideMenu() {
             href="/admin"
             startContent={<Home size={iconSize} />}
             color="primary"
+            className={cn(!isAdminOrOwner ? "hidden" : undefined)}
           >
             Dashboard
           </ListboxItem>

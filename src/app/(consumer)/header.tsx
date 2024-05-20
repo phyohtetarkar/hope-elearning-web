@@ -46,6 +46,7 @@ export default function Header({ user }: { user?: User | null }) {
 
   const accountView = () => {
     if (user) {
+      const isAdminOrOwner = user.role === "owner" || user.role === "admin";
       return (
         <NavbarContent as="div" justify="end">
           <NavbarItem>
@@ -73,7 +74,9 @@ export default function Header({ user }: { user?: User | null }) {
               {user.role !== "user" && (
                 <>
                   <DropdownMenuItem asChild>
-                    <Link href="/admin">Dashboard</Link>
+                    <Link href={isAdminOrOwner ? "/admin" : "/admin/courses"}>
+                      Dashboard
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                 </>

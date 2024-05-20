@@ -37,7 +37,7 @@ export default function VerifyEmailPage() {
   }, [resend]);
 
   return (
-    <div className="container py-3">
+    <div className="container py-5">
       <Card className="shadow-none">
         <CardContent className="px-6 py-4">
           <div className="flex flex-col items-center">
@@ -46,15 +46,17 @@ export default function VerifyEmailPage() {
               Check your email &amp; click the link to verify your email.
             </p>
 
-            <div className="aspect-1 relative w-full my-6 max-w-[350px]">
-              <Image
-                src={"/images/undraw_mailbox.png"}
-                alt=""
-                fill
-                sizes="100vh"
-                priority
-                className="object-contain"
-              />
+            <div className="max-w-[350px] w-full">
+              <div className="aspect-w-1 aspect-h-1">
+                <Image
+                  src={"/images/undraw_mailbox.png"}
+                  alt=""
+                  fill
+                  sizes="100vh"
+                  priority
+                  className="object-contain"
+                />
+              </div>
             </div>
 
             <div className="mb-2">

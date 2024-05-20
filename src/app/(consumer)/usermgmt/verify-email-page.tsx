@@ -9,11 +9,13 @@ import { parseErrorResponse } from "@/lib/parse-error-response";
 import { applyActionCode } from "firebase/auth";
 import { Check } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 export default function VerifyEmailPage({ oobCode }: { oobCode: string }) {
   const [verified, setVerified] = useState(false);
   const [error, setError] = useState<string>();
+  const router = useRouter();
 
   const initRef = useRef(false);
 
@@ -26,10 +28,11 @@ export default function VerifyEmailPage({ oobCode }: { oobCode: string }) {
       const refreshResponse = await fetch("/api/auth/refresh", {
         method: "POST",
       });
+      router.refresh();
     } catch (error) {
       setError(parseErrorResponse(error));
     }
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     if (initRef.current) {
@@ -59,7 +62,7 @@ export default function VerifyEmailPage({ oobCode }: { oobCode: string }) {
         <h3 className="mb-10 text-center">Your email has been verified</h3>
 
         <div className="flex flex-wrap items-center gap-3">
-          <Button className="flex-1" asChild >
+          <Button className="flex-1" asChild>
             <Link href="/courses">Browse courses</Link>
           </Button>
           <Button className="flex-1" variant="outline" asChild>

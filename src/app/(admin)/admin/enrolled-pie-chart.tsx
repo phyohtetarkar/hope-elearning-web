@@ -2,9 +2,9 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { DashboardSummary } from "@/lib/models";
-import { uppercaseFirstChar } from "@/lib/utils";
+import { formatAbbreviate, uppercaseFirstChar } from "@/lib/utils";
 import { Chart, ChartConfiguration, ChartData } from "chart.js";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 function EnrolledPieChart({ summary }: { summary: DashboardSummary }) {
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
@@ -63,6 +63,13 @@ function EnrolledPieChart({ summary }: { summary: DashboardSummary }) {
     };
   }, [canvas, summary]);
 
+  const total = useMemo(() => {
+    return Object.values(summary.enrolledByLevel).reduce(
+      (pv, cv) => pv + cv,
+      0
+    );
+  }, [summary]);
+
   return (
     <Card className="shadow-none h-full">
       <CardHeader className="h-16 px-4 justify-center">
@@ -71,12 +78,13 @@ function EnrolledPieChart({ summary }: { summary: DashboardSummary }) {
       <Separator />
       <CardContent className="py-4 px-0 justify-center items-center h-full relative">
         <canvas ref={setCanvas} />
-        {Object.values(summary.enrolledByLevel).reduce(
-          (pv, cv) => pv + cv,
-          0
-        ) <= 0 && (
+        {total <= 0 ? (
           <div className="text-sliver absolute left-[50%] top-[35%] translate-x-[-50%]">
             No chart data
+          </div>
+        ) : (
+          <div className="text-sliver absolute left-[50%] top-[35%] translate-x-[-50%]">
+            {formatAbbreviate(total)} Enrolled
           </div>
         )}
       </CardContent>

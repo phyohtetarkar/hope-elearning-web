@@ -3,8 +3,8 @@
 import { AuthenticationContext } from "@/components/authentication-context-porvider";
 import { Alert } from "@/components/ui/alert";
 import { DrawerBackdrop, DrawerContextProvider } from "@/components/ui/drawer";
-import { usePathname, useRouter } from "next/navigation";
-import { ReactNode, useContext, useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { ReactNode, useContext } from "react";
 import Header from "./header";
 import SideMenu from "./side-menu";
 
@@ -16,13 +16,6 @@ export default function AdminLayoutWrapper({
   const { user } = useContext(AuthenticationContext);
 
   const pathname = usePathname();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (user === null || user?.role === "user") {
-      router.replace("/");
-    }
-  }, [user, router]);
 
   const render = (node: ReactNode) => {
     return (

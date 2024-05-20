@@ -41,7 +41,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -68,7 +68,6 @@ export default function CourseReviewsPage({
   //   2: 10,
   //   1: 0,
   // };
-  const { user } = useContext(AuthenticationContext);
   const [openReviewEdit, setOpenReviewEdit] = useState(false);
 
   const { toast } = useToast();
@@ -97,6 +96,7 @@ export default function CourseReviewsPage({
         description: "Your review submitted",
         variant: "success",
       });
+      setOpenReviewEdit(false);
     } catch (error) {
       toast({
         title: "Error",

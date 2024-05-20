@@ -30,7 +30,7 @@ export function BookmarkCourseGridItem({ data }: { data: Course }) {
       await removeBookmark(data.id, "/profile/bookmarks");
       toast({
         title: "Success",
-        description: "Removed from bookmark",
+        description: "Removed bookmark",
         variant: "success",
       });
     } catch (error) {
