@@ -92,7 +92,7 @@ type CourseForm = z.infer<typeof schema>;
 
 export default function CourseEditPage({ course }: CourseEditPageProps) {
   const { user } = useContext(AuthenticationContext);
-  const [isStale, setStale] = useState(false);
+  // const [isStale, setStale] = useState(false);
   const [isSaving, setSaving] = useState(false);
   const [isDeleting, setDeleting] = useState(false);
   const [isUploading, setUploading] = useState(false);
@@ -115,7 +115,8 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
     setValue,
   } = useForm<CourseForm>({
     resolver: zodResolver(schema),
-    defaultValues: {
+    defaultValues: {},
+    values: {
       id: course.id,
       cover: course.cover,
       title: course.title,
@@ -124,7 +125,7 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
       description: course.description,
       level: course.level,
       access: course.access,
-      category: course.category,
+      category: course.category!,
       authors: course.authors ?? [],
     },
   });
@@ -136,7 +137,6 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
   const handleUpdate = async (values: CourseForm) => {
     try {
       setSaving(true);
-      setStale(false);
       const { slug, authors, category, ...body } = values;
       const audit = auditRef.current;
       await updateCourse({
@@ -152,7 +152,6 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
         variant: "success",
       });
     } catch (error) {
-      setStale(true);
       toast({
         title: "Error",
         description: parseErrorResponse(error),
@@ -193,6 +192,18 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
         const form = new FormData();
         form.append("file", file);
         const url = await uploadImage(form);
+        if (course.status === "draft") {
+          const audit = auditRef.current;
+          const { id, title, slug, category } = course;
+          await updateCourse({
+            id: id,
+            title: title,
+            slug: slug,
+            cover: url,
+            categoryId: category?.id,
+            updatedAt: audit?.updatedAt,
+          });
+        }
         setValue("cover", url);
       }
     } catch (error) {
@@ -304,7 +315,11 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
 
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button disabled={isSubmitting || isSaving} variant="destructive" size="icon">
+            <Button
+              disabled={isSubmitting || isSaving}
+              variant="destructive"
+              size="icon"
+            >
               <Trash2 className="size-5" />
             </Button>
           </AlertDialogTrigger>
@@ -456,7 +471,6 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
                                 setValue("authors", [...newValue], {
                                   shouldValidate: true,
                                 });
-                                newValue.length > 0 && setStale(true);
                               } else {
                                 setValue("authors", [], {
                                   shouldValidate: true,

@@ -63,6 +63,7 @@ import {
   PanelRight,
   Trash2,
   X,
+  XIcon,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -127,6 +128,18 @@ export default function PostEditPage({ post }: PostEditPageProps) {
   } = useForm<PostUpdateForm>({
     resolver: zodResolver(schema),
     defaultValues: {
+      id: post.id,
+      cover: post.cover,
+      title: post.title,
+      slug: post.slug,
+      excerpt: post.excerpt,
+      visibility: post.visibility,
+      lexical: post.lexical,
+      wordCount: post.wordCount,
+      authors: post.authors ?? [],
+      tags: post.tags ?? [],
+    },
+    values: {
       id: post.id,
       cover: post.cover,
       title: post.title,
@@ -580,32 +593,61 @@ export default function PostEditPage({ post }: PostEditPageProps) {
                 control={control}
                 name="publishedAt"
                 render={({ field }) => {
-                  const date = field.value ? new Date(field.value) : new Date();
+                  const currentDate = new Date();
+                  const date = field.value
+                    ? new Date(field.value)
+                    : currentDate;
                   date.setMilliseconds(0);
                   const h = date.getHours();
                   const m = date.getMinutes();
                   return (
                     <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant={"outline"}
-                          className="justify-start text-left font-normal"
-                        >
-                          <CalendarIcon className="mr-2 size-4" />
-                          {formatTimestamp(date.getTime(), true)}
-                        </Button>
-                      </PopoverTrigger>
+                      <div className="relative flex">
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className="justify-start text-left font-normal grow"
+                          >
+                            <CalendarIcon className="mr-2 size-4" />
+                            {formatTimestamp(date.getTime(), true)}
+                          </Button>
+                        </PopoverTrigger>
+                        {field.value && (
+                          <div
+                            role="button"
+                            className="absolute right-2 top-[50%] translate-y-[-50%]"
+                            onClick={() => {
+                              setValue("publishedAt", undefined);
+                              setStale(true);
+                            }}
+                          >
+                            <XIcon className="size-4 text-gray-400 hover:text-gray-600" />
+                          </div>
+                        )}
+                      </div>
                       <PopoverContent
                         className="w-auto p-0 flex flex-col"
                         align="start"
                       >
                         <Calendar
                           mode="single"
-                          selected={new Date(field.value ?? 0)}
+                          selected={
+                            field.value ? new Date(field.value) : undefined
+                          }
+                          disabled={(d) => d > currentDate}
                           onSelect={(v) => {
                             if (v) {
                               date.setDate(v.getDate());
-                              setValue("publishedAt", date?.toISOString());
+                              if (date > currentDate) {
+                                setValue(
+                                  "publishedAt",
+                                  currentDate?.toISOString()
+                                );
+                              } else {
+                                setValue("publishedAt", date?.toISOString());
+                              }
+
+                              setStale(true);
                             }
                           }}
                           initialFocus
@@ -620,8 +662,11 @@ export default function PostEditPage({ post }: PostEditPageProps) {
                               value={h > 0 ? h : ""}
                               onChange={(evt) => {
                                 const hour = parseInt(evt.target.value);
-                                if (!isNaN(hour)) {
+                                if (!isNaN(hour) && hour < 24) {
                                   date.setHours(hour);
+                                  if (date > currentDate) {
+                                    return;
+                                  }
                                   setValue("publishedAt", date?.toISOString());
                                 } else {
                                   date.setHours(0);
@@ -643,8 +688,11 @@ export default function PostEditPage({ post }: PostEditPageProps) {
                               value={m > 0 ? m : ""}
                               onChange={(evt) => {
                                 const minute = parseInt(evt.target.value);
-                                if (!isNaN(minute)) {
+                                if (!isNaN(minute) && minute < 60) {
                                   date.setMinutes(minute);
+                                  if (date > currentDate) {
+                                    return;
+                                  }
                                   setValue("publishedAt", date?.toISOString());
                                 } else {
                                   date.setMinutes(0);
