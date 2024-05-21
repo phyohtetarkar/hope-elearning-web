@@ -114,15 +114,15 @@ export function EnrolledCourseGridItem({ data }: { data: EnrolledCourse }) {
         <div className="flex flex-col grow p-4">
           <Link
             href={`/courses/${data.course.slug}`}
-            className="text-foreground font-medium text-lg line-clamp-2"
+            className="text-foreground font-semibold text-lg line-clamp-2"
           >
             {data.course.title}
           </Link>
           <div className="flex items-center text-sm mb-4 mt-1">
-            <div className="text-sliver">
+            <div className="text-muted-foreground">
               {uppercaseFirstChar(data.course.access)}
             </div>
-            <div className="mx-2 text-sliver">&bull;</div>
+            <div className="mx-2 text-muted-foreground">&bull;</div>
             <div className="text-primary">
               {uppercaseFirstChar(data.course.level)}
             </div>
@@ -150,7 +150,7 @@ export function EnrolledCourseGridItem({ data }: { data: EnrolledCourse }) {
           indicatorClass="bg-success"
           value={data.progress}
         />
-        <div className="text-sm text-sliver">{data.progress}%</div>
+        <div className="text-sm text-muted-foreground">{data.progress}%</div>
       </CardFooter>
     </Card>
   );

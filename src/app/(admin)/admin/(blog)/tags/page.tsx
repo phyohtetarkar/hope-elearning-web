@@ -71,8 +71,8 @@ export default async function Tags(props: Props) {
                 <TableCell>
                   <h6>{t.name}</h6>
                 </TableCell>
-                <TableCell className="text-sliver text-sm">{t.slug}</TableCell>
-                <TableCell className="text-sliver text-sm">
+                <TableCell className="text-muted-foreground text-sm">{t.slug}</TableCell>
+                <TableCell className="text-muted-foreground text-sm">
                   {formatNumber(BigInt(t.postCount ?? 0))}
                 </TableCell>
                 <TableCell>

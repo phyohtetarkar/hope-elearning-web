@@ -28,7 +28,7 @@ const getPosts = async ({ searchParams }: Props) => {
   const url = `${API_URL_LOCAL}/content/posts${query}`;
 
   const resp = await fetch(url, {
-    next: { revalidate: 10 },
+    cache: "no-store",
   });
 
   return resp
@@ -84,7 +84,7 @@ export default async function Blogs(props: Props) {
               >
                 {b.title ?? "(Untitled)"}
               </Link>
-              <span className="text-sm mt-1 text-sliver">
+              <span className="text-sm mt-1 text-muted-foreground">
                 {formatRelativeTimestamp(b.publishedAt)}
                 <Dot className="size-4 inline" />
                 {`${wordPerMinute(b.wordCount)} min read`}

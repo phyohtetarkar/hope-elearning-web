@@ -64,7 +64,7 @@ const LessonItem = ({ course, value }: { course: Course; value: Lesson }) => {
 
   const statusView = (status: LessonStatus) => {
     if (status === "draft") {
-      return <span className="text-sliver text-sm flex">Draft</span>;
+      return <span className="text-muted-foreground text-sm flex">Draft</span>;
     }
 
     return <span className="text-success text-sm">Ready</span>;
@@ -83,7 +83,7 @@ const LessonItem = ({ course, value }: { course: Course; value: Lesson }) => {
       />
       <div className="text-sm">
         <span className="font-semibold line-clamp-1">{value.title}</span>
-        {value.trial && <span className="text-sliver">Trial</span>}
+        {value.trial && <span className="text-muted-foreground">Trial</span>}
       </div>
       <div className="flex-1"></div>
       <TooltipProvider>

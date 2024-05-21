@@ -16,7 +16,7 @@ export default function ReactSelect<
 }) {
   return (
     <div className={cn(`flex flex-col`, wrapperClass)}>
-      {label && <label className="font-medium mb-1">{label}</label>}
+      {label && <label className="font-medium mb-1 text-foreground">{label}</label>}
       <Select<Option, IsMulti>
         styles={{
           control: (base, state) => ({}),

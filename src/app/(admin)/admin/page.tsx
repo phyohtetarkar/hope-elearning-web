@@ -35,7 +35,7 @@ export default async function Dashboard() {
             <div className="flex items-center space-x-4">
               <GraduationCap className="size-10 text-gray-600" />
               <div className="flex flex-col">
-                <div className="text-sliver mb-1">Courses</div>
+                <div className="text-muted-foreground mb-1">Courses</div>
                 <h2 className="text-gray-700">
                   {formatAbbreviate(data.courseCount)}
                 </h2>
@@ -54,7 +54,7 @@ export default async function Dashboard() {
             <div className="flex items-center space-x-4">
               <Edit className="size-10 text-gray-600" />
               <div className="flex flex-col">
-                <div className="text-sliver mb-1">Posts</div>
+                <div className="text-muted-foreground mb-1">Posts</div>
                 <h2 className="text-gray-700">
                   {formatAbbreviate(data.postCount)}
                 </h2>
@@ -73,7 +73,7 @@ export default async function Dashboard() {
             <div className="flex items-center space-x-4">
               <DollarSign className="size-10 text-gray-600" />
               <div className="flex flex-col">
-                <div className="text-sliver mb-1">Subscribers</div>
+                <div className="text-muted-foreground mb-1">Subscribers</div>
                 <h2 className="text-gray-700">
                   {formatAbbreviate(data.subscriberCount)}
                 </h2>
@@ -92,7 +92,7 @@ export default async function Dashboard() {
             <div className="flex items-center space-x-4">
               <UsersIcon className="size-10 text-gray-600" />
               <div className="flex flex-col">
-                <div className="text-sliver mb-1">Users</div>
+                <div className="text-muted-foreground mb-1">Users</div>
                 <h2 className="text-gray-700">
                   {formatAbbreviate(data.userCount)}
                 </h2>

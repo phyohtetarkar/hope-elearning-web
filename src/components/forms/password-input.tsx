@@ -18,7 +18,7 @@ const PasswordInput = forwardRef<HTMLInputElement, InputProps>(
 
     return (
       <div className={cn(`flex flex-col`, wrapperClass)}>
-        {label && <label className="font-medium mb-1">{label}</label>}
+        {label && <label className="font-medium mb-1 text-foreground">{label}</label>}
         <div className={`flex rounded`}>
           <input
             ref={ref}

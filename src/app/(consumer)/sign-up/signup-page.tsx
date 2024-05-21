@@ -149,7 +149,7 @@ function SignUpPage() {
 
               <div className="flex items-center my-4">
                 <hr className="flex-grow" />
-                <div className=" text-sliver mx-4">OR</div>
+                <div className=" text-muted-foreground mx-4">OR</div>
                 <hr className="flex-grow" />
               </div>
 

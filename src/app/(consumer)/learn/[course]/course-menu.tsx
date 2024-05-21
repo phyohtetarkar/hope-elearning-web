@@ -93,7 +93,7 @@ export default function CourseMenu({
       <div className="flex flex-col grow p-4 overflow-y-auto scrollbar-custom bg-gray-50 mr-[40px] lg:mr-0 border-r">
         <h5 className="mb-5">{course.title}</h5>
 
-        <div className="text-sm text-sliver mb-1">
+        <div className="text-sm text-muted-foreground mb-1">
           {enrolledCourse.progress}% completed
         </div>
         <Progress
@@ -158,7 +158,7 @@ export default function CourseMenu({
         className="fixed top-0 right-0 size-[40px] lg:hidden"
         onClick={toggle}
       >
-        <X className="text-sliver hover:text-white m-auto" />
+        <X className="text-muted-foreground hover:text-white m-auto" />
       </button>
     </div>
   );

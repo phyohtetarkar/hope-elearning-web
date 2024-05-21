@@ -33,12 +33,14 @@ const extensions = [...defaultExtensions, slashCommand];
 
 interface NovelEditorProps {
   content?: JSONContent;
+  onCreate?: (editor: EditorInstance) => void;
   onChange?: (editor: EditorInstance) => void;
   onDebouncedChange?: (content: JSONContent, wordCount: number) => void;
 }
 
 function NovelEditor({
   content,
+  onCreate,
   onChange,
   onDebouncedChange,
 }: NovelEditorProps) {
@@ -94,6 +96,7 @@ function NovelEditor({
           onChange?.(editor);
           // debouncedUpdate(editor);
         }}
+        onCreate={({ editor }) => onCreate?.(editor)}
         // slotAfter={<ImageResizer />}
         editorProps={{
           handleDOMEvents: {
@@ -110,7 +113,7 @@ function NovelEditor({
         }}
       >
         <EditorCommand className="z-50 h-auto max-h-[330px]  w-72 overflow-y-auto rounded-md border bg-background px-1 py-2 shadow-md transition-all">
-          <EditorCommandEmpty className="px-2 text-sliver">
+          <EditorCommandEmpty className="px-2 text-muted-foreground">
             No results
           </EditorCommandEmpty>
           <EditorCommandList>

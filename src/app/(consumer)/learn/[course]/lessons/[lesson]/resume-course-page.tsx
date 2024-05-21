@@ -144,7 +144,7 @@ export default function ResumeCoursePage({ lesson }: { lesson: Lesson }) {
             </>
           )}
           <div className="flex-grow"></div>
-          <div className="text-sliver text-sm">
+          <div className="text-muted-foreground text-sm">
             Last edited: {formatRelativeTimestamp(lesson.audit?.updatedAt)}
           </div>
         </div>
@@ -181,7 +181,7 @@ export default function ResumeCoursePage({ lesson }: { lesson: Lesson }) {
                 return (
                   <li
                     key={i}
-                    className="text-sliver hover:text-black text-sm mb-1"
+                    className="text-muted-foreground hover:text-black text-sm mb-1"
                   >
                     <a href={`#${h.replaceAll(/\s+/g, "-").toLowerCase()}`}>
                       {h}

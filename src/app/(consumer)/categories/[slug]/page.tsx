@@ -38,9 +38,9 @@ const getCategory = async (slug: string) => {
     .catch((e) => undefined);
 };
 
-const getCourses = async (categoryId: number, page?: string) => {
+const getCourses = async (category: string, page?: string) => {
   const query = buildQueryParams({
-    category: categoryId,
+    category: category,
     page: page,
     limit: 15,
   });
@@ -63,11 +63,11 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   try {
     const category = await getCategory(params.slug);
-    
+
     const previousImages = (await parent).openGraph?.images || [];
 
     if (category) {
-      const title = `Categories | ${category.name}`
+      const title = `Categories | ${category.name}`;
       const desc = pluralize(Number(category.courseCount ?? 0), "course");
       return {
         title: title,
@@ -101,7 +101,7 @@ export default async function Topic(props: Props) {
     redirect("/categories");
   }
 
-  const courses = await getCourses(category.id, props.searchParams["page"]);
+  const courses = await getCourses(category.slug, props.searchParams["page"]);
 
   const content = () => {
     if (!courses?.contents.length) {
@@ -134,16 +134,16 @@ export default async function Topic(props: Props) {
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink
-                  className="text-base text-primary-foreground/70 underline hover:text-primary-foreground"
+                  className="text-base text-primary-foreground/70 hover:text-primary-foreground"
                   asChild
                 >
-                  <Link href="/">Home</Link>
+                  <Link href="/browse">Browse</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="text-primary-foreground/70" />
               <BreadcrumbItem>
                 <BreadcrumbLink
-                  className="text-base text-primary-foreground/70 underline hover:text-primary-foreground"
+                  className="text-base text-primary-foreground/70 hover:text-primary-foreground"
                   asChild
                 >
                   <Link href="/categories">Categories</Link>

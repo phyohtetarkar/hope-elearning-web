@@ -85,7 +85,7 @@ export function BookmarkCourseGridItem({ data }: { data: Course }) {
         <div className="flex flex-col grow p-4">
           <Link
             href={`/courses/${data.slug}`}
-            className="text-foreground font-medium text-lg line-clamp-2"
+            className="text-foreground font-semibold text-lg line-clamp-2"
           >
             {data.title}
           </Link>
@@ -99,7 +99,7 @@ export function BookmarkCourseGridItem({ data }: { data: Course }) {
       <CardFooter className="px-4 py-3.5 bg-gray-50">
         <Rating rating={Number(data.meta?.rating ?? 0)} />
         <div className="flex-grow"></div>
-        <div className="text-sm text-sliver font-medium">
+        <div className="text-sm text-muted-foreground font-medium">
           {uppercaseFirstChar(data.access)}
         </div>
       </CardFooter>

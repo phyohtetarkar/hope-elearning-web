@@ -123,7 +123,7 @@ export default function UserActionButtons({ value }: { value: User }) {
                 <label htmlFor="role-user" className="font-semibold">
                   User
                 </label>
-                <p className="text-sliver">
+                <p className="text-muted-foreground">
                   Just a normal user and cannot access to admin panel.
                 </p>
               </div>
@@ -138,7 +138,7 @@ export default function UserActionButtons({ value }: { value: User }) {
                 <label htmlFor="role-contributor" className="font-semibold">
                   Contributor
                 </label>
-                <p className="text-sliver">
+                <p className="text-muted-foreground">
                   Can write courses and posts, but cannot publish.
                 </p>
               </div>
@@ -153,7 +153,7 @@ export default function UserActionButtons({ value }: { value: User }) {
                 <label htmlFor="role-author" className="font-semibold">
                   Author
                 </label>
-                <p className="text-sliver">
+                <p className="text-muted-foreground">
                   Can create and publish new courses and posts.
                 </p>
               </div>
@@ -169,7 +169,7 @@ export default function UserActionButtons({ value }: { value: User }) {
                 <label htmlFor="role-admin" className="font-semibold">
                   Admin
                 </label>
-                <p className="text-sliver">
+                <p className="text-muted-foreground">
                   Have full permissions to edit all data and settings.
                 </p>
               </div>

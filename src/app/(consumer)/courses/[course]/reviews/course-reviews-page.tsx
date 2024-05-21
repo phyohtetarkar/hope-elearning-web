@@ -136,8 +136,8 @@ export default function CourseReviewsPage({
 
       <div className="flex items-center space-x-2 mb-4 text-sm">
         <Rating rating={parseFloat(course.meta?.rating ?? "0")} />
-        <span className="text-sliver">{course.meta?.rating ?? 0} out of 5</span>
-        {/* <span className="text-sliver">({formatNumber(2000)} ratings)</span> */}
+        <span className="text-muted-foreground">{course.meta?.rating ?? 0} out of 5</span>
+        {/* <span className="text-muted-foreground">({formatNumber(2000)} ratings)</span> */}
         <div className="flex-grow"></div>
 
         <Dialog
@@ -232,7 +232,7 @@ export default function CourseReviewsPage({
       {/* {Object.keys(ratings).reverse().map((k) => {
             return (
               <div key={k} className="flex items-center mb-1">
-                <span className="text-sliver w-6">{k}</span>
+                <span className="text-muted-foreground w-6">{k}</span>
                 <StarIcon
                   className="text-warning size-5"
                   fill="currentColor"
@@ -242,7 +242,7 @@ export default function CourseReviewsPage({
                   indicatorClass="bg-warning"
                   value={ratings[k]}
                 />
-                <span className="text-sliver w-[50px] text-end">{ratings[k]}%</span>
+                <span className="text-muted-foreground w-[50px] text-end">{ratings[k]}%</span>
               </div>
             );
           })} */}
@@ -266,11 +266,11 @@ export default function CourseReviewsPage({
               )}
               <div className="flex flex-col">
                 <h6 className="font-semibold mb-1">{r.user.nickname}</h6>
-                <span className="text-sm text-sliver mb-5">
+                <span className="text-sm text-muted-foreground mb-5">
                   {formatRelativeTimestamp(r.audit?.createdAt)}
                 </span>
                 <Rating rating={r.rating} />
-                <p className="text-sliver mt-3">{r.message}</p>
+                <p className="text-muted-foreground mt-3">{r.message}</p>
               </div>
             </div>
           );

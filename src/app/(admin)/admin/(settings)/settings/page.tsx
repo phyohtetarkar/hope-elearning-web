@@ -19,8 +19,8 @@ const SettingMenu = ({
         <div className="flex items-start gap-3">
           {avatar}
           <div className="flex flex-col">
-            <h6 className="font-semibold mb-1">{title}</h6>
-            <p className="text-xs mb-0 text-sliver">{description ?? ""}</p>
+            <h6 className="font-semibold mb-1 text-foreground">{title}</h6>
+            <p className="text-sm mb-0 text-muted-foreground">{description ?? ""}</p>
           </div>
         </div>
       </CardContent>

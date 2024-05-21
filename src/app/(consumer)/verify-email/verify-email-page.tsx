@@ -42,7 +42,7 @@ export default function VerifyEmailPage() {
         <CardContent className="px-6 py-4">
           <div className="flex flex-col items-center">
             <h2 className="text-center mt-5 mb-2">Verify your email</h2>
-            <p className="text-sliver text-center">
+            <p className="text-muted-foreground text-center">
               Check your email &amp; click the link to verify your email.
             </p>
 
@@ -79,7 +79,7 @@ export default function VerifyEmailPage() {
                 {timer > 0 && <span className="ms-1">({timer})</span>}
               </Button>
             </div>
-            <div className="text-sm text-sliver mb-4 text-center">
+            <div className="text-sm text-muted-foreground mb-4 text-center">
               Didn&apos;t get confirmation email?
             </div>
           </div>

@@ -25,15 +25,15 @@ export function CourseGridItem({ data }: { data: Course }) {
         <div className="flex flex-col p-4">
           <Link
             href={`/courses/${data.slug}`}
-            className="text-foreground font-medium text-lg line-clamp-2"
+            className="text-foreground font-semibold text-lg line-clamp-2"
           >
             {data.title}
           </Link>
           <div className="flex items-center text-sm mb-2 mt-1">
-            <div className="text-sliver">
+            <div className="text-muted-foreground">
               {formatAbbreviate(BigInt(data.meta?.enrolledCount ?? 0))} enrolled
             </div>
-            <div className="mx-2 text-sliver">&bull;</div>
+            <div className="mx-2 text-muted-foreground">&bull;</div>
             <div className="text-primary">{uppercaseFirstChar(data.level)}</div>
           </div>
         </div>
@@ -42,7 +42,7 @@ export function CourseGridItem({ data }: { data: Course }) {
       <CardFooter className="px-4 py-3.5 bg-gray-50">
         <Rating rating={Number(data.meta?.rating ?? 0)} />
         <div className="flex-grow"></div>
-        <div className="text-sm text-sliver font-medium">
+        <div className="text-sm text-muted-foreground font-medium">
           {uppercaseFirstChar(data.access)}
         </div>
       </CardFooter>

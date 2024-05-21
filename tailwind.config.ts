@@ -40,8 +40,7 @@ const config = {
         white: colors.white,
         gray: colors.gray,
         anchor: "#2110D6",
-        sliver: colors.gray[400],
-        
+        // sliver: colors.gray[400],
         // muted: colors.slate["400"],
         // border: "hsl(var(--border))",
         // input: "hsl(var(--input))",

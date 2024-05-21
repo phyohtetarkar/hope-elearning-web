@@ -19,7 +19,7 @@ export default function BrowseBreadcrumb() {
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink
-            className="text-base text-primary-foreground/70 underline hover:text-primary-foreground"
+            className="text-base text-primary-foreground/70 hover:text-primary-foreground"
             asChild
           >
             <Link href="/">Home</Link>
@@ -30,7 +30,7 @@ export default function BrowseBreadcrumb() {
           <>
             <BreadcrumbItem>
               <BreadcrumbLink
-                className="text-base text-primary-foreground/70 underline hover:text-primary-foreground"
+                className="text-base text-primary-foreground/70 hover:text-primary-foreground"
                 asChild
               >
                 <Link href="/browse">Courses</Link>

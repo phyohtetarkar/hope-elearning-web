@@ -15,7 +15,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className={cn(`flex flex-col`, wrapperClass)}>
         {label && (
-          <label htmlFor={props.id} className="font-medium mb-1">
+          <label htmlFor={props.id} className="font-medium mb-1 text-foreground">
             {label}
           </label>
         )}

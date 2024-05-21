@@ -288,12 +288,12 @@ export default function PostEditPage({ post }: PostEditPageProps) {
 
     if (isSaving) {
       return (
-        <LoaderCircle className="flex-shrink-0 animate-spin text-sliver" />
+        <LoaderCircle className="flex-shrink-0 animate-spin text-muted-foreground" />
       );
     }
 
     if (isStale) {
-      return <CloudUpload className="flex-shrink-0 text-sliver" />;
+      return <CloudUpload className="flex-shrink-0 text-muted-foreground" />;
     }
 
     return <Cloud className="flex-shrink-0 text-success" />;
@@ -542,7 +542,7 @@ export default function PostEditPage({ post }: PostEditPageProps) {
               }
             }}
           >
-            <X className="text-sliver" />
+            <X className="text-muted-foreground" />
           </button>
         </div>
         <div className="grow overflow-y-auto scrollbar-custom">
@@ -675,7 +675,7 @@ export default function PostEditPage({ post }: PostEditPageProps) {
                                 setStale(true);
                               }}
                             />
-                            <span className="text-sliver absolute right-2 inset-y-0 flex items-center">
+                            <span className="text-muted-foreground absolute right-2 inset-y-0 flex items-center">
                               HH
                             </span>
                           </div>
@@ -701,7 +701,7 @@ export default function PostEditPage({ post }: PostEditPageProps) {
                                 setStale(true);
                               }}
                             />
-                            <div className="text-sliver absolute right-2 inset-y-0 flex items-center">
+                            <div className="text-muted-foreground absolute right-2 inset-y-0 flex items-center">
                               mm
                             </div>
                           </div>

@@ -2,6 +2,7 @@ import { ContentRenderer } from "@/components/editor";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { ProfilePlaceholder } from "@/components/ui/profile-placeholder";
+import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { API_URL_LOCAL } from "@/lib/constants";
 import { Post, User } from "@/lib/models";
 import {
@@ -147,7 +148,7 @@ export default async function BlogPost({ params }: Props) {
           <span className="">
             By {post.authors?.map((a) => a.nickname).join(", ")}
           </span>
-          <span className="text-sm text-sliver">
+          <span className="text-sm text-muted-foreground">
             {formatRelativeTimestamp(post.publishedAt)}
           </span>
         </div>
@@ -222,36 +223,39 @@ export default async function BlogPost({ params }: Props) {
   };
 
   return (
-    <div className="container max-w-3xl 2xl:max-w-4xl py-5 mb-10">
-      <h2 className="text-center">{post.title ?? "(Untitled)"}</h2>
-      <div className="flex items-center justify-center mb-7 mt-2">
-        <div className="text-sliver">
-          {wordPerMinute(post.wordCount)} min read
+    <>
+      <ScrollToTop />
+      <div className="container max-w-3xl 2xl:max-w-4xl py-5 mb-10">
+        <h2 className="text-center">{post.title ?? "(Untitled)"}</h2>
+        <div className="flex items-center justify-center mb-7 mt-2">
+          <div className="text-muted-foreground">
+            {wordPerMinute(post.wordCount)} min read
+          </div>
+          <div className="mx-2 text-muted-foreground">&bull;</div>
+          <div className="text-muted-foreground">
+            {formatAbbreviate(BigInt(post.meta?.viewCount ?? 0))} views
+          </div>
         </div>
-        <div className="mx-2 text-sliver">&bull;</div>
-        <div className="text-sliver">
-          {formatAbbreviate(BigInt(post.meta?.viewCount ?? 0))} views
+
+        {authorsView()}
+
+        <div className="aspect-w-16 aspect-h-9 mb-7">
+          <Image
+            src={post.cover ?? "/images/placeholder.jpeg"}
+            className="object-cover rounded-md border"
+            alt="Cover"
+            fill
+            sizes="100vh"
+            priority
+          />
         </div>
-      </div>
 
-      {authorsView()}
+        {content()}
 
-      <div className="aspect-w-16 aspect-h-9 mb-7">
-        <Image
-          src={post.cover ?? "/images/placeholder.jpeg"}
-          className="object-cover rounded-md border"
-          alt="Cover"
-          fill
-          sizes="100vh"
-          priority
-        />
-      </div>
-
-      {content()}
-
-      {/* <Separator className="mt-6 mb-4" />
+        {/* <Separator className="mt-6 mb-4" />
 
       {authorsView()} */}
-    </div>
+      </div>
+    </>
   );
 }

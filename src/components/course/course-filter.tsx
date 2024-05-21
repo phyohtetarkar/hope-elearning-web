@@ -1,5 +1,8 @@
 "use client";
 
+import { Category } from "@/lib/models";
+import { formatAbbreviate } from "@/lib/utils";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
@@ -11,7 +14,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Separator } from "../ui/separator";
 
-export function CourseFilter() {
+export function CourseFilter({ categories }: { categories: Category[] }) {
   const sp = useSearchParams();
   const router = useRouter();
 
@@ -26,9 +29,43 @@ export function CourseFilter() {
   return (
     <Accordion
       type="multiple"
-      defaultValue={["level", "access"]}
+      defaultValue={["category", "level", "access"]}
       className="rounded-md border"
     >
+      <AccordionItem value="category">
+        <AccordionTrigger
+          className="px-4 py-3 text-base font-semibold"
+          iconType="plus"
+        >
+          Category
+        </AccordionTrigger>
+        <Separator />
+        <AccordionContent className="p-0 overflow-y-auto scrollbar-custom">
+          {categories.length > 0 ? (
+            <div className="flex flex-col space-y-2 max-h-[150px] p-4 pb-0">
+              {categories.map((c) => {
+                return (
+                  <div key={c.id} className="flex items-start">
+                    <Link
+                      href={`/browse?category=${c.slug}`}
+                      className="text-foreground hover:text-anchor font-medium underline grow"
+                    >
+                      {c.name}
+                    </Link>
+                    <span className="bg-slate-200 rounded-full px-2.5 text-sm text-foreground">
+                      {formatAbbreviate(Number(c.courseCount ?? 0))}
+                    </span>
+                  </div>
+                );
+              })}
+              <div className="pb-4"></div>
+            </div>
+          ) : (
+            <span className="text-muted-foreground">No categories found</span>
+          )}
+        </AccordionContent>
+      </AccordionItem>
+      <Separator />
       <AccordionItem value="level">
         <AccordionTrigger
           className="px-4 py-3 text-base font-semibold"

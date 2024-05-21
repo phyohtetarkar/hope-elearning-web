@@ -46,7 +46,7 @@ export default async function Posts(props: Props) {
 
   const statusView = (status: PostStatus) => {
     if (status === "draft") {
-      return <span className="text-sliver font-medium text-sm">Draft</span>;
+      return <span className="text-muted-foreground font-medium text-sm">Draft</span>;
     }
 
     return <span className="text-primary font-medium text-sm">Published</span>;
@@ -79,7 +79,7 @@ export default async function Posts(props: Props) {
                 <TableCell>
                   <div className="flex flex-col">
                     <h6 className="mb-0.5">{p.title ?? "(Untitled)"}</h6>
-                    <span className="text-sliver text-sm mb-2">
+                    <span className="text-muted-foreground text-sm mb-2">
                       By&nbsp;{p.authors?.map((u) => u.nickname).join(", ")}
                       &nbsp;-&nbsp;
                       {formatRelativeTimestamp(p.audit?.createdAt)}
@@ -87,7 +87,7 @@ export default async function Posts(props: Props) {
                     {statusView(p.status)}
                   </div>
                 </TableCell>
-                <TableCell className="text-sliver text-sm">
+                <TableCell className="text-muted-foreground text-sm">
                   {formatAbbreviate(BigInt(p.meta?.viewCount ?? 0))}
                 </TableCell>
                 <TableCell>

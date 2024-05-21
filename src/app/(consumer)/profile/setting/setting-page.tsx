@@ -21,6 +21,10 @@ const getUser = async () => {
 export default async function SettingPage() {
   const user = await getUser();
 
+  if (!user) {
+    return null;
+  }
+
   return (
     <Card className="shadow-none">
       <CardContent className="px-6 py-4">

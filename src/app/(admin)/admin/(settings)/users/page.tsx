@@ -81,8 +81,8 @@ export default async function Users(props: Props) {
                   )}
                   <h6>{u.nickname}</h6>
                 </TableCell>
-                <TableCell className="text-sliver text-sm">{u.email}</TableCell>
-                <TableCell className="text-sliver text-sm">
+                <TableCell className="text-muted-foreground text-sm">{u.email}</TableCell>
+                <TableCell className="text-muted-foreground text-sm">
                   {uppercaseFirstChar(u.role)}
                 </TableCell>
                 <TableCell>

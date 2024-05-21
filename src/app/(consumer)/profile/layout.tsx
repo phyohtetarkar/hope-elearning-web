@@ -4,7 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { BookText, Bookmark, Settings, UserRound } from "lucide-react";
+import { BookText, Bookmark, Settings, User } from "lucide-react";
 import Link from "next/link";
 import { ReactNode } from "react";
 
@@ -30,14 +30,14 @@ export default function ProfileLayout({ children }: { children: ReactNode }) {
 
   const content = (
     <>
-      <div className="text-sliver px-1 mb-2 text-sm uppercase hidden lg:block ">
+      <div className="text-muted-foreground px-1 mb-2 text-sm uppercase hidden lg:block ">
         ACCOUNT
       </div>
       <div className="flex flex-col gap-1">
         {menuLink({
           href: "/profile",
           title: "Overview",
-          icon: <UserRound className="me-2" size={iconSize} />,
+          icon: <User className="me-2" size={iconSize} />,
         })}
         {menuLink({
           href: "/profile/learnings",

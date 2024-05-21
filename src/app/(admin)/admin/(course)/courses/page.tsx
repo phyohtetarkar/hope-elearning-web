@@ -66,7 +66,7 @@ export default async function Courses(props: Props) {
 
   const statusView = (status: CourseStatus) => {
     if (status === "draft") {
-      return <span className="text-sliver text-sm font-medium">Draft</span>;
+      return <span className="text-muted-foreground text-sm font-medium">Draft</span>;
     }
 
     return <span className="text-primary text-sm font-medium">Published</span>;
@@ -99,7 +99,7 @@ export default async function Courses(props: Props) {
                 <TableCell>
                   <div className="flex flex-col">
                     <h6 className="mb-0.5">{c.title ?? "(Untitled)"}</h6>
-                    <span className="text-sliver text-sm mb-2">
+                    <span className="text-muted-foreground text-sm mb-2">
                       By&nbsp;{c.authors?.map((u) => u.nickname).join(", ")}
                       &nbsp;-&nbsp;
                       {formatRelativeTimestamp(c.audit?.createdAt)}
@@ -107,7 +107,7 @@ export default async function Courses(props: Props) {
                     {statusView(c.status)}
                   </div>
                 </TableCell>
-                <TableCell className="text-sliver text-sm">
+                <TableCell className="text-muted-foreground text-sm">
                   {formatAbbreviate(BigInt(c.meta?.enrolledCount ?? 0))}
                 </TableCell>
                 <TableCell>

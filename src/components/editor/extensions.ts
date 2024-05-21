@@ -42,7 +42,7 @@ const heading = Heading.extend({
 const tiptapLink = TiptapLink.configure({
   HTMLAttributes: {
     class: cn(
-      "text-muted-foreground underline underline-offset-[3px] hover:text-anchor transition-colors cursor-pointer"
+      "text-gray-600 underline underline-offset-[3px] hover:text-anchor transition-colors cursor-pointer"
     ),
   },
 });

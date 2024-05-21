@@ -30,7 +30,7 @@ export default function ProfilePage({ meta }: { meta?: UserMeta }) {
           </div>
           <div className="truncate">
             <h6 className="mb-0">{user?.nickname}</h6>
-            <span className="text-sliver text-sm">{user?.email}</span>
+            <span className="text-muted-foreground text-sm">{user?.email}</span>
           </div>
           <div className="ms-auto">
             <Button variant="outline" className="border-primary text-primary hover:text-primary" asChild>

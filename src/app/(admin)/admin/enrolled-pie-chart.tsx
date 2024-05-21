@@ -79,11 +79,11 @@ function EnrolledPieChart({ summary }: { summary: DashboardSummary }) {
       <CardContent className="py-4 px-0 justify-center items-center h-full relative">
         <canvas ref={setCanvas} />
         {total <= 0 ? (
-          <div className="text-sliver absolute left-[50%] top-[35%] translate-x-[-50%]">
+          <div className="text-muted-foreground absolute left-[50%] top-[35%] translate-x-[-50%]">
             No chart data
           </div>
         ) : (
-          <div className="text-sliver absolute left-[50%] top-[35%] translate-x-[-50%]">
+          <div className="text-muted-foreground absolute left-[50%] top-[35%] translate-x-[-50%]">
             {formatAbbreviate(total)} Enrolled
           </div>
         )}

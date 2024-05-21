@@ -55,6 +55,7 @@ const schema = z.object({
   slug: z.string().optional(),
   lexical: z.string().optional(),
   trial: z.boolean().optional(),
+  wordCount: z.number(),
 });
 
 type LessonForm = z.infer<typeof schema>;
@@ -79,6 +80,7 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
       slug: lesson.slug,
       lexical: lesson.lexical,
       trial: lesson.trial,
+      wordCount: lesson.wordCount,
     },
   });
 
@@ -159,12 +161,12 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
 
     if (isSaving) {
       return (
-        <LoaderCircle className="flex-shrink-0 animate-spin text-sliver" />
+        <LoaderCircle className="flex-shrink-0 animate-spin text-muted-foreground" />
       );
     }
 
     if (isStale) {
-      return <CloudUpload className="flex-shrink-0 text-sliver" />;
+      return <CloudUpload className="flex-shrink-0 text-muted-foreground" />;
     }
 
     return <Cloud className="flex-shrink-0 text-success" />;
@@ -267,7 +269,9 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
               content={lesson.lexical ? JSON.parse(lesson.lexical) : undefined}
               onChange={(editor) => {
                 const json = editor.getJSON();
+                const wordCount = editor.storage.characterCount.words();
                 setValue("lexical", JSON.stringify(json));
+                setValue("wordCount", wordCount);
                 if (lesson.status === "draft") {
                   debouncedUpdate(undefined);
                 }

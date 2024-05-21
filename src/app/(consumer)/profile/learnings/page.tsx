@@ -44,7 +44,15 @@ export default async function Learnings(props: Props) {
 
   const content = () => {
     if (!enrollments || enrollments.contents.length === 0) {
-      return <Alert>No courses enrolled</Alert>;
+      return (
+        <Alert>
+          No courses enrolled.&nbsp;
+          <Link href="/browse" className="font-semibold underline">
+            Browse
+          </Link>
+          &nbsp;courses.
+        </Alert>
+      );
     }
 
     return (

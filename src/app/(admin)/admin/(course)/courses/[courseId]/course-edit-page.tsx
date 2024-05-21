@@ -533,7 +533,7 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
                                     <Upload className="size-5 ms-2" />
                                   )}
                                 </Button>
-                                <span className="text-sm text-sliver text-center">
+                                <span className="text-sm text-muted-foreground text-center">
                                   PNG or JPG up to 1MB
                                 </span>
                               </div>
@@ -579,7 +579,7 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
           <div className="lg:col-span-5">
             <Card className="shadow-none">
               <div className="flex items-center gap-2 px-5 h-16">
-                <h4>Curriculum</h4>
+                <h4>Syllabus</h4>
               </div>
               <Separator />
               <CardContent className="p-5">

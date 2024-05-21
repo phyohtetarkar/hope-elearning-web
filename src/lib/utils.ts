@@ -50,7 +50,7 @@ export function formatRelativeTimestamp(
 
   const diff = dayjs().diff(date, "day", false);
 
-  if (diff <= 7) {
+  if (diff < 7) {
     return date.fromNow();
   }
 

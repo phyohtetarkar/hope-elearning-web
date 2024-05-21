@@ -52,7 +52,7 @@ export default function SideMenu() {
         </div>
         <h3 className="">Brand</h3>
         <button className="ms-auto lg:hidden" onClick={toggle}>
-          <X className="text-sliver" />
+          <X className="text-muted-foreground" />
         </button>
       </div>
       <div className="flex grow p-2 pb-0 overflow-y-auto scrollbar-custom">

@@ -73,8 +73,8 @@ export default async function Categories(props: Props) {
                 <TableCell>
                   <h6>{c.name}</h6>
                 </TableCell>
-                <TableCell className="text-sliver text-sm">{c.slug}</TableCell>
-                <TableCell className="text-sliver text-sm">
+                <TableCell className="text-muted-foreground text-sm">{c.slug}</TableCell>
+                <TableCell className="text-muted-foreground text-sm">
                   {formatNumber(BigInt(c.courseCount ?? 0))}
                 </TableCell>
                 <TableCell>

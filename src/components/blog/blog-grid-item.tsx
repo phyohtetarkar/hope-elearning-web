@@ -34,7 +34,7 @@ export function BlogGridItem({ data }: { data: Post }) {
             {data.title ?? "(Untitled)"}
           </Link>
 
-          <div className="text-sm text-sliver mt-1">
+          <div className="text-sm text-muted-foreground mt-1">
             {formatRelativeTimestamp(data.publishedAt)}
           </div>
 
@@ -43,11 +43,11 @@ export function BlogGridItem({ data }: { data: Post }) {
       </CardContent>
       <Separator />
       <CardFooter className="px-4 py-3.5 bg-gray-50">
-        <div className="text-sm text-sliver">
+        <div className="text-sm text-muted-foreground">
           {wordPerMinute(data.wordCount)} min read
         </div>
         <div className="flex-grow"></div>
-        <div className="text-sm text-sliver">
+        <div className="text-sm text-muted-foreground">
           {formatAbbreviate(BigInt(data.meta?.viewCount ?? 0))} views
         </div>
       </CardFooter>

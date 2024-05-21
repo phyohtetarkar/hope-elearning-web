@@ -2,10 +2,11 @@ import { CourseFilter, CourseGridItem } from "@/components/course";
 import { Alert } from "@/components/ui/alert";
 import Pagination from "@/components/ui/pagination";
 import { API_URL_LOCAL } from "@/lib/constants";
-import { Course, Page } from "@/lib/models";
+import { Category, Course, Page } from "@/lib/models";
 import { buildQueryParams } from "@/lib/utils";
-import BrowseBreadcrumb from "./browse-breadcrumb";
 import { Metadata } from "next";
+import BrowseBreadcrumb from "./browse-breadcrumb";
+import FilteredParams from "./filtered-params";
 
 interface Props {
   searchParams: { [key: string]: string | undefined };
@@ -31,8 +32,30 @@ const getCourses = async (props: Props) => {
     .catch((e) => undefined);
 };
 
+const getCategories = async () => {
+  const query = buildQueryParams({
+    includeCourseCount: true,
+  });
+  const url = `${API_URL_LOCAL}/content/categories${query}`;
+
+  const resp = await fetch(url, {
+    next: { revalidate: 10 },
+  });
+
+  return resp
+    .json()
+    .then((json) => json as Page<Category>)
+    .catch((e) => undefined);
+};
+
 export default async function BrowseCourses(props: Props) {
-  const courses = await getCourses(props);
+  const coursesPromise = getCourses(props);
+  const categoriesPromise = getCategories();
+
+  const [courses, categories] = await Promise.all([
+    coursesPromise,
+    categoriesPromise,
+  ]);
 
   const content = () => {
     if (!courses?.contents.length) {
@@ -67,9 +90,12 @@ export default async function BrowseCourses(props: Props) {
       <div className="container py-5 mb-10">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
           <div className="lg:col-span-1">
-            <CourseFilter />
+            <CourseFilter categories={categories?.contents ?? []} />
           </div>
-          <div className="lg:col-span-3">{content()}</div>
+          <div className="lg:col-span-3">
+            <FilteredParams className="mb-4" />
+            {content()}
+          </div>
         </div>
       </div>
     </>

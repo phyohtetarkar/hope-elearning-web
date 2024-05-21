@@ -124,6 +124,7 @@ export interface Lesson {
   status: LessonStatus;
   lexical?: string;
   sortOrder: number;
+  wordCount: number;
   chapter?: Chapter;
   course?: Course;
   completed?: boolean;

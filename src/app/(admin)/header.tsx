@@ -39,7 +39,7 @@ export default function Header() {
           size="icon"
           onClick={toggle}
         >
-          <Menu className="text-sliver" />
+          <Menu className="text-muted-foreground" />
         </Button>
       </NavbarBrand>
 

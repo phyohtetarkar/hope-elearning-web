@@ -15,7 +15,7 @@ const Select = forwardRef<HTMLSelectElement, InputProps>(
 
     return (
       <div className={cn(`flex flex-col`, wrapperClass)}>
-        {label && <label htmlFor={props.id} className="font-medium mb-1">{label}</label>}
+        {label && <label htmlFor={props.id} className="font-medium mb-1 text-foreground">{label}</label>}
         <select
           ref={ref}
           className={cn(

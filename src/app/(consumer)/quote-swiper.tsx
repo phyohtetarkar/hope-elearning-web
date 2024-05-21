@@ -38,10 +38,10 @@ export default function QuoteSwiper() {
         return (
           <SwiperSlide key={i} className="py-7">
             <figure className="text-center">
-              <blockquote className="text-lg font-medium mb-1">
+              <blockquote className="text-lg font-medium mb-1 text-foreground">
                 <p>{q.quote}</p>
               </blockquote>
-              <figcaption className="text-sliver">
+              <figcaption className="text-muted-foreground">
                 <cite className="">~ {q.author}</cite>
               </figcaption>
             </figure>

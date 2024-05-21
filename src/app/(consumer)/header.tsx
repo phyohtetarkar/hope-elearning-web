@@ -177,7 +177,7 @@ export default function Header({ user }: { user?: User | null }) {
               priority
             />
           </div>
-          <h3 className="ms-3 hidden sm:block">
+          <h3 className="ms-3 hidden sm:block text-foreground">
             {process.env.NEXT_PUBLIC_APP_NAME}
           </h3>
         </Link>
@@ -187,7 +187,7 @@ export default function Header({ user }: { user?: User | null }) {
           <Link
             href={"/browse"}
             color="foreground"
-            className="hover:text-primary"
+            className="text-foreground hover:text-primary"
           >
             Browse
           </Link>
@@ -196,7 +196,7 @@ export default function Header({ user }: { user?: User | null }) {
           <Link
             href={"/categories"}
             color="foreground"
-            className="hover:text-primary"
+            className="text-foreground hover:text-primary"
           >
             Categories
           </Link>
@@ -205,7 +205,7 @@ export default function Header({ user }: { user?: User | null }) {
           <Link
             href={"/blogs"}
             color="foreground"
-            className="hover:text-primary"
+            className="text-foreground hover:text-primary"
           >
             Blogs
           </Link>
@@ -219,7 +219,7 @@ export default function Header({ user }: { user?: User | null }) {
           <Link
             href={"/browse"}
             color="foreground"
-            className="hover:text-primary"
+            className="text-foreground hover:text-primary"
             onClick={(evt) => setIsMenuOpen(false)}
           >
             Browse
@@ -229,7 +229,7 @@ export default function Header({ user }: { user?: User | null }) {
           <Link
             href={"/categories"}
             color="foreground"
-            className="hover:text-primary"
+            className="text-foreground hover:text-primary"
             onClick={(evt) => setIsMenuOpen(false)}
           >
             Categories
@@ -239,7 +239,7 @@ export default function Header({ user }: { user?: User | null }) {
           <Link
             href={"/blogs"}
             color="foreground"
-            className="hover:text-primary"
+            className="text-foreground hover:text-primary"
             onClick={(evt) => setIsMenuOpen(false)}
           >
             Blogs

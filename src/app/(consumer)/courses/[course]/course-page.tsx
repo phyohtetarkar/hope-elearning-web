@@ -116,7 +116,7 @@ export default function CoursePage({
                     ></article>
                   </div>
                 </TabItem>
-                <TabItem tabKey="curriculum" title="Curriculum">
+                <TabItem tabKey="syllabus" title="Syllabus">
                   <Accordion
                     type="multiple"
                     className="p-4 flex flex-col gap-2"
@@ -152,7 +152,7 @@ export default function CoursePage({
                                     className="flex items-center gap-2 py-3 px-2"
                                   >
                                     <div className="text-base">{l.title}</div>
-                                    <LockKeyhole className="text-sliver size-5 ms-auto" />
+                                    <LockKeyhole className="text-muted-foreground size-5 ms-auto" />
                                   </div>
                                 );
                               })}
@@ -223,14 +223,14 @@ export default function CoursePage({
                 <div className="flex items-center mb-3">
                   <BookOpen className="size-4 text-primary flex-shrink-0" />
                   <span className="ms-1.5">Chapters</span>
-                  <span className="ms-auto text-sliver">
+                  <span className="ms-auto text-muted-foreground">
                     {course.chapters?.length ?? 0}
                   </span>
                 </div>
                 <div className="flex items-center mb-3">
                   <BarChart className="size-4 text-primary flex-shrink-0" />
                   <span className="ms-1.5">Level</span>
-                  <span className="ms-auto text-sliver">
+                  <span className="ms-auto text-muted-foreground">
                     {uppercaseFirstChar(course.level)}
                   </span>
                 </div>
@@ -247,7 +247,7 @@ export default function CoursePage({
                 <div className="flex items-center">
                   <DollarSign className="size-4 text-primary flex-shrink-0" />
                   <span className="ms-1.5">Access</span>
-                  <span className="ms-auto text-sliver">
+                  <span className="ms-auto text-muted-foreground">
                     {uppercaseFirstChar(course.access)}
                   </span>
                 </div>
