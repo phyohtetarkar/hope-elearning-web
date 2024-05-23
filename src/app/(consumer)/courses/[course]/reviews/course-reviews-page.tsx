@@ -270,7 +270,7 @@ export default function CourseReviewsPage({
                   {formatRelativeTimestamp(r.audit?.createdAt)}
                 </span>
                 <Rating rating={r.rating} />
-                <p className="text-muted-foreground mt-3">{r.message}</p>
+                <p className="font-light mt-3">{r.message}</p>
               </div>
             </div>
           );

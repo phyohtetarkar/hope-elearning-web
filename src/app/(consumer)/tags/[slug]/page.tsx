@@ -134,7 +134,7 @@ export default async function Topic(props: Props) {
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink
-                  className="text-base text-primary-foreground/70 underline hover:text-primary-foreground"
+                  className="text-base text-primary-foreground/70 hover:text-primary-foreground"
                   asChild
                 >
                   <Link href="/">Home</Link>
@@ -143,7 +143,7 @@ export default async function Topic(props: Props) {
               <BreadcrumbSeparator className="text-primary-foreground/70" />
               <BreadcrumbItem>
                 <BreadcrumbLink
-                  className="text-base text-primary-foreground/70 underline hover:text-primary-foreground"
+                  className="text-base text-primary-foreground/70 hover:text-primary-foreground"
                   asChild
                 >
                   <Link href="/blogs">Blogs</Link>

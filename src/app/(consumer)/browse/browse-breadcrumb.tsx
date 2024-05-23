@@ -1,6 +1,5 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -10,6 +9,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 export default function BrowseBreadcrumb() {
   const sp = useSearchParams();
@@ -39,7 +39,8 @@ export default function BrowseBreadcrumb() {
             <BreadcrumbSeparator className="text-primary-foreground/70" />
             <BreadcrumbItem>
               <BreadcrumbPage className="text-base text-nowrap text-primary-foreground">
-                {sp.get("q")}
+                <span>Search results for:</span>
+                <span className="ms-1">{`\"${sp.get("q")}\"`}</span>
               </BreadcrumbPage>
             </BreadcrumbItem>
           </>

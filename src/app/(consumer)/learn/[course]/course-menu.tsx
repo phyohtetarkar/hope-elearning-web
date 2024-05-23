@@ -90,18 +90,20 @@ export default function CourseMenu({
         isMenuOpen ? "translate-x-0" : `-translate-x-[360px]`
       } transition-transform ease-out min-w-[200px] max-w-[360px] lg:max-w-[320px] fixed lg:static inset-y-0 w-full z-50 flex flex-col lg:translate-x-0`}
     >
-      <div className="flex flex-col grow p-4 overflow-y-auto scrollbar-custom bg-gray-50 mr-[40px] lg:mr-0 border-r">
-        <h5 className="mb-5">{course.title}</h5>
+      <div className="flex flex-col grow py-4 overflow-y-auto scrollbar-custom bg-gray-50 mr-[40px] lg:mr-0 border-r">
+        <h5 className="mb-5 px-4">{course.title}</h5>
 
-        <div className="text-sm text-muted-foreground mb-1">
+        <div className="text-sm text-muted-foreground mb-1 px-4">
           {enrolledCourse.progress}% completed
         </div>
-        <Progress
-          value={enrolledCourse.progress}
-          max={100}
-          className="h-3 mb-8 flex-shrink-0"
-          indicatorClass="bg-success"
-        />
+        <div className="px-4">
+          <Progress
+            value={enrolledCourse.progress}
+            max={100}
+            className="h-3 mb-8 flex-shrink-0"
+            indicatorClass="bg-success"
+          />
+        </div>
 
         <Accordion
           type="multiple"
@@ -111,7 +113,7 @@ export default function CourseMenu({
           {course.chapters?.map((c, i) => {
             return (
               <AccordionItem key={i} value={`chapter-${i}`}>
-                <AccordionTrigger className="py-2">
+                <AccordionTrigger className="py-2 px-4">
                   <h6>{c.title}</h6>
                 </AccordionTrigger>
                 <AccordionContent>
@@ -121,7 +123,10 @@ export default function CourseMenu({
                         <div
                           key={i}
                           className={cn(
-                            "flex items-center gap-2 py-3",
+                            "flex items-center gap-2 py-3 px-4",
+                            params.lesson === l.slug
+                              ? "bg-primary/10"
+                              : undefined
                           )}
                         >
                           {isCompleted(l) ? (
@@ -134,7 +139,7 @@ export default function CourseMenu({
                             className={cn(
                               "hover:text-primary",
                               params.lesson === l.slug
-                                ? "text-primary font-medium"
+                                ? "text-primary"
                                 : undefined
                             )}
                             onClick={(evt) => {

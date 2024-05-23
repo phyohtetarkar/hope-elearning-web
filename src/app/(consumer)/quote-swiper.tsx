@@ -33,12 +33,13 @@ export default function QuoteSwiper() {
         disableOnInteraction: false,
       }}
       modules={[Autoplay, Pagination]}
+      className="py-7"
     >
       {quotes.map((q, i) => {
         return (
-          <SwiperSlide key={i} className="py-7">
+          <SwiperSlide key={i} className="my-auto">
             <figure className="text-center">
-              <blockquote className="text-lg font-medium mb-1 text-foreground">
+              <blockquote className="text-xl font-medium mb-1 text-foreground">
                 <p>{q.quote}</p>
               </blockquote>
               <figcaption className="text-muted-foreground">
