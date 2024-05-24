@@ -47,7 +47,7 @@ export default function BrowseBreadcrumb() {
         ) : (
           <BreadcrumbItem>
             <BreadcrumbPage className="text-base text-nowrap text-primary-foreground">
-              All courses
+              Courses
             </BreadcrumbPage>
           </BreadcrumbItem>
         )}

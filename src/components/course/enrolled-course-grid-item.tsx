@@ -144,7 +144,7 @@ export function EnrolledCourseGridItem({ data }: { data: EnrolledCourse }) {
         </div>
       </CardContent>
       <Separator />
-      <CardFooter className="p-4 bg-gray-50 flex space-x-3">
+      <CardFooter className="p-4 bg-muted/50 flex space-x-3">
         <Progress
           className="h-3"
           indicatorClass="bg-success"

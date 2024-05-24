@@ -39,7 +39,7 @@ export function CourseGridItem({ data }: { data: Course }) {
         </div>
       </CardContent>
       <Separator />
-      <CardFooter className="px-4 py-3.5 bg-gray-50">
+      <CardFooter className="px-4 py-3.5 bg-muted/50">
         <Rating rating={Number(data.meta?.rating ?? 0)} />
         <div className="flex-grow"></div>
         <div className="text-sm text-muted-foreground font-medium">

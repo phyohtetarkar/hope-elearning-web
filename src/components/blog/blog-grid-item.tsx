@@ -42,7 +42,7 @@ export function BlogGridItem({ data }: { data: Post }) {
         </div>
       </CardContent>
       <Separator />
-      <CardFooter className="px-4 py-3.5 bg-gray-50">
+      <CardFooter className="px-4 py-3.5 bg-muted/50">
         <div className="text-sm text-muted-foreground">
           {wordPerMinute(data.wordCount)} min read
         </div>

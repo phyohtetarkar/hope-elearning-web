@@ -36,7 +36,7 @@ export default function ProfileLayout({ children }: { children: ReactNode }) {
       <div className="flex flex-col gap-1">
         {menuLink({
           href: "/profile",
-          title: "Overview",
+          title: "Profile",
           icon: <User className="me-2" size={iconSize} />,
         })}
         {menuLink({
@@ -62,7 +62,7 @@ export default function ProfileLayout({ children }: { children: ReactNode }) {
     <div className="container py-5 mb-5">
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
         <div className="lg:col-span-1">
-          <div className="border rounded">
+          <div className="border rounded-md">
             <div className="block lg:hidden">
               <Accordion type="multiple">
                 <AccordionItem value="menu">

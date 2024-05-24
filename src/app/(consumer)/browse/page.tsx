@@ -1,4 +1,4 @@
-import { CourseFilter, CourseGridItem } from "@/components/course";
+import { CourseGridItem } from "@/components/course";
 import { Alert } from "@/components/ui/alert";
 import Pagination from "@/components/ui/pagination";
 import { API_URL_LOCAL } from "@/lib/constants";
@@ -7,6 +7,7 @@ import { buildQueryParams } from "@/lib/utils";
 import { Metadata } from "next";
 import BrowseBreadcrumb from "./browse-breadcrumb";
 import FilteredParams from "./filtered-params";
+import { CourseFilter } from "./course-filter";
 
 interface Props {
   searchParams: { [key: string]: string | undefined };

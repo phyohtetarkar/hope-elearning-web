@@ -79,7 +79,7 @@ export default async function Profile() {
         <Separator className="mt-3" />
         <div className="mt-3 mb-3">Overview</div>
         <div className="flex flex-col lg:flex-row space-y-3 lg:space-y-0">
-          <div className="flex-1 bg-muted border rounded lg:rounded-e-none lg:border-e-0">
+          <div className="flex-1 bg-muted/70 border rounded lg:rounded-e-none lg:border-e-0">
             <div className="p-4">
               <h4 className="mb-1">
                 {formatNumber(meta?.enrollmentCount ?? 0)}
@@ -87,7 +87,7 @@ export default async function Profile() {
               <span>Learnings</span>
             </div>
           </div>
-          <div className="flex-1 bg-muted border rounded lg:rounded-s-none">
+          <div className="flex-1 bg-muted/70 border rounded lg:rounded-s-none">
             <div className="p-4">
               <h4 className="mb-1">{formatNumber(meta?.bookmarkCount ?? 0)}</h4>
               <span>Bookmarks</span>
