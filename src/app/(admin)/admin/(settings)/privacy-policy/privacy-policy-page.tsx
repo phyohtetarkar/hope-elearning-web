@@ -19,7 +19,7 @@ export default function PrivacyPolicyPage({ value }: { value?: JSON }) {
   const handleSave = async () => {
     try {
       setSaving(true);
-      await updateSiteSetting({ privacyPolicy: privacyPolicy });
+      await updateSiteSetting(privacyPolicy ?? "", "privacy-policy");
       toast({
         title: "Success",
         description: "Privacy policy updated",

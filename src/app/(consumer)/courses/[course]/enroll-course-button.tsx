@@ -36,7 +36,7 @@ export default function EnrollCourseButton({
     }
     try {
       setLoading(true);
-      await enrollCourse(course?.id ?? "", revalidate);
+      await enrollCourse(course?.id ?? 0, revalidate);
       toast({
         title: "Success",
         description: "Course enrollment success",

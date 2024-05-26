@@ -48,7 +48,7 @@ import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
 const schema = z.object({
-  id: z.string(),
+  id: z.number(),
   title: z.string().min(1, {
     message: "Please enter lesson title",
   }),
@@ -114,7 +114,7 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
 
       setValue("slug", body["slug"], { shouldValidate: true });
 
-      await updateLesson(lesson.course?.id ?? "", body);
+      await updateLesson(lesson.course?.id ?? 0, body);
 
       // console.log("update lesson");
       // await new Promise((resolve) => setTimeout(() => resolve(true), 3000));
@@ -140,7 +140,7 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
   const handleDelete = async () => {
     try {
       setDeleting(true);
-      await deleteLesson(lesson.course?.id ?? "", lesson.id, true);
+      await deleteLesson(lesson.course?.id ?? 0, lesson.id, true);
     } catch (error) {
       toast({
         title: "Error",

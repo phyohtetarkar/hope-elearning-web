@@ -8,6 +8,46 @@ import { ReactNode, useContext } from "react";
 import Header from "./header";
 import SideMenu from "./side-menu";
 
+const isAdminPath = (pathname: string) => {
+  if (pathname.startsWith("/admin/tags")) {
+    return true;
+  }
+
+  if (pathname.startsWith("/admin/categories")) {
+    return true;
+  }
+
+  if (pathname.startsWith("/admin/users")) {
+    return true;
+  }
+
+  if (pathname.startsWith("/admin/settings")) {
+    return true;
+  }
+
+  if (pathname.startsWith("/admin/subscribers")) {
+    return true;
+  }
+
+  if (pathname.startsWith("/admin/audit-log")) {
+    return true;
+  }
+
+  if (pathname.startsWith("/admin/about-us")) {
+    return true;
+  }
+
+  if (pathname.startsWith("/admin/privacy-policy")) {
+    return true;
+  }
+
+  if (pathname.startsWith("/admin/terms-and-conditions")) {
+    return true;
+  }
+
+  return false;
+};
+
 export default function AdminLayoutWrapper({
   children,
 }: {
@@ -42,23 +82,7 @@ export default function AdminLayoutWrapper({
     return null;
   }
 
-  if (!isAdminOrOwner && pathname.startsWith("/admin/tags")) {
-    return render(<Alert variant="destructive">FORBIDDEN</Alert>);
-  }
-
-  if (!isAdminOrOwner && pathname.startsWith("/admin/categories")) {
-    return render(<Alert variant="destructive">FORBIDDEN</Alert>);
-  }
-
-  if (!isAdminOrOwner && pathname.startsWith("/admin/users")) {
-    return render(<Alert variant="destructive">FORBIDDEN</Alert>);
-  }
-
-  if (!isAdminOrOwner && pathname.startsWith("/admin/settings")) {
-    return render(<Alert variant="destructive">FORBIDDEN</Alert>);
-  }
-
-  if (!isAdminOrOwner && pathname.startsWith("/admin/subscribers")) {
+  if (!isAdminOrOwner && isAdminPath(pathname)) {
     return render(<Alert variant="destructive">FORBIDDEN</Alert>);
   }
 

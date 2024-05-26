@@ -6,7 +6,7 @@ import { validateResponse } from "@/lib/validate-response";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-export async function deleteCourse(id: string, needRedirect?: boolean) {
+export async function deleteCourse(id: number, needRedirect?: boolean) {
   const session = await getSession();
 
   const url = `${API_URL_LOCAL}/admin/courses/${id}`;

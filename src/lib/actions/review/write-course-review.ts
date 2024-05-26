@@ -6,7 +6,7 @@ import { validateResponse } from "@/lib/validate-response";
 import { revalidatePath } from "next/cache";
 
 export async function writeCourseReview(
-  courseId: string,
+  courseId: number,
   body: object,
   revalidate?: string
 ) {

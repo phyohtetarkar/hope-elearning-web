@@ -28,7 +28,7 @@ const getCourse = async (slug: string) => {
     .catch((e) => undefined);
 };
 
-const getReviews = async (courseId: string, props: Props) => {
+const getReviews = async (courseId: number, props: Props) => {
   const query = buildQueryParams({
     page: props.searchParams["page"],
     limit: 10,
@@ -43,7 +43,7 @@ const getReviews = async (courseId: string, props: Props) => {
     .catch((e) => undefined);
 };
 
-const getUserReview = async (courseId: string) => {
+const getUserReview = async (courseId: number) => {
   const cookieStore = cookies();
 
   if (!cookieStore.has("access_token")) {

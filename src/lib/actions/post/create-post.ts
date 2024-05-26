@@ -6,15 +6,15 @@ import { validateResponse } from "@/lib/validate-response";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-export async function createPost() {
+export async function createPost(body: any) {
   const session = await getSession();
 
   const url = `${API_URL_LOCAL}/admin/posts`;
 
-  const body = {
-    slug: "untitled",
-    authors: [session.userId],
-  };
+  // const body = {
+  //   slug: "untitled",
+  //   authors: [session.userId],
+  // };
 
   const resp = await fetch(url, {
     method: "POST",

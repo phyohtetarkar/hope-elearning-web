@@ -40,7 +40,7 @@ const getLesson = cache(async (slug: string) => {
     .catch((e) => undefined);
 });
 
-const getEnrolledCourse = async (courseId: string) => {
+const getEnrolledCourse = async (courseId: number) => {
   const cookieStore = cookies();
 
   if (!cookieStore.has("access_token")) {

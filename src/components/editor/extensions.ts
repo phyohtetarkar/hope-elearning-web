@@ -133,7 +133,7 @@ const starterKit = StarterKit.configure({
     color: "#DBEAFE",
     width: 4,
   },
-  gapcursor: false,
+  // gapcursor: false,
   heading: false,
 });
 

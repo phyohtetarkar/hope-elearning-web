@@ -27,7 +27,7 @@ const getCourse = cache(async (slug: string) => {
     .catch((e) => undefined);
 });
 
-const getEnrolledCourse = async (courseId: string) => {
+const getEnrolledCourse = async (courseId: number) => {
   const cookieStore = cookies();
 
   if (!cookieStore.has("access_token")) {
@@ -52,7 +52,7 @@ const getEnrolledCourse = async (courseId: string) => {
     .catch(() => undefined);
 };
 
-const checkBookmarked = async (courseId: string) => {
+const checkBookmarked = async (courseId: number) => {
   const cookieStore = cookies();
 
   if (!cookieStore.has("access_token")) {
@@ -77,7 +77,7 @@ const checkBookmarked = async (courseId: string) => {
     .catch(() => false);
 };
 
-const getUserReview = async (courseId: string) => {
+const getUserReview = async (courseId: number) => {
   const cookieStore = cookies();
 
   if (!cookieStore.has("access_token")) {

@@ -62,7 +62,7 @@ interface CourseEditPageProps {
 }
 
 const schema = z.object({
-  id: z.string(),
+  id: z.number(),
   title: z.string().min(1, {
     message: "Please enter course name",
   }),
@@ -583,7 +583,7 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
               </div>
               <Separator />
               <CardContent className="p-5">
-                <div className="grid grid-cols-1 gap-4">
+                <div className="grid grid-cols-1">
                   <CourseChaptersEdit course={course} />
                 </div>
               </CardContent>

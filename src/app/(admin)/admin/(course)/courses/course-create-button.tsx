@@ -64,6 +64,7 @@ export default function CourseCreateButton({
   } = useForm<CourseForm>({
     resolver: zodResolver(schema),
     defaultValues: {
+      slug: "",
       authors: user?.id ? [user] : [],
     },
   });
@@ -135,7 +136,7 @@ export default function CourseCreateButton({
                     id="slug"
                     type="text"
                     wrapperClass="mb-4"
-                    placeholder="Enter slug"
+                    placeholder="Enter course slug"
                     value={field.value ?? ""}
                     onChange={(evt) => {
                       const slug = setStringToSlug(evt.target.value) ?? "";

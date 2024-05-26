@@ -279,7 +279,7 @@ export default function CourseChaptersEdit({ course }: { course: Course }) {
         </DndContext>
       </Accordion>
 
-      <div>
+      <div className={chapters.length > 0 ? "mt-4" : undefined}>
         <Dialog open={isOpen} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button size="sm">Add chapter</Button>

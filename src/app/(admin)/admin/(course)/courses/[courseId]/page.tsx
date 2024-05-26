@@ -2,7 +2,7 @@ import { API_URL_LOCAL } from "@/lib/constants";
 import { Course } from "@/lib/models";
 import { validateResponse } from "@/lib/validate-response";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import CourseEditPage from "./course-edit-page";
 
 const getCourse = async (courseId: string) => {
@@ -34,7 +34,7 @@ export default async function CourseEdit({
   const course = await getCourse(params.courseId);
 
   if (!course) {
-    redirect("/admin/courses");
+    notFound();
   }
 
   // const categoriesPromise = getCategories();

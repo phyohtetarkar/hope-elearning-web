@@ -5,7 +5,7 @@ import { API_URL_LOCAL } from "@/lib/constants";
 import { validateResponse } from "@/lib/validate-response";
 import { revalidatePath } from "next/cache";
 
-export async function deleteChapter(courseId: string, chapterId: string) {
+export async function deleteChapter(courseId: number, chapterId: number) {
   const session = await getSession();
 
   const url = `${API_URL_LOCAL}/admin/courses/${courseId}/chapters/${chapterId}`;

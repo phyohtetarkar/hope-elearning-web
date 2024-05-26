@@ -2,7 +2,7 @@ import { API_URL_LOCAL } from "@/lib/constants";
 import { Lesson } from "@/lib/models";
 import { validateResponse } from "@/lib/validate-response";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import LessonEditPage from "./lesson-edit-page";
 
 const getLesson = async (courseId: string, lessonId: string) => {
@@ -34,11 +34,11 @@ export default async function LessonEdit({
   const lesson = await getLesson(params.courseId, params.lessonId);
 
   if (!lesson) {
-    redirect(`/admin/courses/${params.courseId}`);
+    notFound();
   }
 
-  if (lesson.course?.id !== params.courseId) {
-    redirect(`/admin/courses/${params.courseId}`);
+  if (lesson.course?.id !== parseInt(params.courseId)) {
+    notFound();
   }
 
   return <LessonEditPage lesson={lesson} />;

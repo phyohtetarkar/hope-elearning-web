@@ -25,7 +25,7 @@ export default function Pagination({
   const params = useMemo(() => {
     const params = new URLSearchParams(sp.toString());
     params.delete("page");
-    return params.size > 0 ? `?${params.toString()}&` : "?";
+    return params.size > 0 ? params.toString() : undefined;
   }, [sp]);
 
   if (totalPage <= 1) {
@@ -58,7 +58,7 @@ export default function Pagination({
           return (
             <Link
               key={key}
-              href={`${basePath}${params}page=${p}`}
+              href={`${basePath}?page=${p}${params ? "&" + params : ""}`}
               className={props.className}
             >
               {props.children}
@@ -84,7 +84,7 @@ export default function Pagination({
         return (
           <Link
             key={key}
-            href={`${basePath}${params}page=${p}`}
+            href={`${basePath}?page=${p}${params ? "&" + params : ""}`}
             className={cn(
               props.className,
               props.isActive ? "bg-primary text-white" : undefined

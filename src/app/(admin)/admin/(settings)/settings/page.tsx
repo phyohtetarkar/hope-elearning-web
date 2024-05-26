@@ -1,8 +1,17 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { DollarSign, Handshake, Info, Shield, Users } from "lucide-react";
+import {
+  DollarSign,
+  Handshake,
+  Info,
+  ScrollText,
+  Shield,
+  Users,
+} from "lucide-react";
 import Link from "next/link";
 import { ReactNode } from "react";
+
+const iconSize = 30;
 
 const SettingMenu = ({
   avatar,
@@ -20,7 +29,9 @@ const SettingMenu = ({
           {avatar}
           <div className="flex flex-col">
             <h6 className="font-semibold mb-1 text-foreground">{title}</h6>
-            <p className="text-sm mb-0 text-muted-foreground">{description ?? ""}</p>
+            <p className="text-sm mb-0 text-muted-foreground">
+              {description ?? ""}
+            </p>
           </div>
         </div>
       </CardContent>
@@ -45,7 +56,12 @@ export default function Settings() {
                   className="flex flex-shrink-0 rounded-full justify-center items-center bg-success"
                   style={{ width: 60, height: 60 }}
                 >
-                  {<Users size={30} className="text-success-foreground" />}
+                  {
+                    <Users
+                      size={iconSize}
+                      className="text-success-foreground"
+                    />
+                  }
                 </div>
               }
               title="User"
@@ -59,7 +75,12 @@ export default function Settings() {
                   className="flex flex-shrink-0 rounded-full justify-center items-center bg-default"
                   style={{ width: 60, height: 60 }}
                 >
-                  {<DollarSign size={30} className="text-default-foreground" />}
+                  {
+                    <DollarSign
+                      size={iconSize}
+                      className="text-default-foreground"
+                    />
+                  }
                 </div>
               }
               title="Subscribers"
@@ -79,7 +100,7 @@ export default function Settings() {
                   className="flex flex-shrink-0 rounded-full justify-center items-center bg-primary"
                   style={{ width: 60, height: 60 }}
                 >
-                  {<Info size={30} className="text-primary-foreground" />}
+                  {<Info size={iconSize} className="text-primary-foreground" />}
                 </div>
               }
               title="About Us"
@@ -93,7 +114,12 @@ export default function Settings() {
                   className="flex flex-shrink-0 rounded-full justify-center items-center bg-warning"
                   style={{ width: 60, height: 60 }}
                 >
-                  {<Shield size={30} className="text-warning-foreground" />}
+                  {
+                    <Shield
+                      size={iconSize}
+                      className="text-warning-foreground"
+                    />
+                  }
                 </div>
               }
               title="Privacy Policy"
@@ -107,11 +133,41 @@ export default function Settings() {
                   className="flex flex-shrink-0 rounded-full justify-center items-center bg-default"
                   style={{ width: 60, height: 60 }}
                 >
-                  {<Handshake size={30} className="text-default-foreground" />}
+                  {
+                    <Handshake
+                      size={iconSize}
+                      className="text-default-foreground"
+                    />
+                  }
                 </div>
               }
               title="Terms And Conditions"
               description="Edit terms and conditions"
+            />
+          </Link>
+        </div>
+      </div>
+      <div className="mb-10">
+        <div className="uppercase text-sm">Misc</div>
+        <Separator className="mt-3" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xxxl:grid-cols-4 gap-3 mb-5 mt-5">
+          <Link href="/admin/audit-log">
+            <SettingMenu
+              avatar={
+                <div
+                  className="flex flex-shrink-0 rounded-full justify-center items-center bg-default"
+                  style={{ width: 60, height: 60 }}
+                >
+                  {
+                    <ScrollText
+                      size={iconSize}
+                      className="text-default-foreground"
+                    />
+                  }
+                </div>
+              }
+              title="Audit Log"
+              description="View audit actions"
             />
           </Link>
         </div>

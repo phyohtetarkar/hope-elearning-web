@@ -19,7 +19,7 @@ export default function AboutUsPage({ value }: { value?: JSON }) {
   const handleSave = async () => {
     try {
       setSaving(true);
-      await updateSiteSetting({ aboutUs: aboutUs });
+      await updateSiteSetting(aboutUs ?? "", 'about-us');
       toast({
         title: "Success",
         description: "About us updated",

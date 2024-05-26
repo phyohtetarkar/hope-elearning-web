@@ -21,7 +21,7 @@ const getCourse = async (slug: string) => {
     .catch((e) => undefined);
 };
 
-const getEnrolledCourse = async (courseId: string) => {
+const getEnrolledCourse = async (courseId: number) => {
   const cookieStore = cookies();
   const url = `${API_URL_LOCAL}/enrollments/${courseId}`;
 

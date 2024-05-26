@@ -7,7 +7,7 @@ import { validateResponse } from "@/lib/validate-response";
 export async function uploadImage(formData: FormData) {
   const session = await getSession();
 
-  const url = `${API_URL_LOCAL}/common/upload`;
+  const url = `${API_URL_LOCAL}/storage/upload`;
 
   const resp = await fetch(url, {
     method: "POST",

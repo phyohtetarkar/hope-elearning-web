@@ -5,7 +5,7 @@ import { API_URL_LOCAL } from "@/lib/constants";
 import { validateResponse } from "@/lib/validate-response";
 import { revalidatePath } from "next/cache";
 
-export async function createLesson(courseId: string, body: any) {
+export async function createLesson(courseId: number, body: any) {
   const session = await getSession();
 
   const url = `${API_URL_LOCAL}/admin/courses/${courseId}/lessons`;

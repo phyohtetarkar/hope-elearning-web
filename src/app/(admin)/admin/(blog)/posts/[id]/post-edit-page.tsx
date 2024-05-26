@@ -72,7 +72,7 @@ import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
 const schema = z.object({
-  id: z.string(),
+  id: z.number(),
   cover: z.string().optional(),
   title: z.string().optional(),
   slug: z.string().min(1, {

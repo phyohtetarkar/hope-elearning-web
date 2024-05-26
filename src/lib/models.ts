@@ -52,7 +52,7 @@ export interface Category {
 }
 
 export interface Post {
-  id: string;
+  id: number;
   cover?: string;
   title?: string;
   slug: string;
@@ -74,7 +74,7 @@ export interface PostMeta {
 }
 
 export interface Course {
-  id: string;
+  id: number;
   title: string;
   slug: string;
   cover?: string;
@@ -106,7 +106,7 @@ export interface CourseReview {
 }
 
 export interface Chapter {
-  id: string;
+  id: number;
   title: string;
   slug: string;
   sortOrder: number;
@@ -116,8 +116,8 @@ export interface Chapter {
 }
 
 export interface Lesson {
-  id: string;
-  courseId: string;
+  id: number;
+  courseId: number;
   title: string;
   slug: string;
   trial: boolean;
@@ -134,7 +134,7 @@ export interface Lesson {
 export interface EnrolledCourse {
   course: Course;
   resumeLesson?: Lesson;
-  completedLessons: string[];
+  completedLessons: number[];
   progress: number;
 }
 
@@ -161,6 +161,19 @@ export interface SiteSetting {
   aboutUs?: string;
   privacyPolicy?: string;
   termsAndConditions?: string;
+}
+
+export interface AuditAction {
+  resourceId: string;
+  resourceType: string;
+  actorId: string;
+  actorType: string;
+  actorName: string;
+  actorImage?: string | null;
+  event: string;
+  context?: string;
+  createdAt: string;
+  count: number;
 }
 
 export interface AiPromptRequest {

@@ -38,12 +38,15 @@ export const CustomCodeBlock = CodeBlockLowlight.extend({
     return ({ node, HTMLAttributes, getPos, editor }) => {
       const language = node.attrs["language"] ?? this.options.defaultLanguage;
 
-      const container = document.createElement("pre");
+      const wrapper = document.createElement("div");
+      wrapper.className = "relative";
+
+      const pre = document.createElement("pre");
 
       if (editor.isEditable) {
         const select = document.createElement("select");
         select.className =
-          "absolute bg-gray-800 text-white/70 rounded top-4 right-4 px-2 py-1";
+          "absolute bg-gray-800/50 text-white/70 rounded top-4 right-4 px-2 py-1";
 
         for (const l in common) {
           const option = document.createElement("option");
@@ -77,13 +80,13 @@ export const CustomCodeBlock = CodeBlockLowlight.extend({
               .run();
           }
         });
-        container.append(select);
+        wrapper.append(select);
       } else {
         const button = document.createElement("button");
         button.className =
-          "absolute rounded bg-transparent text-white/70 hover:text-white border border-white/70 hover:border-white top-3 right-3 px-2 py-0";
+          "absolute text-sm rounded bg-gray-800/50 text-white/70 hover:text-white border border-white/70 hover:border-white top-3 right-3 px-2 py-0.5";
         button.textContent = "Copy";
-        container.append(button);
+        wrapper.append(button);
 
         button.addEventListener("click", (evt) => {
           navigator.clipboard.writeText(node.textContent);
@@ -101,18 +104,18 @@ export const CustomCodeBlock = CodeBlockLowlight.extend({
       }
 
       const code = document.createElement("code");
-      container.append(code);
+      pre.append(code);
 
       Object.entries(this.options.HTMLAttributes).forEach(([key, value]) => {
-        container.setAttribute(key, value);
+        pre.setAttribute(key, value);
       });
-
-      container.classList.add("relative");
 
       code.classList.add(`${this.options.languageClassPrefix}${language}`);
 
+      wrapper.append(pre);
+
       return {
-        dom: container,
+        dom: wrapper,
         contentDOM: code,
         update: (updatedNode) => {
           if (updatedNode.type !== this.type) {

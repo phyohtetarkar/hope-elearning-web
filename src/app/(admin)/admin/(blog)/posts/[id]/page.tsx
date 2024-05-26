@@ -2,7 +2,7 @@ import { API_URL_LOCAL } from "@/lib/constants";
 import { Post } from "@/lib/models";
 import { validateResponse } from "@/lib/validate-response";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import PostEditPage from "./post-edit-page";
 
 const getPost = async (id: string) => {
@@ -26,7 +26,7 @@ export default async function PostEdit({ params }: { params: { id: string } }) {
   const post = await getPost(params.id);
 
   if (!post) {
-    redirect("/admin/posts");
+    notFound();
   }
 
   // const authorPage = getAuthors();

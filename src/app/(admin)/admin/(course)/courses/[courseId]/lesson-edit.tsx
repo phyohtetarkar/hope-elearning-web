@@ -15,9 +15,9 @@ import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
 const schema = z.object({
-  id: z.string().optional(),
-  courseId: z.string(),
-  chapterId: z.string(),
+  id: z.number().optional(),
+  courseId: z.number(),
+  chapterId: z.number(),
   title: z.string().min(1, {
     message: "Please enter lesson title",
   }),

@@ -1,10 +1,5 @@
 "use client";
 
-import { Category } from "@/lib/models";
-import { formatAbbreviate } from "@/lib/utils";
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -13,6 +8,11 @@ import {
 } from "@/components/ui/accordion";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
+import { Category } from "@/lib/models";
+import { formatAbbreviate } from "@/lib/utils";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export function CourseFilter({ categories }: { categories: Category[] }) {
   const sp = useSearchParams();
@@ -40,28 +40,30 @@ export function CourseFilter({ categories }: { categories: Category[] }) {
           Category
         </AccordionTrigger>
         <Separator />
-        <AccordionContent className="p-0 overflow-y-auto scrollbar-custom">
+        <AccordionContent className="p-0">
           {categories.length > 0 ? (
-            <div className="flex flex-col space-y-2 max-h-[150px] p-4 pb-0">
-              {categories.map((c) => {
-                return (
-                  <div key={c.id} className="flex items-start">
-                    <Link
-                      href={`/browse?category=${c.slug}`}
-                      className="text-foreground hover:text-anchor font-medium underline grow"
-                    >
-                      {c.name}
-                    </Link>
-                    <span className="bg-slate-200 rounded-full px-2.5 text-sm text-foreground">
-                      {formatAbbreviate(Number(c.courseCount ?? 0))}
-                    </span>
-                  </div>
-                );
-              })}
-              <div className="pb-4"></div>
+            <div className="overflow-y-auto scrollbar-custom">
+              <div className="flex flex-col space-y-2 max-h-[150px] p-4 pb-0">
+                {categories.map((c) => {
+                  return (
+                    <div key={c.id} className="flex items-start">
+                      <Link
+                        href={`/browse?category=${c.slug}`}
+                        className="text-foreground hover:text-anchor font-medium underline grow"
+                      >
+                        {c.name}
+                      </Link>
+                      <span className="bg-slate-200 rounded-full px-2.5 text-sm text-foreground">
+                        {formatAbbreviate(Number(c.courseCount ?? 0))}
+                      </span>
+                    </div>
+                  );
+                })}
+                <div className="pb-4"></div>
+              </div>
             </div>
           ) : (
-            <span className="text-muted-foreground">No categories found</span>
+            <div className="text-muted-foreground p-4">No categories found</div>
           )}
         </AccordionContent>
       </AccordionItem>

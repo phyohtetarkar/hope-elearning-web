@@ -19,7 +19,7 @@ export default function TermsAndConditionsPage({ value }: { value?: JSON }) {
   const handleSave = async () => {
     try {
       setSaving(true);
-      await updateSiteSetting({ termsAndConditions: termsAndConditions });
+      await updateSiteSetting(termsAndConditions ?? "", "terms-and-conditions");
       toast({
         title: "Success",
         description: "Terms and conditions updated",

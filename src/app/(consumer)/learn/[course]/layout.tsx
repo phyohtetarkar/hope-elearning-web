@@ -15,7 +15,7 @@ const getCourse = async (slug: string) => {
   const url = `${API_URL_LOCAL}/content/courses/${slug}`;
 
   const resp = await fetch(url, {
-    next: { revalidate: 10 },
+    cache: "no-store",
   });
 
   if (resp.status === 204) {
@@ -28,7 +28,7 @@ const getCourse = async (slug: string) => {
     .catch((e) => undefined);
 };
 
-const getEnrolledCourse = async (courseId: string) => {
+const getEnrolledCourse = async (courseId: number) => {
   const cookieStore = cookies();
   const url = `${API_URL_LOCAL}/enrollments/${courseId}`;
 

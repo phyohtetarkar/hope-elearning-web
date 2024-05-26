@@ -49,7 +49,7 @@ export default async function Home() {
 
   const topCoursesUI = (list: Course[]) => {
     if (list.length === 0) {
-      return <p className="text-muted-foreground mb-5">No count found</p>;
+      return <p className="text-muted-foreground mb-5">No content found</p>;
     }
 
     return list.map((c) => {
@@ -59,7 +59,7 @@ export default async function Home() {
 
   const recentPostsUI = (list: Post[]) => {
     if (list.length === 0) {
-      return <p className="text-muted-foreground mb-5">No count found</p>;
+      return <p className="text-muted-foreground mb-5">No content found</p>;
     }
 
     return list.map((p) => {
