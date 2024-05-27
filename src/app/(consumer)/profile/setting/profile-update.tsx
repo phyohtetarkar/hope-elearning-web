@@ -2,7 +2,7 @@
 
 import { Input } from "@/components/forms";
 import { Button } from "@/components/ui/button";
-import { ProfilePlaceholder } from "@/components/ui/profile-placeholder";
+import { ProfileAvatar } from "@/components/ui/profile-avatar";
 import { useToast } from "@/components/ui/use-toast";
 import { updateUserProfile, uploadImage } from "@/lib/actions";
 import { User } from "@/lib/models";
@@ -10,7 +10,6 @@ import { parseErrorResponse } from "@/lib/parse-error-response";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircle } from "lucide-react";
 
-import Image from "next/image";
 import { ChangeEvent, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -35,8 +34,6 @@ export default function ProfileUpdate({ user }: { user: User }) {
     register,
     formState: { errors, isSubmitting },
     handleSubmit,
-    setValue,
-    getValues,
   } = useForm<ProfileUpdateForm>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -154,7 +151,7 @@ export default function ProfileUpdate({ user }: { user: User }) {
           </Button>
         </div>
 
-        <div className="lg:col-span-4 col-span-12 flex justify-center lg:order-2 mb-2">
+        <div className="lg:col-span-4 col-span-12 flex justify-center lg:order-2 mb-5">
           <div
             role="button"
             className="relative overflow-hidden rounded-full size-[128px] mt-4 lg:mt-0"
@@ -165,22 +162,11 @@ export default function ProfileUpdate({ user }: { user: User }) {
               imageFileRef.current?.click();
             }}
           >
-            {user.image ? (
-              <Image
-                src={user.image}
-                width={0}
-                height={0}
-                alt="Profile"
-                sizes="33vw"
-                className="rounded-full size-[128px] object-cover border bg-gray-200"
-                priority
-              />
-            ) : (
-              <ProfilePlaceholder
-                className="size-[128px]"
-                iconClass="size-[70px]"
-              />
-            )}
+            <ProfileAvatar
+              src={user.image}
+              prefix={user.nickname.substring(0, 2)}
+              className="size-[128px] text-4xl"
+            />
             <div className="absolute bg-black bg-opacity-50 text-white text-center inset-x-0 bottom-0 py-1">
               Edit
             </div>

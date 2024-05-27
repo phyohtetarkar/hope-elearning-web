@@ -49,11 +49,11 @@ export function CourseFilter({ categories }: { categories: Category[] }) {
                     <div key={c.id} className="flex items-start">
                       <Link
                         href={`/browse?category=${c.slug}`}
-                        className="text-foreground hover:text-anchor font-medium underline grow"
+                        className="text-foreground/90 hover:text-foreground font-medium underline grow"
                       >
                         {c.name}
                       </Link>
-                      <span className="bg-slate-200 rounded-full px-2.5 text-sm text-foreground">
+                      <span className="bg-slate-200 dark:bg-muted rounded-full px-2.5 text-sm text-muted-foreground">
                         {formatAbbreviate(Number(c.courseCount ?? 0))}
                       </span>
                     </div>

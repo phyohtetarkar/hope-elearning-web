@@ -16,12 +16,12 @@ export const ProfilePlaceholder = forwardRef<
     <div
       ref={ref}
       className={cn(
-        "flex items-center justify-center size-[46px] bg-gray-200 rounded-full",
+        "flex items-center justify-center size-[46px] bg-muted rounded-full",
         className
       )}
       {...props}
     >
-      <UserIcon className={cn("size-7 text-gray-600", iconClass)} />
+      <UserIcon className={cn("size-7 text-muted-foreground", iconClass)} />
     </div>
   );
 });

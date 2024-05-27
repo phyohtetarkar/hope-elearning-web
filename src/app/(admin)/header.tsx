@@ -10,10 +10,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { ProfileAvatar } from "@/components/ui/profile-avatar";
+import { ThemeToggleButton } from "@/components/ui/theme-toggle-button";
 import { clearAuthCookies } from "@/lib/actions";
-import { Navbar, NavbarBrand, NavbarContent } from "@nextui-org/navbar";
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+} from "@nextui-org/navbar";
 import { Menu } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useContext } from "react";
 
@@ -46,17 +52,11 @@ export default function Header() {
       <NavbarContent as="div" justify="end">
         {user && (
           <DropdownMenu>
-            <DropdownMenuTrigger className="outline-none">
-              <div className="size-[40px] relative">
-                <Image
-                  src={user.image ?? "/images/profile.png"}
-                  alt="Avatar"
-                  fill
-                  sizes="50vh"
-                  className="rounded-full border-1 object-cover bg-gray-200"
-                  priority
-                />
-              </div>
+            <DropdownMenuTrigger className="outline-none flex-shrink-0">
+              <ProfileAvatar
+                src={user.image}
+                prefix={user.nickname.substring(0, 2)}
+              />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="shadow-xl">
               <DropdownMenuLabel className="gap-2">
@@ -78,6 +78,9 @@ export default function Header() {
             </DropdownMenuContent>
           </DropdownMenu>
         )}
+        <NavbarItem>
+          <ThemeToggleButton />
+        </NavbarItem>
       </NavbarContent>
     </Navbar>
   );

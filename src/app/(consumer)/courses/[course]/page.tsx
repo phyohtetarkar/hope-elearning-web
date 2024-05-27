@@ -123,19 +123,21 @@ export async function generateMetadata(
     const previousImages = (await parent).openGraph?.images || [];
 
     if (course) {
+      const title = course.title;
+      const desc = course.excerpt ?? title;
       return {
-        title: course.title,
-        description: course.category?.name,
+        title: title,
+        description: desc,
         openGraph: {
           url: `${process.env.NEXT_PUBLIC_BASE_URL}/courses/${course.slug}`,
-          title: course.title,
-          description: course.category?.name,
+          title: title,
+          description: desc,
           images: [`${course.cover ?? ""}`, ...previousImages],
           type: "website",
         },
         twitter: {
-          title: course.title,
-          description: course.category?.name,
+          title: title,
+          description: desc,
           card: "summary_large_image",
           images: [`${course.cover ?? ""}`, ...previousImages],
         },

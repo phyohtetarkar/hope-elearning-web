@@ -69,12 +69,12 @@ export default async function Home() {
 
   return (
     <>
-      <div className="bg-primary">
+      <div className="bg-primary dark:bg-muted/70">
         <div className="container py-5 lg:py-12">
           <div className="grid grid-cols-1 lg:grid-cols-2">
             <div className="flex flex-col justify-center mb-5 lg:mb-0">
-              <h1 className="text-white mb-2">Welcome to [sitename]</h1>
-              <div className="text-white text-opacity-75 mb-6">
+              <h1 className="text-primary-foreground dark:text-foreground mb-2">Welcome to [sitename]</h1>
+              <div className="text-primary-foreground/75 dark:text-foreground/75 mb-6">
                 Hi, Welcome to [sitename]. Start a new career in the software
                 developing industry.
               </div>
@@ -105,7 +105,7 @@ export default async function Home() {
           </div>
         </div>
       </div>
-      <div className="bg-white px-3 border-b">
+      <div className="bg-background px-3 border-b">
         <QuoteSwiper />
       </div>
       <div className="container py-10">

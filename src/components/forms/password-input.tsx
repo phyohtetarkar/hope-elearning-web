@@ -32,14 +32,14 @@ const PasswordInput = forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
           <div
-            className="border border-l-0 rounded-r-md px-3 flex items-center bg-gray-100"
+            className="border border-l-0 rounded-r-md px-3 flex items-center bg-muted"
             role="button"
             onClick={() => setIsPassword(!isPassword)}
           >
             {isPassword ? <EyeOff size={20} /> : <Eye size={20} />}
           </div>
         </div>
-        {error && <div className="text-danger text-sm mt-1.5">{error}</div>}
+        {error && <div className="text-destructive text-sm mt-1.5">{error}</div>}
       </div>
     );
   }

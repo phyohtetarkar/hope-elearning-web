@@ -1,7 +1,7 @@
 import { ContentRenderer } from "@/components/editor";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { ProfilePlaceholder } from "@/components/ui/profile-placeholder";
+import { ProfileAvatar } from "@/components/ui/profile-avatar";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { API_URL_LOCAL } from "@/lib/constants";
 import { Post, User } from "@/lib/models";
@@ -62,7 +62,7 @@ export async function generateMetadata(
 
     if (post) {
       const title = post.title ?? "(Untitled)";
-      const desc = `${wordPerMinute(post.wordCount)} min read`;
+      const desc = post.excerpt ?? title;
       return {
         title: title,
         description: desc,
@@ -106,37 +106,58 @@ export default async function BlogPost({ params }: Props) {
     const authorCount = post.authors?.length ?? 0;
 
     return (
-      <div className="flex items-center gap-3 mb-4 -ml-[3px]">
+      <div
+        className={cn(
+          "flex items-center gap-3 mb-4",
+          authorCount > 1 ? "-ml-[3px]" : undefined
+        )}
+      >
         <div className="flex flex-shrink-0">
           {post.authors?.map((a, i) => {
-            if (!a.image) {
-              return (
-                <ProfilePlaceholder
-                  key={i}
-                  className={cn(
-                    "size-[54px] border-3 border-white",
-                    i > 0 ? "ml-[-27px]" : undefined
-                  )}
-                  style={{
-                    zIndex: authorCount - i,
-                  }}
-                />
-              );
-            }
+            // if (!a.image) {
+            //   return (
+            //     <ProfilePlaceholder
+            //       key={i}
+            //       className={cn(
+            //         "size-[54px] border-3 border-white",
+            //         i > 0 ? "ml-[-27px]" : undefined
+            //       )}
+            //       style={{
+            //         zIndex: authorCount - i,
+            //       }}
+            //     />
+            //   );
+            // }
+
+            // return (
+            //   <Image
+            //     key={i}
+            //     src={a.image}
+            //     className={cn(
+            //       "size-[54px] object-cover rounded-full border-3 border-white bg-gray-200",
+            //       i > 0 ? "ml-[-27px]" : undefined
+            //     )}
+            //     alt="Cover"
+            //     sizes="30vh"
+            //     width={0}
+            //     height={0}
+            //     priority
+            //     style={{
+            //       zIndex: authorCount - i,
+            //     }}
+            //   />
+            // );
 
             return (
-              <Image
+              <ProfileAvatar
                 key={i}
                 src={a.image}
+                prefix={a.nickname.substring(0, 2)}
                 className={cn(
-                  "size-[54px] object-cover rounded-full border-3 border-white bg-gray-200",
-                  i > 0 ? "ml-[-27px]" : undefined
+                  "size-[54px]",
+                  i > 0 ? "ml-[-27px]" : undefined,
+                  authorCount > 1 ? "border-3 border-white" : undefined
                 )}
-                alt="Cover"
-                sizes="30vh"
-                width={0}
-                height={0}
-                priority
                 style={{
                   zIndex: authorCount - i,
                 }}
@@ -211,7 +232,7 @@ export default async function BlogPost({ params }: Props) {
               <Link
                 key={t.id}
                 href={`/tags/${t.slug}`}
-                className="bg-gray-200 rounded-full text-sm px-3 py-1"
+                className="bg-muted text-foreground rounded-full text-sm px-3 py-1"
               >
                 {t.name}
               </Link>

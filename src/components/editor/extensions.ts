@@ -42,7 +42,7 @@ const heading = Heading.extend({
 const tiptapLink = TiptapLink.configure({
   HTMLAttributes: {
     class: cn(
-      "text-gray-600 underline underline-offset-[3px] hover:text-anchor transition-colors cursor-pointer"
+      "!text-foreground underline underline-offset-[3px] transition-colors cursor-pointer"
     ),
   },
 });
@@ -119,14 +119,14 @@ const starterKit = StarterKit.configure({
   code: {
     HTMLAttributes: {
       class: cn(
-        "rounded-lg bg-gray-100 text-danger-600 px-1.5 py-1 font-mono font-medium"
+        "rounded-lg bg-muted text-red-700 dark:bg-muted/90 dark:text-red-400 px-1.5 py-1 font-mono font-medium"
       ),
       spellcheck: "false",
     },
   },
   horizontalRule: {
     HTMLAttributes: {
-      class: cn("my-4"),
+      class: cn("my-4 bg-border border-border"),
     },
   },
   dropcursor: {

@@ -78,18 +78,18 @@ export async function generateMetadata(
 
     if (course) {
       return {
-        title: course.title,
-        description: lesson.title,
+        title: lesson.title,
+        description: course.title,
         openGraph: {
           url: `${process.env.NEXT_PUBLIC_BASE_URL}/courses/${course.slug}/${lesson.slug}`,
-          title: course.title,
-          description: lesson.title,
+          title: lesson.title,
+          description: course.title,
           images: [`${course.cover ?? ""}`, ...previousImages],
           type: "website",
         },
         twitter: {
-          title: course.title,
-          description: lesson.title,
+          title: lesson.title,
+          description: course.title,
           card: "summary_large_image",
           images: [`${course.cover ?? ""}`, ...previousImages],
         },
@@ -139,7 +139,7 @@ export default async function LessonDetail({ params }: Props) {
       <div className="aspect-w-16 aspect-h-9 mb-6">
         <Image
           src={lesson.course?.cover ?? "/images/placeholder.jpeg"}
-          className="object-cover rounded-md"
+          className="object-cover rounded-md border"
           alt="Cover"
           fill
           sizes="100vh"

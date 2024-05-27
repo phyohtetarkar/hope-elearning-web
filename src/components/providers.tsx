@@ -15,10 +15,11 @@ import {
   PointElement,
   Tooltip,
 } from "chart.js";
-import NextNProgress from "nextjs-progressbar";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
+import dynamic from "next/dynamic";
 import NProgress from "nprogress";
-import { Suspense, useEffect } from "react";
-import { NavigationEvents } from "./navigation-events";
+import { useEffect } from "react";
+import NavigationProgress from "./navigation-progress";
 import { Toaster } from "./ui/toaster";
 
 Chart.register(
@@ -41,7 +42,7 @@ type PushStateInput = [
   url?: string | URL | null | undefined
 ];
 
-export default function Providers({ children }: { children: React.ReactNode }) {
+function Providers({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const handleAnchorClick = (event: MouseEvent) => {
       const targetUrl = (event.currentTarget as HTMLAnchorElement).href;
@@ -72,20 +73,20 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     });
   }, []);
   return (
-    <>
-      <Suspense fallback={null}>
-        <NavigationEvents />
-        <NextNProgress
-          color="#5863f8"
-          startPosition={0.3}
-          height={2}
-          options={{
-            showSpinner: false,
-          }}
-        />
-      </Suspense>
+    <NextThemesProvider
+      attribute="class"
+      defaultTheme="light"
+      disableTransitionOnChange
+    >
+      <NavigationProgress />
       <Toaster />
-      <NextUIProvider className="h-full">{children}</NextUIProvider>
-    </>
+      <NextUIProvider className="h-full dark:bg-[#09090b]">
+        {children}
+      </NextUIProvider>
+    </NextThemesProvider>
   );
 }
+
+export default dynamic(() => Promise.resolve(Providers), {
+  ssr: false,
+});

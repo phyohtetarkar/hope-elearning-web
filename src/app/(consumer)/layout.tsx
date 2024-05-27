@@ -24,13 +24,11 @@ export default async function ConsumerLayout({
   const user = await getUser();
 
   return (
-    <div className="relative h-full">
+    <div className="flex flex-col h-full">
       <Header user={user} />
-      <div className="pt-[65px] h-full">
-        <div className="flex flex-col h-full">
-          <main className="grow">{children}</main>
-          <Footer />
-        </div>
+      <div className="pt-[65px] flex flex-col grow dark:bg-[#09090b]">
+        <div className="grow">{children}</div>
+        <Footer />
       </div>
     </div>
   );

@@ -30,10 +30,10 @@ export default async function Categories() {
 
   return (
     <div className="mb-5">
-      <div className="bg-primary mb-4">
+      <div className="bg-primary dark:bg-muted/70 mb-4">
         <div className="container h-[8rem]">
           <div className="flex items-center h-full">
-            <h2 className="text-primary-foreground">Explore categories</h2>
+            <h2 className="text-primary-foreground dark:text-foreground">Explore categories</h2>
           </div>
         </div>
       </div>

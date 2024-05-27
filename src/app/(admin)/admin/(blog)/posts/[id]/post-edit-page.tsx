@@ -309,7 +309,7 @@ export default function PostEditPage({ post }: PostEditPageProps) {
   return (
     <>
       <div className="flex flex-col">
-        <nav className="flex gap-3 items-center fixed top-0 inset-x-0 bg-white px-4 h-[65px] border-b z-10">
+        <nav className="flex gap-3 items-center fixed top-0 inset-x-0 bg-background px-4 h-[65px] border-b z-10">
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
@@ -474,7 +474,6 @@ export default function PostEditPage({ post }: PostEditPageProps) {
                   return (
                     <TitleInput
                       placeholder="Post title"
-                      className="text-gray-800"
                       value={field.value ?? ""}
                       spellCheck={false}
                       maxLength={2000}
@@ -526,7 +525,7 @@ export default function PostEditPage({ post }: PostEditPageProps) {
       </div>
       <div
         className={cn(
-          "flex flex-col fixed bg-white inset-y-0 right-0 w-full min-w-[100px] max-w-[400px] z-40",
+          "flex flex-col fixed bg-background border-l inset-y-0 right-0 w-full min-w-[100px] max-w-[400px] z-40",
           `transition-transform ease-out`,
           `${isOpenSettings ? "translate-x-0" : "translate-x-[400px]"}`
         )}

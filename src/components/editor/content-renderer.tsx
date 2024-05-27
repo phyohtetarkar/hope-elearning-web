@@ -24,11 +24,12 @@ export function ContentRenderer({ lexical }: { lexical?: string | JSON }) {
         editorProps={{
           editable: () => false,
           attributes: {
-            class: "prose max-w-none prose-pre:rounded tiptap",
+            class:
+              "prose dark:prose-invert max-w-none prose-pre:rounded",
           },
         }}
       >
-        <div></div>
+        <div className=""></div>
       </EditorContent>
     </EditorRoot>
   );

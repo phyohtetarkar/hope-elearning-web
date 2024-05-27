@@ -26,14 +26,15 @@ export default function QuoteSwiper() {
       slidesPerView={1}
       pagination={{
         clickable: true,
-        enabled: false,
+        enabled: true,
+        
       }}
       autoplay={{
         delay: 5000,
         disableOnInteraction: false,
       }}
       modules={[Autoplay, Pagination]}
-      className="py-7"
+      className="py-8"
     >
       {quotes.map((q, i) => {
         return (

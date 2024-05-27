@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ProfilePlaceholder } from "@/components/ui/profile-placeholder";
+import { ProfileAvatar } from "@/components/ui/profile-avatar";
 import Rating from "@/components/ui/rating";
 import { Separator } from "@/components/ui/separator";
 import { TabItem, Tabs } from "@/components/ui/tabs";
@@ -46,7 +46,7 @@ export default function CoursePage({
 }: CoursePageProps) {
   return (
     <>
-      <div className="bg-primary py-6 lg:py-16">
+      <div className="bg-primary dark:bg-muted/70 py-6 lg:py-16">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
             <div className="flex flex-col lg:col-span-8 order-2 lg:order-1">
@@ -56,11 +56,11 @@ export default function CoursePage({
               >
                 {course.category?.name}
               </Link> */}
-              <h2 className="text-primary-foreground mb-5">{course.title}</h2>
-              <p className="text-primary-foreground font-light mb-5">
+              <h2 className="text-primary-foreground dark:text-foreground mb-5">{course.title}</h2>
+              <p className="text-primary-foreground dark:text-foreground font-light mb-5">
                 {course.excerpt}
               </p>
-              <div className="flex flex-wrap gap-4 text-primary-foreground/80">
+              <div className="flex flex-wrap gap-4 text-primary-foreground/75 dark:text-foreground/70">
                 <div className="flex items-center">
                   <Users className="size-4" />
                   <span className="ms-1 text-sm">
@@ -88,7 +88,7 @@ export default function CoursePage({
                 </div>
               </div>
             </div>
-            <div className="aspect-w-16 aspect-h-9 bg-white drop-shadow-xl rounded-md lg:col-span-4 order-1 lg:order-2">
+            <div className="aspect-w-16 aspect-h-9 bg-gray-100 drop-shadow-xl rounded-md lg:col-span-4 order-1 lg:order-2">
               <Image
                 src={course.cover ?? "/images/placeholder.jpeg"}
                 className="object-cover p-1"
@@ -104,12 +104,12 @@ export default function CoursePage({
       <div className="container py-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 mb-10">
           <div className="lg:col-span-8 order-2 lg:order-1">
-            <div className="bg-white rounded-md border">
+            <div className="bg-background rounded-md border">
               <Tabs defaultTabKey="description">
                 <TabItem tabKey="description" title="Description">
                   <div className="p-4">
                     <article
-                      className="prose prose-headings:mt-0 max-w-none"
+                      className="prose dark:prose-invert prose-headings:mt-0 max-w-none"
                       dangerouslySetInnerHTML={{
                         __html: course.description ?? "",
                       }}
@@ -124,7 +124,7 @@ export default function CoursePage({
                     {course.chapters?.map((c, i) => {
                       return (
                         <AccordionItem key={i} value={`chapter-${i}`}>
-                          <AccordionTrigger className="bg-gray-100 rounded-md px-2">
+                          <AccordionTrigger className="bg-muted dark:bg-muted/50 border rounded-md px-2">
                             <h6>{c.title}</h6>
                           </AccordionTrigger>
                           <AccordionContent>
@@ -139,7 +139,7 @@ export default function CoursePage({
                                       <div className="text-base">{l.title}</div>
                                       <Link
                                         href={`/courses/${course.slug}/lessons/${l.slug}`}
-                                        className="ms-auto text-anchor underline"
+                                        className="ms-auto text-primary underline"
                                       >
                                         Preview
                                       </Link>
@@ -239,7 +239,7 @@ export default function CoursePage({
                   <span className="ms-1.5">Category</span>
                   <Link
                     href={`/categories/${course.category?.slug}`}
-                    className="ms-auto text-anchor underline"
+                    className="ms-auto text-primary underline"
                   >
                     {course.category?.name}
                   </Link>
@@ -259,18 +259,11 @@ export default function CoursePage({
                   {course.authors?.map((a, i) => {
                     return (
                       <div key={i} className="flex items-center space-x-3">
-                        {a.image ? (
-                          <Image
-                            alt="Profile"
-                            src={a.image}
-                            width={0}
-                            height={0}
-                            sizes="33vh"
-                            className="rounded-full border size-[54px] bg-gray-200"
-                          />
-                        ) : (
-                          <ProfilePlaceholder className="size-[54px] border" />
-                        )}
+                        <ProfileAvatar
+                          src={a?.image}
+                          prefix={a?.nickname.substring(0, 2)}
+                          className="size-[54px]"
+                        />
                         <h6>{a.nickname}</h6>
                       </div>
                     );

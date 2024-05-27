@@ -1,5 +1,6 @@
 "use client";
 import { Editor } from "@tinymce/tinymce-react";
+import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
 
 type OnEditorChange = (newValue: string) => void;
@@ -27,6 +28,8 @@ function RichTextEditor({
   noBorder,
   iframeEmbed,
 }: RichTextEditorInputProps) {
+  const { theme } = useTheme();
+
   if (typeof window === "undefined") {
     return null;
   }
@@ -45,7 +48,7 @@ function RichTextEditor({
           .getContainer()
           .getElementsByClassName("tox-edit-area__iframe")
           .item(0)
-          ?.setAttribute("style", "background-color: #f9fafb");
+          ?.setAttribute("style", "background-color: transparent");
         editor.getContainer().style.borderRadius = "0.15rem 0.15rem";
         editor.getContainer().style.border = `${
           noBorder ? 0 : 1
@@ -57,7 +60,8 @@ function RichTextEditor({
         height: minHeight,
         menubar: false,
         inline: inline ?? false,
-        skin: "tinymce-5",
+        skin: theme === "dark" ? "tinymce-5-dark" : "tinymce-5",
+        content_css: theme === "dark" ? "tinymce-5-dark" : "tinymce-5",
         link_default_target: "_blank",
         help_tabs: ["shortcuts"],
         media_alt_source: false,
@@ -71,7 +75,7 @@ function RichTextEditor({
           });
         },
         content_style:
-          "body { font-family: Inter, Noto Sans Myanmar UI, Helvetica, Arial, sans-serif; font-size: 16px; }",
+          "body { font-family: Inter, Noto Sans Myanmar UI, Helvetica, Arial, sans-serif; font-size: 16px; border-radius: 0px }",
         quickbars_insert_toolbar: false,
         quickbars_selection_toolbar:
           "blocks | bold italic underline strikethrough link",

@@ -63,7 +63,7 @@ export default function VerifyEmailPage({ oobCode }: { oobCode: string }) {
 
         <div className="flex flex-wrap items-center gap-3">
           <Button className="flex-1" asChild>
-            <Link href="/courses">Browse courses</Link>
+            <Link href="/browse">Browse courses</Link>
           </Button>
           <Button className="flex-1" variant="outline" asChild>
             <Link href="/profile">Go to profile</Link>

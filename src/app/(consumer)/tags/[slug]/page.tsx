@@ -68,7 +68,7 @@ export async function generateMetadata(
 
     if (tag) {
       const title = `Tags | ${tag.name}`;
-      const desc = pluralize(Number(tag.postCount ?? 0), "post");
+      const desc = process.env.NEXT_PUBLIC_APP_DESC;
       return {
         title: title,
         description: desc,
@@ -90,7 +90,7 @@ export async function generateMetadata(
   } catch (error) {}
 
   return {
-    title: "Category not found",
+    title: "Tag not found",
   };
 }
 
@@ -128,30 +128,30 @@ export default async function Topic(props: Props) {
 
   return (
     <>
-      <div className="bg-primary h-[5rem]">
+      <div className="bg-primary dark:bg-muted/70 h-[5rem]">
         <div className="container h-full flex items-center">
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink
-                  className="text-base text-primary-foreground/70 hover:text-primary-foreground"
+                  className="text-base text-primary-foreground/70 hover:text-primary-foreground dark:text-foreground/70 hover:dark:text-foreground"
                   asChild
                 >
                   <Link href="/">Home</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
-              <BreadcrumbSeparator className="text-primary-foreground/70" />
+              <BreadcrumbSeparator className="text-primary-foreground/70 dark:text-foreground/70" />
               <BreadcrumbItem>
                 <BreadcrumbLink
-                  className="text-base text-primary-foreground/70 hover:text-primary-foreground"
+                  className="text-base text-primary-foreground/70 hover:text-primary-foreground dark:text-foreground/70 hover:dark:text-foreground"
                   asChild
                 >
                   <Link href="/blogs">Blogs</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
-              <BreadcrumbSeparator className="text-primary-foreground/70" />
+              <BreadcrumbSeparator className="text-primary-foreground/70 dark:text-foreground/70" />
               <BreadcrumbItem>
-                <BreadcrumbPage className="text-base text-nowrap text-primary-foreground">
+                <BreadcrumbPage className="text-base text-nowrap text-primary-foreground dark:text-foreground">
                   {tag.name}
                 </BreadcrumbPage>
               </BreadcrumbItem>

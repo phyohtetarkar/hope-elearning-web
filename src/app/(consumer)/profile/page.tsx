@@ -1,13 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ProfilePlaceholder } from "@/components/ui/profile-placeholder";
+import { ProfileAvatar } from "@/components/ui/profile-avatar";
 import { Separator } from "@/components/ui/separator";
 import { API_URL_LOCAL } from "@/lib/constants";
 import { User, UserMeta } from "@/lib/models";
 import { formatNumber } from "@/lib/utils";
 import { validateResponse } from "@/lib/validate-response";
 import { cookies } from "next/headers";
-import Image from "next/image";
 import Link from "next/link";
 
 const getUser = async () => {
@@ -49,18 +48,11 @@ export default async function Profile() {
       <CardContent className="p-4">
         <div className="flex gap-3 items-center">
           <div className="flex-shrink-0">
-            {user?.image ? (
-              <Image
-                src={user.image}
-                width={0}
-                height={0}
-                alt="User image"
-                sizes="50vh"
-                className="rounded-full object-cover size-[60px] border bg-gray-200"
-              />
-            ) : (
-              <ProfilePlaceholder className="size-[60px]" iconClass="size-8" />
-            )}
+            <ProfileAvatar
+              src={user?.image}
+              prefix={user?.nickname.substring(0, 2)}
+              className="size-[60px]"
+            />
           </div>
           <div className="truncate">
             <h6 className="mb-0 text-foreground">{user?.nickname}</h6>

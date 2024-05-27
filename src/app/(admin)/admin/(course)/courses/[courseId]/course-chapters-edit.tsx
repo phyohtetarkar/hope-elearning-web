@@ -92,7 +92,7 @@ const ChapterItem = ({
   return (
     <AccordionItem
       value={`chapter-${value.id}`}
-      className="bg-gray-100 rounded-md px-2 active:z-10"
+      className="bg-muted dark:bg-muted/50 border rounded-md px-2 active:z-10"
       ref={setNodeRef}
       style={style}
     >
@@ -179,7 +179,7 @@ const ChapterItem = ({
                       variant="outline"
                       className="flex-shrink-0"
                     >
-                      <Trash2 className="size-4 text-danger" />
+                      <Trash2 className="size-4 text-destructive" />
                     </Button>
                   </AlertDialogTrigger>
                 </TooltipTrigger>

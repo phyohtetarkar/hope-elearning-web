@@ -26,7 +26,7 @@ const Select = forwardRef<HTMLSelectElement, InputProps>(
         >
           {children}
         </select>
-        {error && <div className="text-danger text-sm mt-1.5">{error}</div>}
+        {error && <div className="text-destructive text-sm mt-1.5">{error}</div>}
       </div>
     );
   }

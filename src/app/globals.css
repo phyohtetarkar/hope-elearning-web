@@ -56,13 +56,13 @@
     --novel-highlight-gray: #f1f1ef;
 
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 224 71.4% 4.1%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 224 71.4% 4.1%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 224 71.4% 4.1%;
 
     --primary: 243 75% 59%;
     --primary-foreground: 210 40% 98%;
@@ -70,18 +70,18 @@
     --secondary: 37 95% 56%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 46.1%;
 
-    --accent: 220, 14%, 96%;
-    --accent-foreground: 0, 0%, 13%;
+    --accent: 220 14.3% 95.9%;
+    --accent-foreground: 220.9 39.3% 11%;
 
     --destructive: 359 100% 42%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 210 20% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 224 71.4% 4.1%;
 
     --radius: 0.35rem;
   }
@@ -97,33 +97,33 @@
     --novel-highlight-pink: #5c1a3a;
     --novel-highlight-gray: #3a3a3a;
 
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 224 71.4% 4.1%;
+    --foreground: 210 20% 98%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 224 71.4% 4.1%;
+    --card-foreground: 210 20% 98%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 224 71.4% 4.1%;
+    --popover-foreground: 210 20% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 234 89% 74%;
+    --primary-foreground: 220.9 39.3% 11%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 37 95% 56%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 215 27.9% 16.9%;
+    --muted-foreground: 217.9 10.6% 64.9%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 215 27.9% 16.9%;
+    --accent-foreground: 210 20% 98%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 359 100% 63%;
+    --destructive-foreground: 222.2 47.4% 11.2%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --border: 215 27.9% 16.9%;
+    --input: 215 27.9% 16.9%;
+    --ring: 216 12.2% 83.9%;
   }
 
   h1 {
@@ -157,15 +157,15 @@
 
 @layer components {
   .default-input {
-    @apply border-gray-300 focus:border-primary focus:ring-0 disabled:bg-gray-200 disabled:cursor-not-allowed;
+    @apply border-border focus:border-primary focus:ring-0 bg-background disabled:bg-muted-foreground/20 disabled:cursor-not-allowed;
   }
 
   .valid-input {
-    @apply border-success focus:border-success focus:ring-[4px] focus:ring-success/30;
+    @apply border-success focus:border-success focus:ring-[4px] focus:ring-success/30 bg-background;
   }
 
   .invalid-input {
-    @apply border-danger focus:border-danger focus:ring-[4px] focus:ring-danger/30;
+    @apply border-destructive focus:border-destructive focus:ring-[4px] focus:ring-destructive/30 bg-background;
   }
 }
 
@@ -228,22 +228,32 @@ html body[data-scroll-locked] {
 
 /* Swiper */
 .swiper-pagination-bullet {
-  background-color: #fff;
+  background-color: hsl(var(--primary));
   width: 10px;
   height: 10px;
+  opacity: 0.3;
 }
 .swiper-pagination-bullet-active {
-  background-color: #fff;
+  background-color: hsl(var(--primary));
+  opacity: 1;
 }
 
 .swiper-button-next,
 .swiper-button-prev {
-  --swiper-navigation-color: var(--primary);
+  --swiper-navigation-color: hsl(var(--primary));
 }
 
 /* Tinymce */
 .tox-pop .tox-pop__dialog .tox-toolbar {
   padding: 0 !important;
+}
+
+.tox .tox-collection__item-label h1, h2, h3, h4, h5, h6, p, pre {
+  background-color: transparent !important;
+}
+
+.tox .tox-edit-area__iframe {
+  border-radius: 0px;
 }
 
 .mce-edit-focus {

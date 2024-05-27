@@ -96,7 +96,7 @@ export default async function Blogs(props: Props) {
                     <Link
                       key={t.id}
                       href={`/tags/${t.slug}`}
-                      className="bg-gray-200 rounded-full text-sm px-3 py-1"
+                      className="bg-muted rounded-full text-sm px-3 py-1"
                     >
                       {t.name}
                     </Link>
@@ -113,9 +113,9 @@ export default async function Blogs(props: Props) {
 
   return (
     <>
-      <div className="bg-primary h-[8rem]">
+      <div className="bg-primary dark:bg-muted/70 h-[8rem]">
         <div className="container h-full flex items-center">
-          <h2 className="text-primary-foreground ">Explore blogs</h2>
+          <h2 className="text-primary-foreground dark:text-foreground">Explore blogs</h2>
         </div>
       </div>
       <div className="container py-7 mb-10">
@@ -139,7 +139,7 @@ export default async function Blogs(props: Props) {
                     <Link
                       key={t.id}
                       href={`/tags/${t.slug}`}
-                      className="bg-gray-200 rounded-full text-sm px-3 py-1"
+                      className="bg-muted rounded-full text-sm px-3 py-1"
                     >
                       {t.name}
                     </Link>

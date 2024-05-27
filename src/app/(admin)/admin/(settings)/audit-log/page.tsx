@@ -1,4 +1,5 @@
 import Pagination from "@/components/ui/pagination";
+import { ProfileAvatar } from "@/components/ui/profile-avatar";
 import { ProfilePlaceholder } from "@/components/ui/profile-placeholder";
 import {
   Table,
@@ -17,9 +18,8 @@ import {
   uppercaseFirstChar,
 } from "@/lib/utils";
 import { validateResponse } from "@/lib/validate-response";
-import { BotIcon, CpuIcon, PencilIcon, PlusIcon, Trash2Icon } from "lucide-react";
+import { CpuIcon, PencilIcon, PlusIcon, Trash2Icon } from "lucide-react";
 import { cookies } from "next/headers";
-import Image from "next/image";
 import AuditLogFilter from "./audit-log-filter";
 
 interface Props {
@@ -51,23 +51,20 @@ export default async function AuditLog(props: Props) {
       return (
         <div
           className={
-            "flex items-center justify-center size-[46px] bg-gray-200 rounded-full"
+            "flex items-center justify-center size-[46px] bg-muted rounded-full"
           }
         >
-          <CpuIcon className={"size-6 text-gray-600"} />
+          <CpuIcon className={"size-6 text-muted-foreground"} />
         </div>
       );
     }
 
     if (action.actorImage) {
       return (
-        <Image
-          alt="Profile"
+        <ProfileAvatar
           src={action.actorImage}
-          width={0}
-          height={0}
-          sizes="33vh"
-          className="rounded-full border size-[46px] bg-gray-200"
+          prefix={action.actorName.substring(0, 2)}
+          className="size-[46px]"
         />
       );
     }
@@ -124,7 +121,7 @@ export default async function AuditLog(props: Props) {
                 <TableCell className="flex items-start space-x-3 min-w-[300px]">
                   <div className="relative flex-shrink-0">
                     {avatarUI(a)}
-                    <div className="absolute right-[-2px] bottom-[-2px] size-[1.4rem] bg-white rounded-full shadow flex items-center justify-center">
+                    <div className="absolute right-[-2px] bottom-[-2px] size-[1.4rem] bg-white text-black rounded-full shadow flex items-center justify-center">
                       {eventIcon(a)}
                     </div>
                   </div>

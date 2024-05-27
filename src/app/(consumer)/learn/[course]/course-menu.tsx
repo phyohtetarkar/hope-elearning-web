@@ -90,7 +90,7 @@ export default function CourseMenu({
         isMenuOpen ? "translate-x-0" : `-translate-x-[360px]`
       } transition-transform ease-out min-w-[200px] max-w-[360px] lg:max-w-[320px] fixed lg:static inset-y-0 w-full z-50 flex flex-col lg:translate-x-0`}
     >
-      <div className="flex flex-col grow py-4 overflow-y-auto scrollbar-custom bg-gray-50 mr-[40px] lg:mr-0 border-r">
+      <div className="flex flex-col grow py-4 overflow-y-auto scrollbar-custom bg-muted mr-[40px] lg:mr-0 border-r">
         <h5 className="mb-5 px-4">{course.title}</h5>
 
         <div className="text-sm text-muted-foreground mb-1 px-4">
@@ -125,14 +125,14 @@ export default function CourseMenu({
                           className={cn(
                             "flex items-center gap-2 py-3 px-4",
                             params.lesson === l.slug
-                              ? "bg-primary/10"
+                              ? "bg-primary/15"
                               : undefined
                           )}
                         >
                           {isCompleted(l) ? (
                             <CheckCircle className="text-success size-5 flex-shrink-0" />
                           ) : (
-                            <Circle className="text-default size-5 flex-shrink-0" />
+                            <Circle className="text-muted-foreground/50 size-5 flex-shrink-0" />
                           )}
                           <Link
                             href={`/learn/${course.slug}/lessons/${l.slug}`}

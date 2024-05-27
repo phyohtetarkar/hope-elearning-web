@@ -181,7 +181,7 @@ export default function ResumeCoursePage({ lesson }: { lesson: Lesson }) {
                 return (
                   <li
                     key={i}
-                    className="text-muted-foreground hover:text-black text-sm mb-1"
+                    className="text-muted-foreground hover:text-foreground text-sm mb-1"
                   >
                     <a href={`#${h.replaceAll(/\s+/g, "-").toLowerCase()}`}>
                       {h}

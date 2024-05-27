@@ -1,6 +1,5 @@
 "use client";
 
-import { YoutubeIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -10,7 +9,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { ProfileAvatar } from "@/components/ui/profile-avatar";
 import { ProfilePlaceholder } from "@/components/ui/profile-placeholder";
+import { ThemeToggleButton } from "@/components/ui/theme-toggle-button";
 import { clearAuthCookies } from "@/lib/actions";
 import { User } from "@/lib/models";
 import {
@@ -30,16 +31,10 @@ import HeaderSearchField from "./header-search-field";
 export default function Header({ user }: { user?: User | null }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const socials = (
+  const themeButton = (
     <>
       <NavbarItem>
-        <a
-          href="https://www.youtube.com"
-          color="foreground"
-          className="text-gray-500 hover:text-primary flex items-center space-x-1"
-        >
-          <YoutubeIcon />
-        </a>
+        <ThemeToggleButton />
       </NavbarItem>
     </>
   );
@@ -53,17 +48,11 @@ export default function Header({ user }: { user?: User | null }) {
             <HeaderSearchField />
           </NavbarItem>
           <DropdownMenu>
-            <DropdownMenuTrigger className="outline-none">
-              <div className="size-[40px] relative">
-                <Image
-                  src={user.image ?? "/images/profile.png"}
-                  alt="Avatar"
-                  fill
-                  sizes="50vh"
-                  priority
-                  className="rounded-full border object-cover bg-gray-200"
-                />
-              </div>
+            <DropdownMenuTrigger className="outline-none flex-shrink-0">
+              <ProfileAvatar
+                src={user.image}
+                prefix={user.nickname.substring(0, 2)}
+              />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="shadow-xl">
               <DropdownMenuLabel className="gap-2">
@@ -101,6 +90,7 @@ export default function Header({ user }: { user?: User | null }) {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          {themeButton}
         </NavbarContent>
       );
     }
@@ -128,6 +118,7 @@ export default function Header({ user }: { user?: User | null }) {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          {themeButton}
         </NavbarContent>
 
         <NavbarContent justify="end" className="hidden lg:flex">
@@ -145,6 +136,7 @@ export default function Header({ user }: { user?: User | null }) {
               <Link href="/sign-up">Sign Up</Link>
             </Button>
           </NavbarItem>
+          {themeButton}
         </NavbarContent>
       </>
     );
@@ -155,7 +147,7 @@ export default function Header({ user }: { user?: User | null }) {
       isBordered
       isBlurred={false}
       maxWidth="full"
-      className="fixed top-0"
+      className="fixed top-0 bg-background"
       classNames={{
         wrapper: "px-4",
       }}
@@ -214,7 +206,7 @@ export default function Header({ user }: { user?: User | null }) {
 
       {accountView()}
 
-      <NavbarMenu className="gap-4 px-4 backdrop-blur-xl bg-white/95 z-50">
+      <NavbarMenu className="gap-4 px-4 backdrop-blur-xl bg-background/95 z-50">
         <NavbarMenuItem>
           <Link
             href={"/browse"}

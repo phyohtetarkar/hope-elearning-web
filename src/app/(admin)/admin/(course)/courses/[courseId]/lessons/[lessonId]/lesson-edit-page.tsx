@@ -175,7 +175,7 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
   return (
     <>
       <div className="flex flex-col">
-        <div className="flex items-center space-x-3 fixed inset-x-0 top-0 bg-white px-4 h-[65px] border-b z-10">
+        <div className="flex items-center space-x-3 fixed inset-x-0 top-0 bg-background px-4 h-[65px] border-b z-10">
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
@@ -247,7 +247,6 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
                   return (
                     <TitleInput
                       placeholder="Lesson title"
-                      className="text-gray-800"
                       spellCheck={false}
                       maxLength={2000}
                       value={field.value ?? ""}

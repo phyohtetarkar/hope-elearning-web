@@ -104,7 +104,7 @@ function NovelEditor({
           },
           attributes: {
             class: cn(
-              `prose prose-lg dark:prose-invert prose-headings:font-title font-default focus:outline-none max-w-full`
+              `prose dark:prose-invert prose-headings:font-title font-default focus:outline-none max-w-full`
             ),
           },
           handlePaste: (view, event) => handleImagePaste(view, event, uploadFn),

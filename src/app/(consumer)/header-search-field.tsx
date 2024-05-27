@@ -14,7 +14,7 @@ export default function HeaderSearchField() {
   }, [sp]);
 
   return (
-    <div className="flex items-center bg-gray-100 px-4 rounded-full h-10 lg:w-[280px]">
+    <div className="flex items-center bg-muted px-4 rounded-full h-10 lg:w-[280px]">
       <SearchIcon className="size-5 flex-shrink-0 text-gray-500" />
       <input
         className="border-none focus:ring-0 bg-transparent pl-2 pr-0 w-full"

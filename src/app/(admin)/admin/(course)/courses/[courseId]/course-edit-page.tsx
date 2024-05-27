@@ -254,7 +254,7 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
 
   return (
     <div className="flex flex-col">
-      <div className="flex items-center space-x-3 fixed inset-x-0 top-0 bg-white px-4 h-[65px] border-b">
+      <div className="flex items-center space-x-3 fixed inset-x-0 top-0 bg-background px-4 h-[65px] border-b">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -489,7 +489,7 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
 
                   <div className="flex flex-col">
                     <label className="font-medium mb-1">Cover photo</label>
-                    <div className="aspect-w-5 aspect-h-2 border-2 border-dashed rounded-md bg-gray-50">
+                    <div className="aspect-w-5 aspect-h-2 border-2 border-border border-dashed rounded-md bg-muted/50">
                       <Controller
                         control={control}
                         name="cover"

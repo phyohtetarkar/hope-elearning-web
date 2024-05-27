@@ -1,6 +1,5 @@
 "use client";
 
-import { AuthenticationContext } from "@/components/authentication-context-porvider";
 import { Textarea } from "@/components/forms";
 import { Alert } from "@/components/ui/alert";
 import {
@@ -22,7 +21,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import Pagination from "@/components/ui/pagination";
-import { ProfilePlaceholder } from "@/components/ui/profile-placeholder";
+import { ProfileAvatar } from "@/components/ui/profile-avatar";
 import Rating from "@/components/ui/rating";
 import {
   Select,
@@ -126,7 +125,7 @@ export default function CourseReviewsPage({
       <div className="aspect-w-16 aspect-h-9 mb-6">
         <Image
           src={course.cover ?? "/images/placeholder.jpeg"}
-          className="object-cover rounded-md"
+          className="object-cover rounded-md border"
           alt="Cover"
           fill
           sizes="100vh"
@@ -136,7 +135,9 @@ export default function CourseReviewsPage({
 
       <div className="flex items-center space-x-2 mb-4 text-sm">
         <Rating rating={parseFloat(course.meta?.rating ?? "0")} />
-        <span className="text-muted-foreground">{course.meta?.rating ?? 0} out of 5</span>
+        <span className="text-muted-foreground">
+          {course.meta?.rating ?? 0} out of 5
+        </span>
         {/* <span className="text-muted-foreground">({formatNumber(2000)} ratings)</span> */}
         <div className="flex-grow"></div>
 
@@ -253,17 +254,11 @@ export default function CourseReviewsPage({
         {reviews?.contents.map((r, i) => {
           return (
             <div key={i} className="flex items-start space-x-4 border-b py-4">
-              {r.user?.image ? (
-                <Image
-                  src={r.user.image}
-                  alt="Profile"
-                  width={50}
-                  height={50}
-                  className="rounded-full border"
-                />
-              ) : (
-                <ProfilePlaceholder className="size-[50px] border" />
-              )}
+              <ProfileAvatar
+                src={r.user?.image}
+                prefix={r.user?.nickname.substring(0, 2)}
+                className="size-[50px]"
+              />
               <div className="flex flex-col">
                 <h6 className="font-semibold mb-1">{r.user.nickname}</h6>
                 <span className="text-sm text-muted-foreground mb-5">

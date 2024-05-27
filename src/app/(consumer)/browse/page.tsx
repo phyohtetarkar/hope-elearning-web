@@ -83,7 +83,7 @@ export default async function BrowseCourses(props: Props) {
 
   return (
     <>
-      <div className="bg-primary h-[5rem]">
+      <div className="bg-primary dark:bg-muted/70 h-[5rem]">
         <div className="container h-full flex items-center">
           <BrowseBreadcrumb />
         </div>

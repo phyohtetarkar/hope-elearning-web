@@ -5,6 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import { makeApiRequest } from "@/lib/make-api-request";
 import { MonthlyEnrollmentDto } from "@/lib/models";
 import { Chart, ChartConfiguration, ChartData } from "chart.js";
+import { useTheme } from "next-themes";
 import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 
@@ -24,6 +25,7 @@ const _months = [
 ];
 
 function EnrolledLineChart() {
+  const { theme } = useTheme();
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
   const [year, setYear] = useState(new Date().getFullYear());
 
@@ -74,19 +76,27 @@ function EnrolledLineChart() {
       return data.data[`${i + 1}`] ?? 0;
     });
 
+    const primaryColor = theme === "dark" ? "129, 140, 248" : "80, 72, 229";
+    const pointColor = theme === "dark" ? "0, 0, 0" : "255, 255, 255";
+    const tickColor =
+      theme === "dark" ? "rgba(180, 180, 180, 0.2)" : undefined;
+    const tooltipBackground =
+      theme === "dark" ? "rgb(255, 255, 255)" : undefined;
+    const tooltipText = theme === "dark" ? "rgb(0, 0, 0)" : undefined;
+
     const chartData: ChartData<"line"> = {
       labels: _months,
       datasets: [
         {
-          backgroundColor: "rgba(80, 72, 229, 0.1)",
-          borderColor: "rgb(80, 72, 229)",
-          pointBackgroundColor: "rgb(255, 255, 255)",
+          backgroundColor: `rgba(${primaryColor}, 0.1)`,
+          borderColor: `rgb(${primaryColor})`,
+          pointBackgroundColor: `rgb(${pointColor})`,
           data: list,
           tension: 0.1,
           fill: true,
           borderWidth: 2,
           pointRadius: 3.5,
-          pointBorderColor: "rgb(80, 72, 229)",
+          pointBorderColor: `rgb(${primaryColor})`,
         },
       ],
     };
@@ -102,15 +112,24 @@ function EnrolledLineChart() {
           },
           tooltip: {
             displayColors: false,
+            backgroundColor: tooltipBackground,
+            titleColor: tooltipText,
+            bodyColor: tooltipText,
           },
         },
         scales: {
           x: {
             grid: {
               drawTicks: false,
+              color: tickColor,
             },
             ticks: {
               padding: 8,
+            },
+          },
+          y: {
+            grid: {
+              color: tickColor,
             },
           },
         },
@@ -118,17 +137,10 @@ function EnrolledLineChart() {
     };
     chart = new Chart(canvas, chartConfig);
 
-    // const handleResize = () => {
-    //   chart?.resize();
-    // };
-
-    // window.addEventListener("resize", handleResize);
-
     return () => {
-      // window.removeEventListener("resize", handleResize);
       chart?.destroy();
     };
-  }, [canvas, data]);
+  }, [canvas, data, theme]);
 
   return (
     <Card className="shadow-none h-full">

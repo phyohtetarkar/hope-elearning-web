@@ -21,7 +21,7 @@ export default function ProfileLayout({ children }: { children: ReactNode }) {
     icon: ReactNode;
   }) {
     return (
-      <Link href={href} className={"flex p-2 items-center hover:text-primary"}>
+      <Link href={href} className={"flex p-2 items-center text-foreground hover:text-primary"}>
         {icon}
         <span>{title}</span>
       </Link>
@@ -62,7 +62,7 @@ export default function ProfileLayout({ children }: { children: ReactNode }) {
     <div className="container py-5 mb-5">
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
         <div className="lg:col-span-1">
-          <div className="border rounded-md">
+          <div className="border rounded-md bg-card">
             <div className="block lg:hidden">
               <Accordion type="multiple">
                 <AccordionItem value="menu">

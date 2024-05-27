@@ -1,7 +1,7 @@
+import { nextui } from "@nextui-org/theme";
 import type { Config } from "tailwindcss";
 import colors from "tailwindcss/colors";
 import defaultTheme from "tailwindcss/defaultTheme";
-import { nextui } from "@nextui-org/theme";
 
 const config = {
   darkMode: ["class"],
@@ -22,6 +22,9 @@ const config = {
       padding: "1rem",
     },
     extend: {
+      borderColor: (theme) => ({
+        DEFAULT: "hsl(var(--border))",
+      }),
       colors: {
         transparent: "transparent",
         success: {
@@ -40,6 +43,7 @@ const config = {
         white: colors.white,
         gray: colors.gray,
         anchor: "#2110D6",
+        border: "hsl(var(--border))",
         // sliver: colors.gray[400],
         // muted: colors.slate["400"],
         // border: "hsl(var(--border))",
@@ -102,7 +106,15 @@ const config = {
     require("@tailwindcss/typography"),
     require("@tailwindcss/forms"),
     require("@tailwindcss/aspect-ratio"),
-    nextui(),
+    nextui({
+      layout: {
+        radius: {
+          large: "var(--radius)",
+          medium: "calc(var(--radius) - 2px)",
+          small: "calc(var(--radius) - 4px)",
+        },
+      },
+    }),
   ],
 } satisfies Config;
 

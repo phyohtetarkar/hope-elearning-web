@@ -44,7 +44,6 @@ export default async function RootLayout({
 
   if (headers().get("revalidate") === "true") {
     revalidatePath("/", "layout");
-    console.log("revalidated");
   }
 
   return (

@@ -4,9 +4,11 @@ import { Separator } from "@/components/ui/separator";
 import { DashboardSummary } from "@/lib/models";
 import { formatAbbreviate, uppercaseFirstChar } from "@/lib/utils";
 import { Chart, ChartConfiguration, ChartData } from "chart.js";
+import { useTheme } from "next-themes";
 import { useEffect, useMemo, useState } from "react";
 
 function EnrolledPieChart({ summary }: { summary: DashboardSummary }) {
+  const { theme } = useTheme();
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -15,6 +17,10 @@ function EnrolledPieChart({ summary }: { summary: DashboardSummary }) {
     if (!canvas) {
       return;
     }
+
+    const tooltipBackground =
+      theme === "dark" ? "rgb(255, 255, 255)" : undefined;
+    const tooltipText = theme === "dark" ? "rgb(0, 0, 0)" : undefined;
 
     const chartData: ChartData<"doughnut"> = {
       labels: Object.keys(summary.enrolledByLevel).map((k) =>
@@ -29,11 +35,14 @@ function EnrolledPieChart({ summary }: { summary: DashboardSummary }) {
           ],
           data: Object.values(summary.enrolledByLevel),
           hoverOffset: 10,
+          offset: 5,
           hoverBackgroundColor: [
             "rgb(56, 176, 0)",
             "rgb(253, 197, 0)",
             "rgb(80, 72, 229)",
           ],
+          hoverBorderWidth: 0,
+          borderWidth: 0,
         },
       ],
     };
@@ -52,6 +61,11 @@ function EnrolledPieChart({ summary }: { summary: DashboardSummary }) {
             display: true,
             position: "bottom",
           },
+          tooltip: {
+            backgroundColor: tooltipBackground,
+            titleColor: tooltipText,
+            bodyColor: tooltipText,
+          },
         },
       },
     };
@@ -61,7 +75,7 @@ function EnrolledPieChart({ summary }: { summary: DashboardSummary }) {
     return () => {
       chart?.destroy();
     };
-  }, [canvas, summary]);
+  }, [canvas, summary, theme]);
 
   const total = useMemo(() => {
     return Object.values(summary.enrolledByLevel).reduce(

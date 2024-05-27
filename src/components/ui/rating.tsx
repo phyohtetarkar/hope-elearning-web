@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { Star } from "lucide-react";
 
 interface RatingProps {
@@ -6,10 +7,6 @@ interface RatingProps {
 }
 
 const stars = [1, 2, 3, 4, 5];
-
-const activeColor = "#ff9017";
-
-const defaultColor = "#cbd5e1";
 
 function Rating({ rating, size = "default" }: RatingProps) {
   let iconSize = 18;
@@ -26,6 +23,11 @@ function Rating({ rating, size = "default" }: RatingProps) {
       break;
   }
 
+  const defaultColor = cn(
+    "stroke-gray-300 text-gray-300 dark:stroke-gray-400 dark:text-gray-400"
+  );
+  const activeColor = cn("stroke-warning text-warning");
+
   return (
     <div className="flex">
       {stars.map((e, i) => {
@@ -34,8 +36,8 @@ function Rating({ rating, size = "default" }: RatingProps) {
             <Star
               key={i}
               size={iconSize}
-              fill={activeColor}
-              stroke={activeColor}
+              fill="currentColor"
+              className={activeColor}
             />
           );
         }
@@ -55,8 +57,8 @@ function Rating({ rating, size = "default" }: RatingProps) {
                 <Star
                   key={i}
                   size={iconSize}
-                  fill={defaultColor}
-                  stroke={defaultColor}
+                  fill="currentColor"
+                  className={defaultColor}
                 />
               </div>
               <div
@@ -66,8 +68,8 @@ function Rating({ rating, size = "default" }: RatingProps) {
                 <Star
                   key={i}
                   size={iconSize}
-                  fill={activeColor}
-                  stroke={activeColor}
+                  fill="currentColor"
+                  className={activeColor}
                 />
               </div>
             </div>
@@ -78,8 +80,8 @@ function Rating({ rating, size = "default" }: RatingProps) {
           <Star
             key={i}
             size={iconSize}
-            fill={defaultColor}
-            stroke={defaultColor}
+            fill="currentColor"
+            className={defaultColor}
           />
         );
       })}

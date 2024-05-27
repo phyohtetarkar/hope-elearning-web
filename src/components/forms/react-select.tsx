@@ -16,7 +16,9 @@ export default function ReactSelect<
 }) {
   return (
     <div className={cn(`flex flex-col`, wrapperClass)}>
-      {label && <label className="font-medium mb-1 text-foreground">{label}</label>}
+      {label && (
+        <label className="font-medium mb-1 text-foreground">{label}</label>
+      )}
       <Select<Option, IsMulti>
         styles={{
           control: (base, state) => ({}),
@@ -31,19 +33,34 @@ export default function ReactSelect<
           control: ({ isFocused }) => {
             if (error) {
               return cn(
-                "flex py-1 rounded-md border border-danger",
+                "flex py-1 rounded-md border border-destructive bg-background",
                 isFocused ? "ring-[4px] ring-danger/30" : ""
               );
             }
             return cn(
-              "flex py-1 rounded-md border",
-              isFocused ? "border-primary" : "border-gray-300"
+              "flex py-1 rounded-md border bg-background",
+              isFocused ? "border-primary" : "border-border"
             );
+          },
+          multiValue: ({}) => {
+            return cn("dark:!bg-muted dark:text-muted-foreground");
+          },
+          multiValueLabel: ({}) => {
+            return cn("dark:text-muted-foreground");
+          },
+          singleValue: ({}) => {
+            return cn("!text-foreground");
+          },
+          menu: ({}) => {
+            return cn("!bg-background dark:border");
+          },
+          option: ({}) => {
+            return cn("!bg-background hover:!bg-muted focus:!bg-muted text-foreground");
           },
         }}
         {...props}
       />
-      {error && <div className="text-danger text-sm mt-1.5">{error}</div>}
+      {error && <div className="text-destructive text-sm mt-1.5">{error}</div>}
     </div>
   );
 }

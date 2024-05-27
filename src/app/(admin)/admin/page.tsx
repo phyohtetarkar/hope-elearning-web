@@ -33,10 +33,10 @@ export default async function Dashboard() {
         <Card className="shadow-none">
           <CardContent className="p-4">
             <div className="flex items-center space-x-4">
-              <GraduationCap className="size-10 text-gray-600" />
+              <GraduationCap className="size-10 text-muted-foreground" />
               <div className="flex flex-col">
                 <div className="text-muted-foreground mb-1">Courses</div>
-                <h2 className="text-gray-700">
+                <h2 className="">
                   {formatAbbreviate(data.courseCount)}
                 </h2>
               </div>
@@ -52,10 +52,10 @@ export default async function Dashboard() {
         <Card className="shadow-none">
           <CardContent className="p-4">
             <div className="flex items-center space-x-4">
-              <Edit className="size-10 text-gray-600" />
+              <Edit className="size-10 text-muted-foreground" />
               <div className="flex flex-col">
                 <div className="text-muted-foreground mb-1">Posts</div>
-                <h2 className="text-gray-700">
+                <h2 className="">
                   {formatAbbreviate(data.postCount)}
                 </h2>
               </div>
@@ -71,10 +71,10 @@ export default async function Dashboard() {
         <Card className="shadow-none">
           <CardContent className="p-4">
             <div className="flex items-center space-x-4">
-              <DollarSign className="size-10 text-gray-600" />
+              <DollarSign className="size-10 text-muted-foreground" />
               <div className="flex flex-col">
                 <div className="text-muted-foreground mb-1">Subscribers</div>
-                <h2 className="text-gray-700">
+                <h2 className="">
                   {formatAbbreviate(data.subscriberCount)}
                 </h2>
               </div>
@@ -90,10 +90,10 @@ export default async function Dashboard() {
         <Card className="shadow-none">
           <CardContent className="p-4">
             <div className="flex items-center space-x-4">
-              <UsersIcon className="size-10 text-gray-600" />
+              <UsersIcon className="size-10 text-muted-foreground" />
               <div className="flex flex-col">
                 <div className="text-muted-foreground mb-1">Users</div>
-                <h2 className="text-gray-700">
+                <h2 className="">
                   {formatAbbreviate(data.userCount)}
                 </h2>
               </div>

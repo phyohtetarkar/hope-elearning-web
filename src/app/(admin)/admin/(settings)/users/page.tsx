@@ -1,5 +1,5 @@
 import Pagination from "@/components/ui/pagination";
-import { ProfilePlaceholder } from "@/components/ui/profile-placeholder";
+import { ProfileAvatar } from "@/components/ui/profile-avatar";
 import {
   Table,
   TableBody,
@@ -14,7 +14,6 @@ import { Page, User } from "@/lib/models";
 import { buildQueryParams, uppercaseFirstChar } from "@/lib/utils";
 import { validateResponse } from "@/lib/validate-response";
 import { cookies } from "next/headers";
-import Image from "next/image";
 import UserActionButtons from "./user-action-buttons";
 import UserFilter from "./users-filter";
 
@@ -67,21 +66,16 @@ export default async function Users(props: Props) {
             return (
               <TableRow key={u.id}>
                 <TableCell className="flex items-center space-x-3">
-                  {u.image ? (
-                    <Image
-                      alt="Profile"
-                      src={u.image}
-                      width={0}
-                      height={0 }
-                      sizes="33vh"
-                      className="rounded-full border size-[46px] bg-gray-200"
-                    />
-                  ) : (
-                    <ProfilePlaceholder className="border" />
-                  )}
+                  <ProfileAvatar
+                    src={u.image}
+                    prefix={u.nickname.substring(0, 2)}
+                    className="size-[46px]"
+                  />
                   <h6>{u.nickname}</h6>
                 </TableCell>
-                <TableCell className="text-muted-foreground text-sm">{u.email}</TableCell>
+                <TableCell className="text-muted-foreground text-sm">
+                  {u.email}
+                </TableCell>
                 <TableCell className="text-muted-foreground text-sm">
                   {uppercaseFirstChar(u.role)}
                 </TableCell>
