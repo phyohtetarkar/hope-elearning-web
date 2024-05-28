@@ -87,7 +87,7 @@ export default function Pagination({
             href={`${basePath}?page=${p}${params ? "&" + params : ""}`}
             className={cn(
               props.className,
-              props.isActive ? "bg-primary text-white" : undefined
+              props.isActive ? "bg-primary text-primary-foreground" : undefined
             )}
           >
             {props.children}

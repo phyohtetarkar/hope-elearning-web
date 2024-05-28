@@ -80,7 +80,7 @@ function Providers({ children }: { children: React.ReactNode }) {
     >
       <NavigationProgress />
       <Toaster />
-      <NextUIProvider className="h-full dark:bg-[#09090b]">
+      <NextUIProvider className="h-full dark:bg-zinc-950">
         {children}
       </NextUIProvider>
     </NextThemesProvider>

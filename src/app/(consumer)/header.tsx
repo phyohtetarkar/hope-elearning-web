@@ -160,14 +160,14 @@ export default function Header({ user }: { user?: User | null }) {
       />
       <NavbarBrand className="flex-grow-0">
         <Link href="/" color="foreground" className="flex items-center">
-          <div className="size-[40px] relative">
-            <Image
+          <div className="size-[40px] relative bg-primary rounded">
+            {/* <Image
               src="/images/logo.svg"
               alt="Logo"
               fill
               className="rounded object-fill"
               priority
-            />
+            /> */}
           </div>
           <h3 className="ms-3 hidden sm:block text-foreground">
             {process.env.NEXT_PUBLIC_APP_NAME}
@@ -200,6 +200,15 @@ export default function Header({ user }: { user?: User | null }) {
             className="text-foreground hover:text-primary"
           >
             Blogs
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link
+            href={"/pricing"}
+            color="foreground"
+            className="text-foreground hover:text-primary"
+          >
+            Pricing
           </Link>
         </NavbarItem>
       </NavbarContent>
@@ -235,6 +244,16 @@ export default function Header({ user }: { user?: User | null }) {
             onClick={(evt) => setIsMenuOpen(false)}
           >
             Blogs
+          </Link>
+        </NavbarMenuItem>
+        <NavbarMenuItem>
+          <Link
+            href={"/pricing"}
+            color="foreground"
+            className="text-foreground hover:text-primary"
+            onClick={(evt) => setIsMenuOpen(false)}
+          >
+            Pricing
           </Link>
         </NavbarMenuItem>
       </NavbarMenu>

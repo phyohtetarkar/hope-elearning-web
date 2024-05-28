@@ -226,13 +226,13 @@ export default async function BlogPost({ params }: Props) {
       <>
         <ContentRenderer lexical={post.lexical} />
 
-        <div className="flex flex-wrap gap-2 mt-8">
+        <div className="flex flex-wrap gap-2 mt-10">
           {post.tags?.map((t) => {
             return (
               <Link
                 key={t.id}
                 href={`/tags/${t.slug}`}
-                className="bg-muted text-foreground rounded-full text-sm px-3 py-1"
+                className="bg-muted text-foreground rounded-md text-sm px-3 py-2"
               >
                 {t.name}
               </Link>

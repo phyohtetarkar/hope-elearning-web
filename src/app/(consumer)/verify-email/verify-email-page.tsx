@@ -49,7 +49,7 @@ export default function VerifyEmailPage() {
             <div className="max-w-[350px] w-full">
               <div className="aspect-w-1 aspect-h-1">
                 <Image
-                  src={"/images/undraw_mailbox.png"}
+                  src={"/images/undraw_mailbox.svg"}
                   alt=""
                   fill
                   sizes="100vh"

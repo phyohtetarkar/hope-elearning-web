@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { API_URL_LOCAL } from "@/lib/constants";
 import { Course, Page, Post } from "@/lib/models";
 import { buildQueryParams } from "@/lib/utils";
-import Image from "next/image";
 import Link from "next/link";
+import BannerImage from "./banner-image";
 import QuoteSwiper from "./quote-swiper";
 
 const getTopCourses = async () => {
@@ -73,7 +73,9 @@ export default async function Home() {
         <div className="container py-5 lg:py-12">
           <div className="grid grid-cols-1 lg:grid-cols-2">
             <div className="flex flex-col justify-center mb-5 lg:mb-0">
-              <h1 className="text-primary-foreground dark:text-foreground mb-2">Welcome to [sitename]</h1>
+              <h1 className="text-primary-foreground dark:text-foreground mb-2">
+                Welcome to [sitename]
+              </h1>
               <div className="text-primary-foreground/75 dark:text-foreground/75 mb-6">
                 Hi, Welcome to [sitename]. Start a new career in the software
                 developing industry.
@@ -81,7 +83,7 @@ export default async function Home() {
               <div className="mb-4">
                 <Button
                   variant="secondary"
-                  className="w-full lg:w-auto rounded-full px-6"
+                  className="w-full lg:w-auto rounded-full px-6 dark:bg-primary dark:hover:bg-primary/90"
                   asChild
                 >
                   <Link href="/browse">Browse courses</Link>
@@ -91,21 +93,14 @@ export default async function Home() {
             <div className="">
               <div className="lg:ms-auto lg:max-w-[450px]">
                 <div className="aspect-w-3 aspect-h-2 z-0">
-                  <Image
-                    src="/images/undraw_teaching.svg"
-                    alt=""
-                    fill
-                    sizes="50vh"
-                    className="drop-shadow-xl object-contain"
-                    priority
-                  />
+                  <BannerImage />
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div className="bg-background px-3 border-b">
+      <div className="px-3 border-b">
         <QuoteSwiper />
       </div>
       <div className="container py-10">

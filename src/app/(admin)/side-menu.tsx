@@ -42,13 +42,13 @@ export default function SideMenu() {
       } transition-transform ease-out min-w-[200px] max-w-[300px] fixed lg:static inset-y-0 w-full border-r z-50 flex flex-col bg-background lg:translate-x-0`}
     >
       <div className="h-[65px] min-h-[65px] px-5 flex items-center gap-3">
-        <div className="size-[40px] relative">
-          <Image
+        <div className="size-[40px] relative bg-primary rounded">
+          {/* <Image
             src="/images/logo.svg"
             alt="Logo"
             fill
             className="rounded object-fill"
-          />
+          /> */}
         </div>
         <h3 className="">Brand</h3>
         <button className="ms-auto lg:hidden" onClick={toggle}>

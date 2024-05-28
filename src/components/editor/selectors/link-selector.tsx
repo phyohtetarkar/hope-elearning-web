@@ -46,7 +46,7 @@ export const LinkSelector = ({ open, onOpenChange }: LinkSelectorProps) => {
           <p className='text-base'>↗</p>
           <p
             className={cn("underline decoration-stone-400 underline-offset-4", {
-              "text-anchor": editor.isActive("link"),
+              "text-primary": editor.isActive("link"),
             })}>
             Link
           </p>
