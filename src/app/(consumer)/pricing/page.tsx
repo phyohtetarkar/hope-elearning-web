@@ -27,7 +27,7 @@ export default function Pricing() {
               Always free
             </div>
             <Separator className="mb-6" />
-            <p className="mb-12 text-center">
+            <p className="mb-16 text-center">
               Access to all free courses and article contents
             </p>
             <div className="flex-1"></div>
@@ -54,7 +54,7 @@ export default function Pricing() {
               Billed monthly
             </div>
             <Separator className="mb-6" />
-            <p className="mb-12 text-center">
+            <p className="mb-16 text-center">
               Everything in basic plus paid courses and articles
             </p>
             <div className="flex-1"></div>
@@ -81,7 +81,7 @@ export default function Pricing() {
               Billed annually. Saved 20% monthly.
             </div>
             <Separator className="mb-6" />
-            <p className="mb-12 text-center">
+            <p className="mb-16 text-center">
               Everything in basic plus paid courses and articles
             </p>
             <div className="flex-1"></div>

@@ -30,7 +30,7 @@ export function CourseFilter({ categories }: { categories: Category[] }) {
     <Accordion
       type="multiple"
       defaultValue={["category", "level", "access"]}
-      className="rounded-md border"
+      className="rounded-md border bg-card"
     >
       <AccordionItem value="category">
         <AccordionTrigger

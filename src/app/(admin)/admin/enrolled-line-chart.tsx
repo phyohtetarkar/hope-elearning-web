@@ -76,7 +76,7 @@ function EnrolledLineChart() {
       return data.data[`${i + 1}`] ?? 0;
     });
 
-    const primaryColor = theme === "dark" ? "129, 140, 248" : "80, 72, 229";
+    const primaryColor = theme === "dark" ? "99, 102, 241" : "80, 72, 229";
     const pointColor = theme === "dark" ? "0, 0, 0" : "255, 255, 255";
     const tickColor =
       theme === "dark" ? "rgba(180, 180, 180, 0.2)" : undefined;

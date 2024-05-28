@@ -12,7 +12,7 @@ export default function NavigationProgress() {
     <Suspense fallback={null}>
       <NavigationEvents />
       <NextNProgress
-        color={theme === "dark" ? "#818cf8" : "#5863f8"}
+        color={theme === "dark" ? "#6366F1" : "#5863f8"}
         startPosition={0.3}
         height={2}
         options={{

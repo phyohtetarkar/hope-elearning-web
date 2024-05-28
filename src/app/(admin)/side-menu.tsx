@@ -93,7 +93,7 @@ export default function SideMenu() {
             endContent={<ExternalLink size={iconSize} />}
             color="primary"
             target="_blank"
-            className="data-[selectable=true]:focus:bg-white data-[selectable=true]:focus:text-default-600 data-[focus=true]:bg-white"
+            className="data-[selectable=true]:focus:bg-transparent data-[selectable=true]:focus:text-default-600 data-[focus=true]:bg-transparent"
           >
             View site
           </ListboxItem>

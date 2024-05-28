@@ -51,10 +51,10 @@ export default async function AuditLog(props: Props) {
       return (
         <div
           className={
-            "flex items-center justify-center size-[46px] bg-muted rounded-full"
+            "flex items-center justify-center size-[46px] bg-default rounded-full"
           }
         >
-          <CpuIcon className={"size-6 text-muted-foreground"} />
+          <CpuIcon className={"size-6 text-default-foreground"} />
         </div>
       );
     }
@@ -121,7 +121,7 @@ export default async function AuditLog(props: Props) {
                 <TableCell className="flex items-start space-x-3 min-w-[300px]">
                   <div className="relative flex-shrink-0">
                     {avatarUI(a)}
-                    <div className="absolute right-[-2px] bottom-[-2px] size-[1.4rem] bg-white text-black rounded-full shadow flex items-center justify-center">
+                    <div className="absolute right-[-2px] bottom-[-2px] size-[1.4rem] bg-white text-black dark:bg-muted dark:text-muted-foreground rounded-full shadow flex items-center justify-center">
                       {eventIcon(a)}
                     </div>
                   </div>

@@ -83,7 +83,7 @@ export default async function Home() {
               <div className="mb-4">
                 <Button
                   variant="secondary"
-                  className="w-full lg:w-auto rounded-full px-6 dark:bg-primary dark:hover:bg-primary/90"
+                  className="w-full lg:w-auto rounded-full px-6 dark:bg-primary dark:hover:bg-primary/90 dark:text-primary-foreground shadow"
                   asChild
                 >
                   <Link href="/browse">Browse courses</Link>
