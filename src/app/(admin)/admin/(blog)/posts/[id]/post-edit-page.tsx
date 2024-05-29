@@ -73,7 +73,7 @@ import { z } from "zod";
 
 const schema = z.object({
   id: z.number(),
-  cover: z.string().optional(),
+  cover: z.string().optional().nullable(),
   title: z.string().optional(),
   slug: z.string().min(1, {
     message: "Please enter post slug",
@@ -432,7 +432,7 @@ export default function PostEditPage({ post }: PostEditPageProps) {
                         variant="destructive"
                         size="icon"
                         className="absolute top-4 right-4"
-                        onClick={() => setValue("cover", undefined)}
+                        onClick={() => setValue("cover", null)}
                       >
                         <Trash2 size={20} />
                       </Button>
