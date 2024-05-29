@@ -193,12 +193,12 @@ export default async function BlogPost({ params }: Props) {
   const content = () => {
     if (post.visibility === "member" && !user) {
       return (
-        <div className="rounded bg-primary px-5 py-8 flex flex-col items-center">
-          <LockKeyhole className="text-primary-foreground/80 mb-2 size-7" />
-          <p className="mb-4 text-primary-foreground/80">
+        <div className="rounded bg-primary dark:bg-muted px-5 py-8 flex flex-col items-center">
+          <LockKeyhole className="text-primary-foreground dark:text-muted-foreground mb-2 size-7" />
+          <p className="mb-4 text-primary-foreground dark:text-muted-foreground">
             You need to sign in to view this content.
           </p>
-          <Button className="bg-white hover:bg-gray-50 text-black" asChild>
+          <Button className="bg-white text-black hover:bg-gray-200" asChild>
             <Link href={`/login`}>Sign In</Link>
           </Button>
         </div>
@@ -210,13 +210,13 @@ export default async function BlogPost({ params }: Props) {
       (!user || user.expiredAt < new Date().getTime())
     ) {
       return (
-        <div className="rounded bg-primary px-5 py-8 flex flex-col items-center">
-          <LockKeyhole className="text-primary-foreground/80 mb-2 size-7" />
-          <p className="mb-4 text-primary-foreground/80">
+        <div className="rounded bg-primary dark:bg-muted px-5 py-8 flex flex-col items-center">
+          <LockKeyhole className="text-primary-foreground dark:text-muted-foreground mb-2 size-7" />
+          <p className="mb-4 text-primary-foreground dark:text-muted-foreground">
             You need to subscribe to view this content.
           </p>
-          <Button className="bg-white hover:bg-gray-50 text-black" asChild>
-            <Link href={`/subscriptions`}>Subscribe</Link>
+          <Button className="bg-white hover:bg-gray-200 text-black" asChild>
+            <Link href={`/pricing`}>Subscribe</Link>
           </Button>
         </div>
       );
