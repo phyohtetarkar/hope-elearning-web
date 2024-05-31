@@ -9,16 +9,6 @@ import {
   Textarea,
 } from "@/components/forms";
 import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
@@ -30,13 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
-import {
-  deleteCourse,
-  publishCourse,
-  unpublishCourse,
-  updateCourse,
-  uploadImage,
-} from "@/lib/actions";
+import { updateCourse, uploadImage } from "@/lib/actions";
 import { useCategories, useStaffs } from "@/lib/hooks";
 import {
   Audit,
@@ -56,6 +40,8 @@ import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import CourseChaptersEdit from "./course-chapters-edit";
+import CourseDeleteButton from "./course-delete-button";
+import CoursePublishButton from "./course-publish-button";
 
 interface CourseEditPageProps {
   course: Course;
@@ -92,11 +78,7 @@ type CourseForm = z.infer<typeof schema>;
 
 export default function CourseEditPage({ course }: CourseEditPageProps) {
   const { user } = useContext(AuthenticationContext);
-  // const [isStale, setStale] = useState(false);
-  const [isSaving, setSaving] = useState(false);
-  const [isDeleting, setDeleting] = useState(false);
   const [isUploading, setUploading] = useState(false);
-  const [isOpenStatusAlert, setOpenStatusAlert] = useState(false);
 
   const coverFileRef = useRef<HTMLInputElement>(null);
 
@@ -136,7 +118,6 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
 
   const handleUpdate = async (values: CourseForm) => {
     try {
-      setSaving(true);
       const { slug, authors, category, ...body } = values;
       const audit = auditRef.current;
       await updateCourse({
@@ -157,23 +138,6 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
         description: parseErrorResponse(error),
         variant: "destructive",
       });
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handleDelete = async () => {
-    try {
-      setDeleting(true);
-      await deleteCourse(course.id, true);
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: parseErrorResponse(error),
-        variant: "destructive",
-      });
-    } finally {
-      setDeleting(false);
     }
   };
 
@@ -218,33 +182,6 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
     }
   };
 
-  const handleStatusUpdate = async () => {
-    try {
-      setSaving(true);
-      if (course.status === "published") {
-        await unpublishCourse(course.id);
-      } else {
-        await publishCourse(course.id);
-      }
-      setOpenStatusAlert(false);
-      toast({
-        title: "Success",
-        description: `Course ${
-          course.status === "draft" ? "published" : "unpublished"
-        }`,
-        variant: "success",
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: parseErrorResponse(error),
-        variant: "destructive",
-      });
-    } finally {
-      setSaving(false);
-    }
-  };
-
   if (!user) {
     return null;
   }
@@ -285,64 +222,10 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
         </Breadcrumb>
         <div className="flex-1"></div>
 
-        <AlertDialog open={isOpenStatusAlert} onOpenChange={setOpenStatusAlert}>
-          {!isContributor && (
-            <AlertDialogTrigger asChild>
-              <Button disabled={isSubmitting || isSaving} className="ms-2">
-                {course.status === "draft" ? "Publish" : "Unpublish"}
-              </Button>
-            </AlertDialogTrigger>
-          )}
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Confirm</AlertDialogTitle>
-              <AlertDialogDescription>
-                Are you sure to&nbsp;
-                {course.status === "draft" ? "publish" : "unpublish"} course?
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel disabled={isSaving}>Cancel</AlertDialogCancel>
-              <Button disabled={isSaving} onClick={handleStatusUpdate}>
-                {isSaving && (
-                  <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
-                )}
-                {course.status === "draft" ? "Publish" : "Unpublish"}
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button
-              disabled={isSubmitting || isSaving}
-              variant="destructive"
-              size="icon"
-            >
-              <Trash2 className="size-5" />
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Confirm Delete</AlertDialogTitle>
-              <AlertDialogDescription>
-                Are you sure to delete course?
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel disabled={isDeleting}>
-                Cancel
-              </AlertDialogCancel>
-              <Button onClick={handleDelete} disabled={isDeleting}>
-                {isDeleting && (
-                  <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
-                )}
-                Proceed
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+        {!isContributor && (
+          <CoursePublishButton course={course} disabled={isSubmitting} />
+        )}
+        <CourseDeleteButton course={course} disabled={isSubmitting} />
       </div>
       <div className="grow fixed inset-0 overflow-y-auto mt-[65px] py-4">
         <div className="container grid grid-cols-1 lg:grid-cols-12 gap-4 mb-10">
@@ -355,7 +238,7 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
 
                 <Button
                   className="ms-auto"
-                  disabled={isSubmitting || isSaving}
+                  disabled={isSubmitting}
                   onClick={() => {
                     handleSubmit(handleUpdate)();
                   }}

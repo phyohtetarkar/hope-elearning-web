@@ -9,16 +9,6 @@ import {
   TitleInput,
 } from "@/components/forms";
 import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
@@ -41,13 +31,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/use-toast";
-import {
-  deletePost,
-  publishPost,
-  unpublishPost,
-  updatePost,
-  uploadImage,
-} from "@/lib/actions";
+import { updatePost, uploadImage } from "@/lib/actions";
 import { useStaffs, useTags } from "@/lib/hooks";
 import { Audit, Post, PostVisibility, Tag, User } from "@/lib/models";
 import { parseErrorResponse } from "@/lib/parse-error-response";
@@ -70,6 +54,8 @@ import Link from "next/link";
 import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
+import PostDeleteButton from "./post-delete-button";
+import PostPublishButton from "./post-publish-button";
 
 const schema = z.object({
   id: z.number(),
@@ -103,11 +89,9 @@ export default function PostEditPage({ post }: PostEditPageProps) {
   const auditRef = useRef<Audit>();
 
   const [isOpenSettings, setOpenSettings] = useState(false);
-  const [isOpenStatusAlert, setOpenStatusAlert] = useState(false);
 
   const [isStale, setStale] = useState(false);
   const [isSaving, setSaving] = useState(false);
-  const [isDeleting, setDeleting] = useState(false);
   const [isUploading, setUploading] = useState(false);
 
   const coverFileRef = useRef<HTMLInputElement>(null);
@@ -160,10 +144,6 @@ export default function PostEditPage({ post }: PostEditPageProps) {
       return;
     }
 
-    if (isDeleting) {
-      return;
-    }
-
     try {
       setSaving(true);
       setStale(false);
@@ -201,21 +181,6 @@ export default function PostEditPage({ post }: PostEditPageProps) {
     }
   };
 
-  const handleDelete = async () => {
-    try {
-      setDeleting(true);
-      await deletePost(post.id, true);
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: parseErrorResponse(error),
-        variant: "destructive",
-      });
-    } finally {
-      setDeleting(false);
-    }
-  };
-
   const debouncedUpdate = debounce(handleUpdate, 2000);
 
   const handleCoverUpload = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -248,36 +213,6 @@ export default function PostEditPage({ post }: PostEditPageProps) {
     } finally {
       event.target.value = "";
       setUploading(false);
-    }
-  };
-
-  const handleStatusUpdate = async () => {
-    try {
-      setSaving(true);
-      if (post.status === "published") {
-        await unpublishPost(post.id);
-      } else {
-        if (isStale) {
-          await handleUpdate();
-        }
-        await publishPost(post.id);
-      }
-      setOpenStatusAlert(false);
-      toast({
-        title: "Success",
-        description: `Post ${
-          post.status === "draft" ? "published" : "unpublished"
-        }`,
-        variant: "success",
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: parseErrorResponse(error),
-        variant: "destructive",
-      });
-    } finally {
-      setSaving(false);
     }
   };
 
@@ -339,52 +274,20 @@ export default function PostEditPage({ post }: PostEditPageProps) {
           <div className="flex-1"></div>
           {saveStateView()}
 
-          <AlertDialog
-            open={isOpenStatusAlert}
-            onOpenChange={setOpenStatusAlert}
-          >
-            {!isContributor && (
-              <AlertDialogTrigger asChild>
-                {post.status === "draft" ? (
-                  <Button disabled={isSaving}>Publish</Button>
-                ) : (
-                  <Button
-                    variant="ghost"
-                    disabled={isSaving}
-                    className="ms-2 p-0 text-destructive hover:text-destructive/50 hover:bg-transparent"
-                  >
-                    Unpublish
-                  </Button>
-                )}
-              </AlertDialogTrigger>
-            )}
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Confirm</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Are you sure to&nbsp;
-                  {post.status === "draft" ? "publish" : "unpublish"} post?
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel disabled={isSaving}>
-                  Cancel
-                </AlertDialogCancel>
-                <Button disabled={isSaving} onClick={handleStatusUpdate}>
-                  {isSaving && (
-                    <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
-                  )}
-                  {post.status === "draft" ? "Publish" : "Unpublish"}
-                </Button>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          {!isContributor && (
+            <PostPublishButton
+              post={post}
+              disabled={isSaving}
+              beforeUpdate={async () => {
+                if (isStale) {
+                  await handleUpdate();
+                }
+              }}
+            />
+          )}
 
           {post.status === "published" && (
-            <Button
-              disabled={isSaving || isDeleting}
-              onClick={() => handleUpdate()}
-            >
+            <Button disabled={isSaving} onClick={() => handleUpdate()}>
               {isSaving && (
                 <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
               )}
@@ -789,32 +692,9 @@ export default function PostEditPage({ post }: PostEditPageProps) {
             )}
 
             <div className="grow mt-6"></div>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="destructive">Delete post</Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Confirm Delete</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Are you sure to delete post: &ldquo;
-                    {post.title ?? "(Untitled)"}
-                    &ldquo;?
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel disabled={isDeleting}>
-                    Cancel
-                  </AlertDialogCancel>
-                  <Button onClick={handleDelete} disabled={isDeleting}>
-                    {isDeleting && (
-                      <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
-                    )}
-                    Proceed
-                  </Button>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+
+            <PostDeleteButton post={post} />
+
             <div className="pb-4"></div>
           </div>
         </div>
