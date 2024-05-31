@@ -54,7 +54,10 @@ export default function ReactSelect<
           menu: ({}) => {
             return cn("!bg-background dark:border");
           },
-          option: ({}) => {
+          option: ({isSelected}) => {
+            if (isSelected) {
+              return cn("!bg-primary !text-primary-foreground");
+            }
             return cn("!bg-background hover:!bg-muted focus:!bg-muted text-foreground");
           },
         }}
