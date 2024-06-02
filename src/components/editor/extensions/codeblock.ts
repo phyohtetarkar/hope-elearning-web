@@ -26,7 +26,7 @@ export const CustomCodeBlock = CodeBlockLowlight.extend({
       ...this.parent?.(),
       HTMLAttributes: {
         class: cn(
-          "rounded !bg-gray-800 dark:!bg-gray-900 text-gray-200 border p-5 font-mono font-medium"
+          "rounded !bg-gray-800 dark:!bg-gray-900 text-gray-200 border p-5 font-mono font-medium",
         ),
         spellcheck: false,
       },
@@ -39,7 +39,7 @@ export const CustomCodeBlock = CodeBlockLowlight.extend({
       const language = node.attrs["language"] ?? this.options.defaultLanguage;
 
       const wrapper = document.createElement("div");
-      wrapper.className = "relative";
+      wrapper.className = "relative before:hidden";
 
       const pre = document.createElement("pre");
 

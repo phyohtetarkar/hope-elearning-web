@@ -15,6 +15,7 @@ import {
 } from "novel/extensions";
 import { UploadImagesPlugin } from "novel/plugins";
 import { CustomCodeBlock } from "./extensions/codeblock";
+import { Mathematics } from "./extensions/mathematics";
 
 // You can overwrite the placeholder with your own configuration
 const aiHighlight = AIHighlight;
@@ -119,7 +120,7 @@ const starterKit = StarterKit.configure({
   code: {
     HTMLAttributes: {
       class: cn(
-        "rounded-lg bg-muted text-red-700 dark:bg-muted/90 dark:text-red-400 px-1.5 py-1 font-mono font-medium"
+        "rounded-lg bg-muted text-red-700 dark:bg-muted/90 dark:text-red-400 px-1.5 py-1 font-mono font-medium before:content-none after:content-none",
       ),
       spellcheck: "false",
     },
@@ -155,4 +156,5 @@ export const defaultExtensions = [
   youtube,
   CharacterCount,
   GlobalDragHandle,
+  Mathematics,
 ];
