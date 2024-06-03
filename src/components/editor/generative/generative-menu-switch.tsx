@@ -33,7 +33,7 @@ const GenerativeMenuSwitch = ({
         appendTo: "parent",
       }}
       className={cn(
-        "flex w-fit max-w-[90vw] overflow-hidden rounded-md border bg-background shadow-xl",
+        "flex w-fit max-w-[90vw] overflow-x-auto scrollbar-hide rounded-md border bg-background shadow-xl",
         open ? "mb-10" : undefined
       )}
     >

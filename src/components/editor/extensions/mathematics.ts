@@ -29,6 +29,7 @@ export const Mathematics = Node.create<MathematicsOptions>({
   group: "inline",
   atom: true,
   selectable: true,
+  marks: "",
 
   addAttributes() {
     return {
@@ -57,16 +58,23 @@ export const Mathematics = Node.create<MathematicsOptions>({
     return {
       setLatex:
         ({ latex }) =>
-        ({ chain, state }) => {
+        ({ chain, state, tr }) => {
           if (!latex) {
             return false;
           }
+          const {from, to, $anchor} = state.selection;
 
-          const selection = state.selection;
+          if (!$anchor.parent.isTextblock) {
+            return false;
+          }
+
+          if ($anchor.parent.type.name === "codeBlock") {
+            return false;
+          }
+
           return chain()
-            .deleteRange({ from: selection.from, to: selection.to })
             .insertContentAt(
-              selection.from,
+              { from: from, to: to },
               {
                 type: "math",
                 attrs: {
@@ -81,17 +89,11 @@ export const Mathematics = Node.create<MathematicsOptions>({
         },
       unsetLatex:
         ({ latex }) =>
-        ({ chain, state }) => {
+        ({ state, tr }) => {
           const selection = state.selection;
-          return chain()
-            .deleteRange({
-              from: selection.from,
-              to: selection.to,
-            })
-            .insertContentAt(selection.from, latex, {
-              updateSelection: true,
-            })
-            .run();
+          tr.insertText(latex, selection.from, selection.to);
+
+          return true;
         },
     };
   },
@@ -137,10 +139,7 @@ export const Mathematics = Node.create<MathematicsOptions>({
         if (editor.isEditable && typeof getPos === "function") {
           const pos = getPos();
           const nodeSize = node.nodeSize;
-          editor
-            .chain()
-            .setTextSelection({ from: pos, to: pos + nodeSize })
-            .run();
+          editor.commands.setTextSelection({ from: pos, to: pos + nodeSize });
         }
       });
 

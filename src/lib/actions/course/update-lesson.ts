@@ -2,8 +2,8 @@
 
 import { getSession } from "@/lib/auth";
 import { API_URL_LOCAL } from "@/lib/constants";
+import { Lesson } from "@/lib/models";
 import { validateResponse } from "@/lib/validate-response";
-import { revalidatePath } from "next/cache";
 
 export async function updateLesson(courseId: number, body: any) {
   const session = await getSession();
@@ -22,5 +22,7 @@ export async function updateLesson(courseId: number, body: any) {
   await validateResponse(resp);
 
   // revalidatePath(`/(admin)/admin/(course)/courses/[courseId]/lessons/[lessonId]`, "page");
-  revalidatePath(`/admin/courses/${courseId}/lessons/${body.id}`);
+  // revalidatePath(`/admin/courses/${courseId}/lessons/${body.id}`);
+
+  return (await resp.json()) as Lesson;
 }

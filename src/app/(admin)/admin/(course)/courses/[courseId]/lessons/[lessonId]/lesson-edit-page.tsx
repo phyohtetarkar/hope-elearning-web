@@ -44,6 +44,8 @@ const schema = z.object({
 type LessonForm = z.infer<typeof schema>;
 
 export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
+  const [data, setData] = useState(lesson);
+
   const [isStale, setStale] = useState(false);
   const [isSaving, setSaving] = useState(false);
 
@@ -57,20 +59,32 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
   const { control, setValue, getValues } = useForm<LessonForm>({
     resolver: zodResolver(schema),
     defaultValues: {
-      id: lesson.id,
+      id: data.id,
     },
     values: {
-      id: lesson.id,
-      title: lesson.title,
-      slug: lesson.slug,
-      lexical: lesson.lexical,
-      wordCount: lesson.wordCount,
+      id: data.id,
+      title: data.title,
+      slug: data.slug,
+      lexical: data.lexical,
+      wordCount: data.wordCount,
     },
   });
 
   useEffect(() => {
     auditRef.current = lesson.audit;
   }, [lesson]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (isStale) {
+        handleUpdate();
+      }
+    }, 5000);
+    return () => {
+      clearInterval(interval);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isStale]);
 
   const handleUpdate = async () => {
     if (isSaving) {
@@ -94,7 +108,11 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
 
       setValue("slug", body["slug"], { shouldValidate: true });
 
-      await updateLesson(lesson.course?.id ?? 0, body);
+      const result = await updateLesson(lesson.course?.id ?? 0, body);
+
+      auditRef.current = result.audit;
+
+      setData(result);
 
       // await new Promise((resolve) => setTimeout(() => resolve(true), 3000));
       if (lesson.status === "published") {

@@ -2,8 +2,8 @@
 
 import { getSession } from "@/lib/auth";
 import { API_URL_LOCAL } from "@/lib/constants";
+import { Post } from "@/lib/models";
 import { validateResponse } from "@/lib/validate-response";
-import { revalidatePath } from "next/cache";
 
 export async function updatePost(body: any) {
   const session = await getSession();
@@ -21,7 +21,7 @@ export async function updatePost(body: any) {
 
   await validateResponse(resp);
 
-  revalidatePath(`/admin/posts/${body.id}`);
+  // revalidatePath(`/admin/posts/${body.id}`);
 
-  // return (await resp.json()) as Post;
+  return (await resp.json()) as Post;
 }

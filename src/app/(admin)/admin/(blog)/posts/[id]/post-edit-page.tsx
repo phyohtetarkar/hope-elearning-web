@@ -88,6 +88,8 @@ export default function PostEditPage({ post }: PostEditPageProps) {
   const { toast } = useToast();
   const auditRef = useRef<Audit>();
 
+  const [data, setData] = useState(post);
+
   const [isOpenSettings, setOpenSettings] = useState(false);
 
   const [isStale, setStale] = useState(false);
@@ -103,6 +105,18 @@ export default function PostEditPage({ post }: PostEditPageProps) {
     auditRef.current = post.audit;
   }, [post]);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (isStale) {
+        handleUpdate();
+      }
+    }, 5000);
+    return () => {
+      clearInterval(interval);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isStale]);
+
   const {
     control,
     register,
@@ -112,29 +126,29 @@ export default function PostEditPage({ post }: PostEditPageProps) {
   } = useForm<PostUpdateForm>({
     resolver: zodResolver(schema),
     defaultValues: {
-      id: post.id,
-      cover: post.cover,
-      title: post.title,
-      slug: post.slug,
-      excerpt: post.excerpt,
-      visibility: post.visibility,
-      lexical: post.lexical,
-      wordCount: post.wordCount,
-      authors: post.authors ?? [],
-      tags: post.tags ?? [],
+      id: data.id,
+      cover: data.cover,
+      title: data.title,
+      slug: data.slug,
+      excerpt: data.excerpt,
+      visibility: data.visibility,
+      lexical: data.lexical,
+      wordCount: data.wordCount,
+      authors: data.authors ?? [],
+      tags: data.tags ?? [],
     },
     values: {
-      id: post.id,
-      cover: post.cover,
-      title: post.title,
-      slug: post.slug,
-      excerpt: post.excerpt,
-      visibility: post.visibility,
-      lexical: post.lexical,
-      wordCount: post.wordCount,
-      publishedAt: post.publishedAt,
-      authors: post.authors ?? [],
-      tags: post.tags ?? [],
+      id: data.id,
+      cover: data.cover,
+      title: data.title,
+      slug: data.slug,
+      excerpt: data.excerpt,
+      visibility: data.visibility,
+      lexical: data.lexical,
+      wordCount: data.wordCount,
+      publishedAt: data.publishedAt,
+      authors: data.authors ?? [],
+      tags: data.tags ?? [],
     },
   });
 
@@ -158,8 +172,10 @@ export default function PostEditPage({ post }: PostEditPageProps) {
         tags: tags.map((v) => v.id),
         updatedAt: audit?.updatedAt,
       };
-      await updatePost(body);
+      const result = await updatePost(body);
       setValue("slug", body["slug"], { shouldValidate: true });
+      auditRef.current = result.audit;
+      setData(result);
 
       // await new Promise((resolve) => setTimeout(() => resolve(true), 3000));
       if (post.status === "published") {
@@ -314,7 +330,7 @@ export default function PostEditPage({ post }: PostEditPageProps) {
           </TooltipProvider>
         </nav>
         <div className="grow fixed inset-0 overflow-y-auto mt-[65px]">
-          <div className="container max-w-3xl 2xl:max-w-4xl mt-7 mb-10">
+          <div className="container max-w-3xl 2xl:max-w-4xl mt-7 mb-16">
             <Controller
               control={control}
               name="cover"

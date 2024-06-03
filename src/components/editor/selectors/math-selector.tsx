@@ -1,16 +1,9 @@
 import { FunctionIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { useEditor } from "novel";
-import { useEffect, useRef } from "react";
 
 export const MathSelector = () => {
-  const inputRef = useRef<HTMLInputElement>(null);
   const { editor } = useEditor();
-
-  // Autofocus on input by default
-  useEffect(() => {
-    inputRef.current && inputRef.current?.focus();
-  });
 
   if (!editor) return null;
 
@@ -37,15 +30,7 @@ export const MathSelector = () => {
           size="icon"
           className="rounded-none w-14"
           onClick={(evt) => {
-            const { from, to, $anchor } = editor.state.selection;
-            console.log($anchor);
-            if (!$anchor.parent.isTextblock) {
-              return;
-            }
-
-            if ($anchor.parent.type.name === "codeBlock") {
-              return;
-            }
+            const { from, to } = editor.state.selection;
             const latex = editor.state.doc.textBetween(from, to);
             latex && editor.chain().focus().setLatex({ latex }).run();
           }}
