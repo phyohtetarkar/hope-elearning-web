@@ -5,7 +5,6 @@ import {
   Heading1,
   Heading2,
   Heading3,
-  ImageIcon,
   List,
   ListOrdered,
   Text,

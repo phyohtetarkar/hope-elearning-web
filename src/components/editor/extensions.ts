@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import { mergeAttributes } from "@tiptap/core";
 import { CharacterCount } from "@tiptap/extension-character-count";
 import Heading from "@tiptap/extension-heading";
+import TextAlign from "@tiptap/extension-text-align";
 import {
   AIHighlight,
   GlobalDragHandle,
@@ -27,7 +28,7 @@ const heading = Heading.extend({
     const hasLevel = this.options.levels.includes(node.attrs.level);
     const level = hasLevel ? node.attrs.level : this.options.levels[0];
 
-    if (!this.editor?.isEditable) {
+    if (!this.editor?.isEditable && node.textContent) {
       return [
         `h${level}`,
         mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
@@ -36,7 +37,11 @@ const heading = Heading.extend({
         0,
       ];
     }
-    return [`h${level}`, 0];
+    return [
+      `h${level}`,
+      mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
+      0,
+    ];
   },
 });
 
@@ -59,6 +64,10 @@ const taskItem = TaskItem.configure({
     class: cn("flex items-start my-4"),
   },
   nested: true,
+});
+
+const textAlign = TextAlign.configure({
+  types: ["heading", "paragraph", "math"],
 });
 
 // const horizontalRule = HorizontalRule.configure({
@@ -120,7 +129,7 @@ const starterKit = StarterKit.configure({
   code: {
     HTMLAttributes: {
       class: cn(
-        "rounded-lg bg-muted text-red-700 dark:bg-muted/90 dark:text-red-400 px-1.5 py-1 font-mono font-medium before:content-none after:content-none",
+        "rounded-lg bg-muted text-red-700 dark:bg-muted/90 dark:text-red-400 px-1.5 py-1 font-mono font-medium before:content-none after:content-none"
       ),
       spellcheck: "false",
     },
@@ -143,16 +152,12 @@ export const defaultExtensions = [
   placeholder,
   tiptapLink,
   tiptapImage,
+  textAlign,
   heading,
   taskList,
   taskItem,
   aiHighlight,
   CustomCodeBlock,
-  // CustomYoutube.configure({
-  //   nocookie: true,
-  //   width: 0,
-  //   height: 0,
-  // }),
   youtube,
   CharacterCount,
   GlobalDragHandle,

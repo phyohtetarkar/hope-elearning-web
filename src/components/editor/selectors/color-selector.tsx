@@ -1,5 +1,4 @@
 import { Check, ChevronDown } from "lucide-react";
-import type { Dispatch, SetStateAction } from "react";
 import { EditorBubbleItem, useEditor } from "novel";
 
 import { PopoverTrigger, Popover, PopoverContent } from "@/components/ui/popover";

@@ -28,6 +28,8 @@ import { LinkSelector } from "./selectors/link-selector";
 import { NodeSelector } from "./selectors/node-selector";
 import { TextButtons } from "./selectors/text-buttons";
 import { slashCommand, suggestionItems } from "./slash-command";
+import { MathSelector } from "./selectors/math-selector";
+import { TextAlignSelector } from "./selectors/text-align-selector";
 
 const extensions = [...defaultExtensions, slashCommand];
 
@@ -47,6 +49,7 @@ function NovelEditor({
   const [openNode, setOpenNode] = useState(false);
   const [openColor, setOpenColor] = useState(false);
   const [openLink, setOpenLink] = useState(false);
+  const [openTextAlign, setOpenTextAlign] = useState(false);
   const [openAI, setOpenAI] = useState(false);
 
   const { toast } = useToast();
@@ -156,7 +159,11 @@ function NovelEditor({
 
           <LinkSelector open={openLink} onOpenChange={setOpenLink} />
           <Separator orientation="vertical" />
+          <MathSelector />
+          <Separator orientation="vertical" />
           <TextButtons />
+          <Separator orientation="vertical" />
+          <TextAlignSelector open={openTextAlign} onOpenChange={setOpenTextAlign} />
           <Separator orientation="vertical" />
           <ColorSelector open={openColor} onOpenChange={setOpenColor} />
         </GenerativeMenuSwitch>
