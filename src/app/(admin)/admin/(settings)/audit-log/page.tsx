@@ -18,7 +18,7 @@ import {
   uppercaseFirstChar,
 } from "@/lib/utils";
 import { validateResponse } from "@/lib/validate-response";
-import { CpuIcon, PencilIcon, PlusIcon, Trash2Icon } from "lucide-react";
+import { CpuIcon } from "lucide-react";
 import { cookies } from "next/headers";
 import AuditLogFilter from "./audit-log-filter";
 
@@ -72,17 +72,29 @@ export default async function AuditLog(props: Props) {
     return <ProfilePlaceholder className="border" />;
   };
 
-  const eventIcon = (action: AuditAction) => {
+  const eventUI = (action: AuditAction) => {
     if (action.event === "created") {
-      return <PlusIcon className="size-3.5" />;
+      return (
+        <div className="px-2 py-1 bg-success/20 text-success rounded-full inline">
+          Create
+        </div>
+      );
     }
 
     if (action.event === "updated") {
-      return <PencilIcon className="size-3.5" />;
+      return (
+        <div className="px-2 py-1 bg-primary/20 text-primary rounded-full inline">
+          Update
+        </div>
+      );
     }
 
     if (action.event === "deleted") {
-      return <Trash2Icon className="size-3.5" />;
+      return (
+        <div className="px-2 py-1 bg-destructive/20 text-destructive rounded-full inline">
+          Delete
+        </div>
+      );
     }
 
     return undefined;
@@ -107,11 +119,12 @@ export default async function AuditLog(props: Props) {
         {data.contents.length === 0 && (
           <TableCaption className="text-start">No audit log</TableCaption>
         )}
-        <TableHeader className="hidden">
+        <TableHeader>
           <TableRow>
             <TableHead className="uppercase min-w-[300px] w-full">
               Audit
             </TableHead>
+            <TableHead className="uppercase min-w-[200px]">Event</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody className="border-b">
@@ -119,12 +132,7 @@ export default async function AuditLog(props: Props) {
             return (
               <TableRow key={i}>
                 <TableCell className="flex items-start space-x-3 min-w-[300px]">
-                  <div className="relative flex-shrink-0">
-                    {avatarUI(a)}
-                    <div className="absolute right-[-2px] bottom-[-2px] size-[1.4rem] bg-white text-black dark:bg-muted dark:text-muted-foreground rounded-full shadow flex items-center justify-center">
-                      {eventIcon(a)}
-                    </div>
-                  </div>
+                  <div className="relative flex-shrink-0">{avatarUI(a)}</div>
                   <div className="flex flex-col">
                     <span className="mb-0.5">
                       <span>{`${uppercaseFirstChar(a.resourceType)} ${
@@ -138,6 +146,9 @@ export default async function AuditLog(props: Props) {
                       {formatTimestamp(a.createdAt, true)}
                     </span>
                   </div>
+                </TableCell>
+                <TableCell className="text-xs uppercase font-medium">
+                  {eventUI(a)}
                 </TableCell>
               </TableRow>
             );

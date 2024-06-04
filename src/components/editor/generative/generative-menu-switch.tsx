@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Sparkles } from "lucide-react";
+import { SmilePlus } from "lucide-react";
 import { EditorBubble, useEditor } from "novel";
 import { useEffect, type ReactNode } from "react";
 import { AISelector } from "./ai-selector";
@@ -41,13 +41,13 @@ const GenerativeMenuSwitch = ({
       {!open && (
         <div className="flex w-fit h-10">
           <Button
-            className="gap-1 rounded-none text-purple-500 h-full"
+            className="space-x-1.5 rounded-none text-primary h-full"
             variant="ghost"
             onClick={() => onOpenChange(true)}
             size="sm"
           >
-            <Sparkles size={20} fill="currentColor" />
-            Ask AI
+            <SmilePlus size={20} strokeWidth={2.3} />
+            <span>Ask AI</span>
           </Button>
           {children}
         </div>

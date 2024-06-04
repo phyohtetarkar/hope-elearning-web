@@ -53,16 +53,23 @@ const AISelectorCommands = ({ onSelect }: AISelectorCommandsProps) => {
             onSelect={(value) => {
               if (!editor) return;
               const slice = editor.state.selection.content();
-              const text = editor.storage.markdown.serializer.serialize(
-                slice.content
-              );
+
+              let text = "";
+
+              if (editor?.isActive("math")) {
+                text = editor.getAttributes("math").latex;
+              } else {
+                text = editor!.storage.markdown.serializer.serialize(
+                  slice.content
+                );
+              }
               onSelect(text, value);
             }}
             className="flex gap-2 px-4"
             key={option.value}
             value={option.value}
           >
-            <option.icon className="h-4 w-4 text-purple-500" />
+            <option.icon className="h-4 w-4 text-primary" />
             {option.label}
           </CommandItem>
         ))}
@@ -74,13 +81,19 @@ const AISelectorCommands = ({ onSelect }: AISelectorCommandsProps) => {
             if (!editor) return;
             const pos = editor.state.selection.from;
 
-            const text = getPrevText(editor, pos);
+            let text = "";
+
+            if (editor?.isActive("math")) {
+              text = editor.getAttributes("math").latex;
+            } else {
+              text = getPrevText(editor, pos);
+            }
             onSelect(text, "continue");
           }}
           value="continue"
           className="gap-2 px-4"
         >
-          <StepForward className="h-4 w-4 text-purple-500" />
+          <StepForward className="h-4 w-4 text-primary" />
           Continue writing
         </CommandItem>
       </CommandGroup>

@@ -57,9 +57,9 @@ export default function AuditLogFilter() {
         }}
       >
         <option value="">All event</option>
-        <option value="created">Created</option>
-        <option value="updated">Updated</option>
-        <option value="deleted">Deleted</option>
+        <option value="created">Create</option>
+        <option value="updated">Update</option>
+        <option value="deleted">Delete</option>
       </Select>
     </div>
   );

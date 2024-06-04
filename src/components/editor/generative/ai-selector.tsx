@@ -16,7 +16,6 @@ import { useState } from "react";
 import Markdown from "react-markdown";
 import AICompletionCommands from "./ai-completion-command";
 import AISelectorCommands from "./ai-selector-commands";
-//TODO: I think it makes more sense to create a custom Tiptap extension for this functionality https://tiptap.dev/docs/editor/ai/introduction
 
 interface AISelectorProps {
   open: boolean;
@@ -29,27 +28,6 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
   const [completion, setCompletion] = useState("");
   const [isLoading, setLoading] = useState(false);
   const { toast } = useToast();
-
-  // const { completion, complete, isLoading } = useCompletion({
-  //   api: `${API_URL}/ai/generate`,
-  //   onResponse: (response) => {
-  //     if (response.status === 429) {
-  //       toast({
-  //         title: "Error",
-  //         description: "You have reached your request limit for the day.",
-  //         variant: "destructive",
-  //       });
-  //       return;
-  //     }
-  //   },
-  //   onError: (e) => {
-  //     toast({
-  //       title: "Error",
-  //       description: e.message,
-  //       variant: "destructive",
-  //     });
-  //   },
-  // });
 
   const handleCompletion = async (values: AiPromptRequest) => {
     try {
@@ -89,7 +67,7 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
       )}
 
       {isLoading && (
-        <div className="flex h-12 w-full items-center px-4 text-sm font-medium text-muted-foreground text-purple-500">
+        <div className="flex h-12 w-full items-center px-4 text-sm font-medium text-primary">
           <Sparkles className="mr-2 h-4 w-4 shrink-0" />
           AI is thinking
           <div className="ml-auto mt-1">
@@ -116,13 +94,9 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
             />
             <Button
               size="icon"
-              className="absolute right-2 top-1/2 h-6 w-6 -translate-y-1/2 rounded-full bg-purple-500 hover:bg-purple-900"
+              className="absolute right-2 top-1/2 size-7 -translate-y-1/2 rounded-full shadow"
               onClick={() => {
                 if (completion) {
-                  // return complete(completion, {
-                  //   body: { option: "zap", command: inputValue },
-                  // }).then(() => setInputValue(""));
-
                   handleCompletion({
                     prompt: completion,
                     option: "zap",
@@ -133,13 +107,16 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
                 }
 
                 const slice = editor!.state.selection.content();
-                const text = editor!.storage.markdown.serializer.serialize(
-                  slice.content
-                );
 
-                // complete(text, {
-                //   body: { option: "zap", command: inputValue },
-                // }).then(() => setInputValue(""));
+                let text = "";
+                
+                if (editor?.isActive("math")) {
+                  text = editor.getAttributes('math').latex;
+                } else {
+                  text = editor!.storage.markdown.serializer.serialize(
+                    slice.content
+                  );
+                }
 
                 handleCompletion({
                   prompt: text,
@@ -148,7 +125,7 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
                 });
               }}
             >
-              <ArrowUp className="h-4 w-4" />
+              <ArrowUp className="size-4" />
             </Button>
           </div>
           {hasCompletion ? (
@@ -162,8 +139,6 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
           ) : (
             <AISelectorCommands
               onSelect={(value, option) =>
-                // complete(value, { body: { option } })
-
                 handleCompletion({
                   prompt: value,
                   option: option,

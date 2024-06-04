@@ -170,8 +170,8 @@ ul[data-type="taskList"] li[data-checked="true"] > div > p {
 }
 
 /* Custom Youtube Video CSS */
-iframe {
-  border: 8px solid #ffd00027;
+.ProseMirror iframe {
+  border: 8px solid transparent;
   border-radius: 4px;
   min-width: 200px;
   min-height: 200px;
@@ -179,10 +179,11 @@ iframe {
   outline: 0px solid transparent;
 }
 
-div[data-youtube-video] > iframe {
+.ProseMirror div[data-youtube-video] > iframe {
   cursor: move;
   aspect-ratio: 16 / 9;
-  width: 100%;
+  width: 100% !important;
+  height: auto !important;
 }
 
 .ProseMirror-selectednode iframe {
@@ -190,7 +191,7 @@ div[data-youtube-video] > iframe {
   outline: 4px solid #fbbf24;
 }
 
-@media only screen and (max-width: 480px) {
+/* @media only screen and (max-width: 480px) {
   div[data-youtube-video] > iframe {
     max-height: 50px;
   }
@@ -200,4 +201,4 @@ div[data-youtube-video] > iframe {
   div[data-youtube-video] > iframe {
     max-height: 100px;
   }
-}
+} */

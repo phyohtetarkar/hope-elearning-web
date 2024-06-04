@@ -1,15 +1,10 @@
 import { cn } from "@/lib/utils";
 import { Node, mergeAttributes } from "@tiptap/core";
-import { Node as ProseMirrorNode } from "@tiptap/pm/model";
 import { EditorState } from "@tiptap/pm/state";
 import katex, { KatexOptions } from "katex";
 
 export interface MathematicsOptions {
-  shouldRender: (
-    state: EditorState,
-    pos: number,
-    node: ProseMirrorNode
-  ) => boolean;
+  shouldRender: (state: EditorState, pos: number) => boolean;
   katexOptions?: KatexOptions;
   HTMLAttributes: Record<string, any>;
 }
@@ -18,7 +13,7 @@ declare module "@tiptap/core" {
   interface Commands<ReturnType> {
     customCommand: {
       setLatex: ({ latex }: { latex: string }) => ReturnType;
-      unsetLatex: ({ latex }: { latex: string }) => ReturnType;
+      unsetLatex: () => ReturnType;
     };
   }
 }
@@ -39,11 +34,14 @@ export const Mathematics = Node.create<MathematicsOptions>({
 
   addOptions() {
     return {
-      shouldRender: (state, pos, node) => {
+      shouldRender: (state, pos) => {
         const $pos = state.doc.resolve(pos);
-        return (
-          node.type.name === "text" && $pos.parent.type.name !== "codeBlock"
-        );
+
+        if (!$pos.parent.isTextblock) {
+          return false;
+        }
+        
+        return $pos.parent.type.name !== "codeBlock";
       },
       katexOptions: {
         throwOnError: false,
@@ -58,17 +56,13 @@ export const Mathematics = Node.create<MathematicsOptions>({
     return {
       setLatex:
         ({ latex }) =>
-        ({ chain, state, tr }) => {
+        ({ chain, state }) => {
           if (!latex) {
             return false;
           }
-          const {from, to, $anchor} = state.selection;
+          const { from, to, $anchor } = state.selection;
 
-          if (!$anchor.parent.isTextblock) {
-            return false;
-          }
-
-          if ($anchor.parent.type.name === "codeBlock") {
+          if (!this.options.shouldRender(state, $anchor.pos)) {
             return false;
           }
 
@@ -80,20 +74,31 @@ export const Mathematics = Node.create<MathematicsOptions>({
                 attrs: {
                   latex: latex,
                 },
-              },
-              {
-                updateSelection: true,
               }
             )
+            .setTextSelection({ from: from, to: from + 1 })
             .run();
         },
       unsetLatex:
-        ({ latex }) =>
-        ({ state, tr }) => {
-          const selection = state.selection;
-          tr.insertText(latex, selection.from, selection.to);
+        () =>
+        ({ editor, state, chain }) => {
+          const latex = editor.getAttributes(this.name).latex;
+          if (typeof latex !== "string") {
+            return false;
+          }
 
-          return true;
+          const { from, to } = state.selection;
+
+          return chain()
+            .command(({ tr }) => {
+              tr.insertText(latex, from, to);
+              return true;
+            })
+            .setTextSelection({
+              from: from,
+              to: from + latex.length,
+            })
+            .run();
         },
     };
   },
@@ -114,8 +119,7 @@ export const Mathematics = Node.create<MathematicsOptions>({
   },
 
   renderText({ node }) {
-    const latex = node.attrs["latex"] ?? "";
-    return latex;
+    return node.attrs["latex"] ?? "";
   },
 
   addNodeView() {
