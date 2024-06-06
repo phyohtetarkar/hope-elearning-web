@@ -49,7 +49,7 @@ export const MathSelector = () => {
         </TooltipTrigger>
         <TooltipContent>
           LaTex
-          <TooltipArrow className="dark:fill-white" />
+          <TooltipArrow />
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

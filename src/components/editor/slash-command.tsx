@@ -7,6 +7,7 @@ import {
   Heading3,
   List,
   ListOrdered,
+  Table,
   Text,
   TextQuote,
 } from "lucide-react";
@@ -15,12 +16,14 @@ import { createSuggestionItems } from "novel/extensions";
 import { Command, renderItems } from "novel/extensions";
 import { YoutubeIcon } from "../icons";
 
+const iconSize = 18;
+
 export const suggestionItems = createSuggestionItems([
   {
     title: "Text",
     description: "Just start typing with plain text.",
     searchTerms: ["p", "paragraph"],
-    icon: <Text size={18} />,
+    icon: <Text size={iconSize} />,
     command: ({ editor, range }) => {
       editor
         .chain()
@@ -34,7 +37,7 @@ export const suggestionItems = createSuggestionItems([
     title: "To-do List",
     description: "Track tasks with a to-do list.",
     searchTerms: ["todo", "task", "list", "check", "checkbox"],
-    icon: <CheckSquare size={18} />,
+    icon: <CheckSquare size={iconSize} />,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleTaskList().run();
     },
@@ -43,7 +46,7 @@ export const suggestionItems = createSuggestionItems([
     title: "Heading 1",
     description: "Big section heading.",
     searchTerms: ["title", "big", "large"],
-    icon: <Heading1 size={18} />,
+    icon: <Heading1 size={iconSize} />,
     command: ({ editor, range }) => {
       editor
         .chain()
@@ -57,7 +60,7 @@ export const suggestionItems = createSuggestionItems([
     title: "Heading 2",
     description: "Medium section heading.",
     searchTerms: ["subtitle", "medium"],
-    icon: <Heading2 size={18} />,
+    icon: <Heading2 size={iconSize} />,
     command: ({ editor, range }) => {
       editor
         .chain()
@@ -71,7 +74,7 @@ export const suggestionItems = createSuggestionItems([
     title: "Heading 3",
     description: "Small section heading.",
     searchTerms: ["subtitle", "small"],
-    icon: <Heading3 size={18} />,
+    icon: <Heading3 size={iconSize} />,
     command: ({ editor, range }) => {
       editor
         .chain()
@@ -85,7 +88,7 @@ export const suggestionItems = createSuggestionItems([
     title: "Bullet List",
     description: "Create a simple bullet list.",
     searchTerms: ["unordered", "point"],
-    icon: <List size={18} />,
+    icon: <List size={iconSize} />,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleBulletList().run();
     },
@@ -94,7 +97,7 @@ export const suggestionItems = createSuggestionItems([
     title: "Numbered List",
     description: "Create a list with numbering.",
     searchTerms: ["ordered"],
-    icon: <ListOrdered size={18} />,
+    icon: <ListOrdered size={iconSize} />,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleOrderedList().run();
     },
@@ -103,7 +106,7 @@ export const suggestionItems = createSuggestionItems([
     title: "Quote",
     description: "Capture a quote.",
     searchTerms: ["blockquote"],
-    icon: <TextQuote size={18} />,
+    icon: <TextQuote size={iconSize} />,
     command: ({ editor, range }) =>
       editor
         .chain()
@@ -117,7 +120,7 @@ export const suggestionItems = createSuggestionItems([
     title: "Code",
     description: "Capture a code snippet.",
     searchTerms: ["codeblock"],
-    icon: <Code size={18} />,
+    icon: <Code size={iconSize} />,
     command: ({ editor, range }) =>
       editor
         .chain()
@@ -125,6 +128,14 @@ export const suggestionItems = createSuggestionItems([
         .deleteRange(range)
         .toggleCodeBlock({ language: "plaintext" })
         .run(),
+  },
+  {
+    title: "Table",
+    description: "Capture a table.",
+    searchTerms: ["table"],
+    icon: <Table size={iconSize} />,
+    command: ({ editor, range }) =>
+      editor.chain().focus().deleteRange(range).insertTable().run(),
   },
   // {
   //   title: "Image",
@@ -179,7 +190,7 @@ export const suggestionItems = createSuggestionItems([
     title: "Divider",
     description: "Create a horizontal divider.",
     searchTerms: ["divider"],
-    icon: <Divide size={18} />,
+    icon: <Divide size={iconSize} />,
     command: ({ editor, range }) =>
       editor.chain().focus().deleteRange(range).setHorizontalRule().run(),
   },

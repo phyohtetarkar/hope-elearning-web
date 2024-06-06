@@ -1,5 +1,5 @@
-import "../styles/codeblock.scss";
 import "./globals.css";
+import "../styles/tiptap.scss";
 
 import { AuthenticationContextProvider } from "@/components/authentication-context-porvider";
 import Providers from "@/components/providers";

@@ -73,4 +73,16 @@
       text-decoration: underline;
     }
   }
+
+  table p {
+    margin: 0;
+  }
+  
+  table .selectedCell {
+    background-color: rgba(90, 187, 247, 0.3);
+  }
+
+  .tableWrapper {
+    overflow-x: auto;
+  }
 }

@@ -2,7 +2,12 @@ import { cn } from "@/lib/utils";
 import { mergeAttributes } from "@tiptap/core";
 import { CharacterCount } from "@tiptap/extension-character-count";
 import Heading from "@tiptap/extension-heading";
+import Table, { createColGroup } from "@tiptap/extension-table";
+import TableCell from "@tiptap/extension-table-cell";
+import TableHeader from "@tiptap/extension-table-header";
+import TableRow from "@tiptap/extension-table-row";
 import TextAlign from "@tiptap/extension-text-align";
+import { DOMOutputSpec } from "@tiptap/pm/model";
 import {
   AIHighlight,
   GlobalDragHandle,
@@ -17,11 +22,14 @@ import {
 import { UploadImagesPlugin } from "novel/plugins";
 import { CustomCodeBlock } from "./extensions/codeblock";
 import { Mathematics } from "./extensions/mathematics";
+import { TableView } from "./utilities/table-view";
 
 // You can overwrite the placeholder with your own configuration
 const aiHighlight = AIHighlight;
 
-const placeholder = Placeholder.configure({});
+const placeholder = Placeholder.configure({
+  includeChildren: false,
+});
 
 const heading = Heading.extend({
   renderHTML({ node, HTMLAttributes }) {
@@ -104,6 +112,40 @@ const youtube = Youtube.configure({
   inline: false,
 });
 
+const TiptapTable = Table.extend({
+  renderHTML({ node, HTMLAttributes }) {
+    const { colgroup, tableWidth, tableMinWidth } = createColGroup(
+      node,
+      this.options.cellMinWidth
+    );
+
+    const table: DOMOutputSpec = [
+      "div",
+      {
+        class: "table-wrapper overflow-y-auto my-[2em] not-draggable",
+      },
+      [
+        "table",
+        mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
+          style: tableWidth
+            ? `width: ${tableWidth}`
+            : `minWidth: ${tableMinWidth}`,
+        }),
+        colgroup,
+        ["tbody", 0],
+      ],
+    ];
+
+    return table;
+  },
+}).configure({
+  HTMLAttributes: {
+    class: cn("not-prose table-auto border-collapse w-full not-draggable"),
+  },
+  lastColumnResizable: false,
+  allowTableNodeSelection: true,
+});
+
 const starterKit = StarterKit.configure({
   bulletList: {
     HTMLAttributes: {
@@ -162,4 +204,18 @@ export const defaultExtensions = [
   CharacterCount,
   GlobalDragHandle,
   Mathematics,
+  TiptapTable,
+  TableHeader.configure({
+    HTMLAttributes: {
+      class: cn(
+        "bg-muted border border-default p-2 text-start min-w-[150px] font-semibold"
+      ),
+    },
+  }),
+  TableRow,
+  TableCell.configure({
+    HTMLAttributes: {
+      class: cn("border border-default p-2 min-w-[150px] align-middle"),
+    },
+  }),
 ];

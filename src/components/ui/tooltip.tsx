@@ -9,8 +9,6 @@ const TooltipProvider = TooltipPrimitive.Provider;
 
 const Tooltip = TooltipPrimitive.Root;
 
-const TooltipArrow = TooltipPrimitive.Arrow;
-
 const TooltipTrigger = TooltipPrimitive.Trigger;
 
 const TooltipContent = React.forwardRef<
@@ -27,7 +25,20 @@ const TooltipContent = React.forwardRef<
     {...props}
   />
 ));
+
 TooltipContent.displayName = TooltipPrimitive.Content.displayName;
+
+const TooltipArrow = React.forwardRef<
+  React.ElementRef<typeof TooltipPrimitive.Arrow>,
+  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Arrow>
+>(({ className, ...props }, ref) => (
+  <TooltipPrimitive.Arrow
+    ref={ref}
+    className={cn("dark:fill-white", className)}
+    {...props}
+  />
+));
+TooltipArrow.displayName = TooltipPrimitive.Arrow.displayName;
 
 export {
   Tooltip,

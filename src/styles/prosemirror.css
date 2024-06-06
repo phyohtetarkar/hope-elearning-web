@@ -202,3 +202,7 @@ ul[data-type="taskList"] li[data-checked="true"] > div > p {
     max-height: 100px;
   }
 } */
+
+.tippy-box {
+  max-width: none !important;
+}

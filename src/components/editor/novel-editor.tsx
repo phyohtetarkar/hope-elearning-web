@@ -30,6 +30,7 @@ import { TextButtons } from "./selectors/text-buttons";
 import { slashCommand, suggestionItems } from "./slash-command";
 import { MathSelector } from "./selectors/math-selector";
 import { TextAlignSelector } from "./selectors/text-align-selector";
+import TableFloatingMenu from "./table-floating-menu";
 
 const extensions = [...defaultExtensions, slashCommand];
 
@@ -152,6 +153,8 @@ function NovelEditor({
           <ColorSelector open={openColor} onOpenChange={setOpenColor} />
         </EditorBubble> */}
 
+        <TableFloatingMenu />
+
         <GenerativeMenuSwitch open={openAI} onOpenChange={setOpenAI}>
           <Separator orientation="vertical" />
           <NodeSelector open={openNode} onOpenChange={setOpenNode} />
@@ -163,7 +166,10 @@ function NovelEditor({
           <Separator orientation="vertical" />
           <TextButtons />
           <Separator orientation="vertical" />
-          <TextAlignSelector open={openTextAlign} onOpenChange={setOpenTextAlign} />
+          <TextAlignSelector
+            open={openTextAlign}
+            onOpenChange={setOpenTextAlign}
+          />
           <Separator orientation="vertical" />
           <ColorSelector open={openColor} onOpenChange={setOpenColor} />
         </GenerativeMenuSwitch>
