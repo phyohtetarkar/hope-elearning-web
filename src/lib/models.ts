@@ -4,6 +4,12 @@ export type PostVisibility = "public" | "member" | "paid_member";
 export type CourseStatus = "draft" | "published";
 export type CourseLevel = "beginner" | "intermediate" | "advanced";
 export type CourseAccess = "free" | "premium";
+export type LessonType = "text" | "video" | "quiz";
+export type QuizType =
+  | "multiple_choice"
+  | "single_choice"
+  | "true_false"
+  | "short_answer";
 
 export interface Page<T> {
   contents: T[];
@@ -119,11 +125,32 @@ export interface Lesson {
   title: string;
   slug: string;
   trial: boolean;
+  type: LessonType;
   lexical?: string;
   sortOrder: number;
   wordCount: number;
   chapter?: Chapter;
+  quizzes?: Quiz[];
   completed?: boolean;
+  audit?: Audit;
+}
+
+export interface Quiz {
+  id: number;
+  question: string;
+  type: QuizType;
+  feedback?: string;
+  sortOrder: number;
+  answers: QuizAnswer[];
+  audit?: Audit;
+}
+
+export interface QuizAnswer {
+  id: number;
+  answer: string;
+  correct: boolean;
+  sortOrder: number;
+  deleted?: boolean;
   audit?: Audit;
 }
 

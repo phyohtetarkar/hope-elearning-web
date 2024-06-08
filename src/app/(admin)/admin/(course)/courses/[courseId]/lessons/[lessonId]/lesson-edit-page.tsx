@@ -74,17 +74,17 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
     auditRef.current = lesson.audit;
   }, [lesson]);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (isStale) {
-        handleUpdate();
-      }
-    }, 5000);
-    return () => {
-      clearInterval(interval);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isStale]);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     if (isStale) {
+  //       handleUpdate();
+  //     }
+  //   }, 5000);
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [isStale]);
 
   const handleUpdate = async () => {
     if (isSaving) {
@@ -122,15 +122,19 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
           variant: "success",
         });
       }
+
+      setSaving(false);
+      if (isStale) {
+        handleUpdate();
+      }
     } catch (error) {
+      setSaving(false);
       setStale(true);
       toast({
         title: "Error",
         description: parseErrorResponse(error),
         variant: "destructive",
       });
-    } finally {
-      setSaving(false);
     }
   };
 

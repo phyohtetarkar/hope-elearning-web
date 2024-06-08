@@ -105,17 +105,17 @@ export default function PostEditPage({ post }: PostEditPageProps) {
     auditRef.current = post.audit;
   }, [post]);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (isStale) {
-        handleUpdate();
-      }
-    }, 5000);
-    return () => {
-      clearInterval(interval);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isStale]);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     if (isStale) {
+  //       handleUpdate();
+  //     }
+  //   }, 5000);
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [isStale]);
 
   const {
     control,
@@ -185,15 +185,19 @@ export default function PostEditPage({ post }: PostEditPageProps) {
           variant: "success",
         });
       }
+
+      setSaving(false);
+      if (isStale) {
+        handleUpdate();
+      }
     } catch (error) {
       toast({
         title: "Error",
         description: parseErrorResponse(error),
         variant: "destructive",
       });
-      setStale(true);
-    } finally {
       setSaving(false);
+      setStale(true);
     }
   };
 
@@ -481,7 +485,10 @@ export default function PostEditPage({ post }: PostEditPageProps) {
                       setValue("slug", slug, {
                         shouldValidate: true,
                       });
-                      setStale(true);
+
+                      if (post.status === "draft") {
+                        setStale(true);
+                      }
                     }}
                     error={error?.message}
                   />
@@ -494,7 +501,9 @@ export default function PostEditPage({ post }: PostEditPageProps) {
                 wrapperClass="mb-4"
                 {...register("visibility", {
                   onChange: (evt) => {
-                    setStale(true);
+                    if (post.status === "draft") {
+                      setStale(true);
+                    }
                   },
                 })}
                 error={errors.visibility?.message}
@@ -536,7 +545,9 @@ export default function PostEditPage({ post }: PostEditPageProps) {
                             className="absolute right-2 top-[50%] translate-y-[-50%]"
                             onClick={() => {
                               setValue("publishedAt", undefined);
-                              setStale(true);
+                              if (post.status === "draft") {
+                                setStale(true);
+                              }
                             }}
                           >
                             <XIcon className="size-4 text-gray-400 hover:text-gray-600" />
@@ -564,8 +575,9 @@ export default function PostEditPage({ post }: PostEditPageProps) {
                               } else {
                                 setValue("publishedAt", date?.toISOString());
                               }
-
-                              setStale(true);
+                              if (post.status === "draft") {
+                                setStale(true);
+                              }
                             }
                           }}
                           initialFocus
@@ -590,7 +602,9 @@ export default function PostEditPage({ post }: PostEditPageProps) {
                                   date.setHours(0);
                                   setValue("publishedAt", date?.toISOString());
                                 }
-                                setStale(true);
+                                if (post.status === "draft") {
+                                  setStale(true);
+                                }
                               }}
                             />
                             <span className="text-muted-foreground absolute right-2 inset-y-0 flex items-center">
@@ -616,7 +630,9 @@ export default function PostEditPage({ post }: PostEditPageProps) {
                                   date.setMinutes(0);
                                   setValue("publishedAt", date?.toISOString());
                                 }
-                                setStale(true);
+                                if (post.status === "draft") {
+                                  setStale(true);
+                                }
                               }}
                             />
                             <div className="text-muted-foreground absolute right-2 inset-y-0 flex items-center">
@@ -640,7 +656,9 @@ export default function PostEditPage({ post }: PostEditPageProps) {
               maxLength={1000}
               {...register("excerpt", {
                 onChange: (evt) => {
-                  setStale(true);
+                  if (post.status === "draft") {
+                    setStale(true);
+                  }
                 },
               })}
             />
@@ -662,7 +680,9 @@ export default function PostEditPage({ post }: PostEditPageProps) {
                       } else {
                         setValue("tags", []);
                       }
-                      setStale(true);
+                      if (post.status === "draft") {
+                        setStale(true);
+                      }
                     }}
                     isMulti
                     error={error?.message}
@@ -690,7 +710,9 @@ export default function PostEditPage({ post }: PostEditPageProps) {
                           setValue("authors", [...newValue], {
                             shouldValidate: true,
                           });
-                          newValue.length > 0 && setStale(true);
+                          if (post.status === "draft" && newValue.length > 0) {
+                            setStale(true);
+                          }
                         } else {
                           setValue("authors", [], {
                             shouldValidate: true,
