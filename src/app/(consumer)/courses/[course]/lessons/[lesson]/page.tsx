@@ -72,7 +72,7 @@ export async function generateMetadata(
   try {
     const lesson = await getLesson(params.lesson);
 
-    const course = lesson?.course;
+    const course = lesson?.chapter?.course;
 
     const previousImages = (await parent).openGraph?.images || [];
 
@@ -113,17 +113,17 @@ export default async function LessonDetail({ params }: Props) {
     redirect(`/courses/${params.course}`);
   }
 
-  const enrolledCourse = await getEnrolledCourse(lesson.courseId);
+  const enrolledCourse = await getEnrolledCourse(lesson.chapter?.course?.id ?? 0);
 
   return (
     <div className="container max-w-3xl 2xl:max-w-4xl py-6">
-      <h2 className="mb-1">{lesson.course?.title}</h2>
+      <h2 className="mb-1">{lesson.chapter?.course?.title}</h2>
       <Breadcrumb className="mb-4">
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link href={`/courses/${lesson.course?.slug}`}>
-                {lesson.course?.title}
+              <Link href={`/courses/${lesson.chapter?.course?.slug}`}>
+                {lesson.chapter?.course?.title}
               </Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
@@ -138,7 +138,7 @@ export default async function LessonDetail({ params }: Props) {
 
       <div className="aspect-w-16 aspect-h-9 mb-6">
         <Image
-          src={lesson.course?.cover ?? "/images/placeholder.jpeg"}
+          src={lesson.chapter?.course?.cover ?? "/images/placeholder.jpeg"}
           className="object-cover rounded-md border"
           alt="Cover"
           fill
@@ -159,12 +159,12 @@ export default async function LessonDetail({ params }: Props) {
                 Resume course
               </Link>
             ) : (
-              <Link href={`/learn/${lesson.course?.slug}`}>Resume course</Link>
+              <Link href={`/learn/${lesson.chapter?.course?.slug}`}>Resume course</Link>
             )}
           </Button>
         ) : (
           <EnrollCourseButton
-            course={lesson.course}
+            course={lesson.chapter?.course}
             revalidate={`/courses/${params.course}/lessons/${params.lesson}`}
           >
             Enroll course

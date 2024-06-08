@@ -53,13 +53,13 @@ export default function ResumeCoursePage({ lesson }: { lesson: Lesson }) {
   const handleCompleted = async () => {
     try {
       setSaving(true);
-      const courseId = lesson.courseId;
+      const courseId = lesson.chapter?.course?.id;
       const lessonId = lesson.id;
-      const path = `/learn/${lesson.course?.slug}/lessons/${lesson.slug}`;
+      const path = `/learn/${lesson.chapter?.course?.slug}/lessons/${lesson.slug}`;
       if (lesson.completed) {
-        await removeCompletedLesson(courseId, lessonId, path);
+        await removeCompletedLesson(courseId ?? 0, lessonId, path);
       } else {
-        await addCompletedLesson(courseId, lessonId, path);
+        await addCompletedLesson(courseId ?? 0, lessonId, path);
       }
       setCompleted(!lesson.completed);
     } catch (error) {
@@ -79,7 +79,7 @@ export default function ResumeCoursePage({ lesson }: { lesson: Lesson }) {
   };
 
   const content = () => {
-    const course = lesson.course;
+    const course = lesson.chapter?.course;
     if (
       course?.access === "premium" &&
       (user?.expiredAt ?? 0) < new Date().getTime()

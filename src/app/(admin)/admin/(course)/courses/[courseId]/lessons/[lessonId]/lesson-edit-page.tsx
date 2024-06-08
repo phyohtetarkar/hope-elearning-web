@@ -82,8 +82,8 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
     }, 5000);
     return () => {
       clearInterval(interval);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isStale]);
 
   const handleUpdate = async () => {
@@ -101,21 +101,21 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
 
       const body = {
         ...values,
-        courseId: lesson.course?.id,
+        courseId: lesson.chapter?.course?.id,
         slug: !values.slug?.trim() ? lesson.slug : values.slug,
         updatedAt: audit?.updatedAt,
       };
 
       setValue("slug", body["slug"], { shouldValidate: true });
 
-      const result = await updateLesson(lesson.course?.id ?? 0, body);
+      const result = await updateLesson(lesson.chapter?.course?.id ?? 0, body);
 
       auditRef.current = result.audit;
 
       setData(result);
 
       // await new Promise((resolve) => setTimeout(() => resolve(true), 3000));
-      if (lesson.status === "published") {
+      if (lesson.chapter?.course?.status === "published") {
         toast({
           title: "Success",
           description: "Lesson updated",
@@ -137,7 +137,7 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
   const debouncedUpdate = debounce(handleUpdate, 2000);
 
   const saveStateView = () => {
-    if (lesson.status === "published") {
+    if (lesson.chapter?.course?.status === "published") {
       return null;
     }
 
@@ -162,7 +162,7 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
-                  <Link href={`/admin/courses/${lesson.course?.id}`}>
+                  <Link href={`/admin/courses/${lesson.chapter?.course?.id}`}>
                     Course
                   </Link>
                 </BreadcrumbLink>
@@ -177,7 +177,7 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
           </Breadcrumb>
           <div className="flex-1"></div>
           {saveStateView()}
-          {lesson.status === "published" && (
+          {lesson.chapter?.course?.status === "published" && (
             <Button disabled={isSaving} onClick={handleUpdate}>
               {isSaving && (
                 <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
@@ -210,8 +210,8 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
               <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
-                    <Link href={`/admin/courses/${lesson.course?.id}`}>
-                      {lesson.course?.title}
+                    <Link href={`/admin/courses/${lesson.chapter?.course?.id}`}>
+                      {lesson.chapter?.course?.title}
                     </Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
@@ -237,7 +237,7 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
                         const value = evt.target.value;
                         const slug = setStringToSlug(value);
                         setValue("slug", slug);
-                        if (lesson.status === "draft") {
+                        if (lesson.chapter?.course?.status === "draft") {
                           debouncedUpdate(undefined);
                         }
                       }}
@@ -253,7 +253,7 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
                 const wordCount = editor.storage.characterCount.words();
                 setValue("lexical", JSON.stringify(json));
                 setValue("wordCount", wordCount);
-                if (lesson.status === "draft") {
+                if (lesson.chapter?.course?.status === "draft") {
                   debouncedUpdate(undefined);
                 }
               }}
@@ -265,6 +265,10 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
       <LessonSettingDialog
         lesson={lesson}
         isOpen={openSetting}
+        afterUpdate={(result) => {
+          auditRef.current = result.audit;
+          setData(result);
+        }}
         onOpenChange={setOpenSetting}
       />
 

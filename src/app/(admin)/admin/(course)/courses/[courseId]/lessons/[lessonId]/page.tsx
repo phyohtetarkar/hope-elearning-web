@@ -37,7 +37,7 @@ export default async function LessonEdit({
     notFound();
   }
 
-  if (lesson.course?.id !== parseInt(params.courseId)) {
+  if (lesson.chapter?.course?.id !== parseInt(params.courseId)) {
     notFound();
   }
 

@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils";
-import { posToDOMRect } from "@tiptap/core";
 import { FloatingMenu } from "@tiptap/react";
 import {
   Columns,
@@ -54,7 +53,7 @@ export default function TableFloatingMenu() {
             }
           }
 
-          return posToDOMRect(editor.view, from, to);
+          return editor.view.dom.getBoundingClientRect();
         },
       }}
       className={cn("flex w-fit max-w-[90vw] space-x-0.5")}

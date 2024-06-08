@@ -35,10 +35,12 @@ type LessonForm = z.infer<typeof schema>;
 export default function LessonSettingDialog({
   lesson,
   isOpen,
+  afterUpdate,
   onOpenChange,
 }: {
   lesson: Lesson;
   isOpen: boolean;
+  afterUpdate: (lesson: Lesson) => void;
   onOpenChange: (open: boolean) => void;
 }) {
   const { toast } = useToast();
@@ -49,7 +51,6 @@ export default function LessonSettingDialog({
     control,
     formState: { isSubmitting },
     setValue,
-    getValues,
     handleSubmit,
     reset,
   } = useForm<LessonForm>({
@@ -76,14 +77,16 @@ export default function LessonSettingDialog({
 
       const body = {
         ...values,
-        courseId: lesson.course?.id,
+        courseId: lesson.chapter?.course?.id,
         slug: !values.slug?.trim() ? lesson.slug : values.slug,
         updatedAt: audit?.updatedAt,
       };
 
       setValue("slug", body["slug"], { shouldValidate: true });
 
-      await updateLesson(lesson.course?.id ?? 0, body);
+      const result = await updateLesson(lesson.chapter?.course?.id ?? 0, body);
+
+      afterUpdate(result);
 
       toast({
         title: "Success",

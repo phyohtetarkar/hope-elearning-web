@@ -32,7 +32,7 @@ export default function LessonDeleteAlert({
   const handleDelete = async () => {
     try {
       setDeleting(true);
-      await deleteLesson(lesson.course?.id ?? 0, lesson.id, true);
+      await deleteLesson(lesson.chapter?.course?.id ?? 0, lesson.id, true);
     } catch (error) {
       toast({
         title: "Error",

@@ -4,7 +4,6 @@ export type PostVisibility = "public" | "member" | "paid_member";
 export type CourseStatus = "draft" | "published";
 export type CourseLevel = "beginner" | "intermediate" | "advanced";
 export type CourseAccess = "free" | "premium";
-export type LessonStatus = "draft" | "published";
 
 export interface Page<T> {
   contents: T[];
@@ -117,16 +116,13 @@ export interface Chapter {
 
 export interface Lesson {
   id: number;
-  courseId: number;
   title: string;
   slug: string;
   trial: boolean;
-  status: LessonStatus;
   lexical?: string;
   sortOrder: number;
   wordCount: number;
   chapter?: Chapter;
-  course?: Course;
   completed?: boolean;
   audit?: Audit;
 }
