@@ -4,7 +4,6 @@ import { forwardRef } from "react";
 
 export interface ProfilePlaceholderProps
   extends React.InputHTMLAttributes<HTMLDivElement> {
-  className?: string;
   iconClass?: string;
 }
 

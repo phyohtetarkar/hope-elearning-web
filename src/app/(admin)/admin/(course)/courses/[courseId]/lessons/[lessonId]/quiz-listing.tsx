@@ -1,4 +1,5 @@
 "use client";
+
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -10,6 +11,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { RadioButton } from "@/components/ui/radio-button";
 import {
   Tooltip,
   TooltipContent,
@@ -17,8 +20,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/use-toast";
-import { deleteLesson, sortLessons } from "@/lib/actions";
-import { Chapter, Course, Lesson } from "@/lib/models";
+import { deleteQuiz, sortQuizzes } from "@/lib/actions";
+import { Lesson, Quiz } from "@/lib/models";
 import { parseErrorResponse } from "@/lib/parse-error-response";
 import { debounce } from "@/lib/utils";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
@@ -29,17 +32,28 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Edit, LoaderCircle, Menu, Trash2 } from "lucide-react";
-import Link from "next/link";
+import { LoaderCircle, Menu, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import QuizCreateButton from "./quiz-create-button";
+import QuizUpdateButton from "./quiz-update-button";
 
-const LessonItem = ({ course, value }: { course: Course; value: Lesson }) => {
+const QuizItem = ({
+  lesson,
+  quiz,
+  update,
+  remove,
+}: {
+  lesson: Lesson;
+  quiz: Quiz;
+  update: (quiz: Quiz) => void;
+  remove: () => void;
+}) => {
   const [openDelete, setOpenDelete] = useState(false);
   const [isDeleting, setDeleting] = useState(false);
   const { toast } = useToast();
 
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: value.id, resizeObserverConfig: { disabled: true } });
+    useSortable({ id: quiz.id, resizeObserverConfig: { disabled: true } });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -49,8 +63,9 @@ const LessonItem = ({ course, value }: { course: Course; value: Lesson }) => {
   const handleDelete = async () => {
     try {
       setDeleting(true);
-      await deleteLesson(course.id, value.id);
+      await deleteQuiz(lesson.chapter?.course?.id ?? 0, quiz.id);
       setOpenDelete(false);
+      remove();
     } catch (error) {
       toast({
         title: "Error",
@@ -62,39 +77,52 @@ const LessonItem = ({ course, value }: { course: Course; value: Lesson }) => {
     }
   };
 
+  const renderAnswers = () => {
+    return quiz.answers.map((a) => {
+      if (quiz.type === "short_answer") {
+        return (
+          <span key={a.id} className="text-sm italic mb-1">
+            {a.answer}
+          </span>
+        );
+      }
+      return (
+        <div key={a.id} className="flex items-center space-x-2 mb-1">
+          {quiz.type === "multiple_choice" ? (
+            <Checkbox checked={a.correct} onCheckedChange={() => {}} />
+          ) : (
+            <RadioButton checked={a.correct} />
+          )}
+          <label className="text-sm">{a.answer}</label>
+        </div>
+      );
+    });
+  };
+
   return (
     <div
       ref={setNodeRef}
       style={style}
-      className="flex items-center space-x-2 bg-background border rounded-md p-2 active:z-10"
+      className="flex items-start gap-2 bg-muted border p-2 active:z-10"
     >
       <Menu
         className="size-5 cursor-move outline-none text-gray-500 flex-shrink-0"
         {...attributes}
         {...listeners}
       />
-      <div className="text-sm">
-        <span className="font-semibold line-clamp-1">{value.title}</span>
-        {value.trial && <span className="text-muted-foreground">Trial</span>}
+      <div className="flex flex-col">
+        <div className="font-medium mb-2">{quiz.question}</div>
+        {renderAnswers()}
       </div>
       <div className="flex-1"></div>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              size="icon"
-              variant="default"
-              className="size-8 flex-shrink-0"
-              asChild
-            >
-              <Link href={`/admin/courses/${course.id}/lessons/${value.id}`}>
-                <Edit className="size-4" />
-              </Link>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Edit lesson</TooltipContent>
-        </Tooltip>
 
+      <TooltipProvider>
+        <QuizUpdateButton
+          lesson={lesson}
+          quiz={quiz}
+          index={quiz.sortOrder}
+          afterSubmit={update}
+        />
         <AlertDialog open={openDelete} onOpenChange={setOpenDelete}>
           <Tooltip delayDuration={300}>
             <TooltipTrigger asChild>
@@ -108,13 +136,13 @@ const LessonItem = ({ course, value }: { course: Course; value: Lesson }) => {
                 </Button>
               </AlertDialogTrigger>
             </TooltipTrigger>
-            <TooltipContent>Delete lesson</TooltipContent>
+            <TooltipContent>Delete quiz</TooltipContent>
           </Tooltip>
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>Confirm Delete</AlertDialogTitle>
               <AlertDialogDescription>
-                Are you sure to delete lesson: &ldquo;{value.title}&ldquo;?
+                Are you sure to delete quiz: &ldquo;{quiz.question}&ldquo;?
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
@@ -123,7 +151,7 @@ const LessonItem = ({ course, value }: { course: Course; value: Lesson }) => {
               </AlertDialogCancel>
               <Button onClick={handleDelete} disabled={isDeleting}>
                 {isDeleting && (
-                  <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                  <LoaderCircle className="mr-2 size-4 animate-spin" />
                 )}
                 Proceed
               </Button>
@@ -135,25 +163,19 @@ const LessonItem = ({ course, value }: { course: Course; value: Lesson }) => {
   );
 };
 
-export default function CourseLessonsEdit({
-  course,
-  chapter,
-}: {
-  course: Course;
-  chapter: Chapter;
-}) {
-  const [lessons, setLessons] = useState<Lesson[]>([]);
+export default function QuizListing({ lesson }: { lesson: Lesson }) {
+  const [quizzes, setQuizzes] = useState<Quiz[]>([]);
   const { toast } = useToast();
 
   useEffect(() => {
-    setLessons(chapter.lessons ?? []);
-  }, [chapter]);
+    setQuizzes(lesson.quizzes ?? []);
+  }, [lesson]);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
     if (over && active.id !== over.id) {
-      setLessons((items) => {
+      setQuizzes((items) => {
         const oldIndex = items.findIndex((e) => e.id === active.id);
         const newIndex = items.findIndex((e) => e.id === over.id);
 
@@ -167,11 +189,12 @@ export default function CourseLessonsEdit({
   };
 
   const handleSort = useCallback(
-    async (lessons: Lesson[]) => {
+    async (quizzes: Quiz[]) => {
       try {
-        await sortLessons(
-          course.id,
-          lessons.map((l, i) => ({ id: l.id, sortOrder: i }))
+        await sortQuizzes(
+          lesson.chapter?.course?.id ?? 0,
+          quizzes.map((c, i) => ({ id: c.id, sortOrder: i })),
+          `/admin/courses/${lesson.chapter?.course?.id}/lessons/${lesson.id}`
         );
       } catch (error) {
         toast({
@@ -181,7 +204,7 @@ export default function CourseLessonsEdit({
         });
       }
     },
-    [course.id, toast]
+    [lesson, toast]
   );
 
   const debouncedSortUpdate = useMemo(
@@ -190,12 +213,39 @@ export default function CourseLessonsEdit({
   );
 
   return (
-    <DndContext onDragEnd={handleDragEnd}>
-      <SortableContext items={lessons} strategy={verticalListSortingStrategy}>
-        {lessons.map((l, i) => {
-          return <LessonItem key={l.id} course={course} value={l} />;
-        })}
-      </SortableContext>
-    </DndContext>
+    <div className="flex flex-col space-y-4">
+      <DndContext onDragEnd={handleDragEnd}>
+        <SortableContext items={quizzes} strategy={verticalListSortingStrategy}>
+          {quizzes.map((q, i) => {
+            return (
+              <QuizItem
+                key={q.id}
+                lesson={lesson}
+                quiz={q}
+                update={(quiz) => {
+                  const list = [...quizzes];
+                  list[i] = quiz;
+                  setQuizzes(list);
+                }}
+                remove={() => {
+                  const list = [...quizzes];
+                  list.splice(i, 1);
+                  setQuizzes(list);
+                }}
+              />
+            );
+          })}
+        </SortableContext>
+      </DndContext>
+      <div className="">
+        <QuizCreateButton
+          lesson={lesson}
+          index={lesson.quizzes?.length ?? 0}
+          afterSubmit={(quiz) => {
+            setQuizzes((old) => [...old, quiz]);
+          }}
+        />
+      </div>
+    </div>
   );
 }

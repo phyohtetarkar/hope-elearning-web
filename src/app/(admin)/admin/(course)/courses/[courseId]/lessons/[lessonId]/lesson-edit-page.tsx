@@ -30,6 +30,7 @@ import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import LessonDeleteAlert from "./lesson-delete-alert";
 import LessonSettingDialog from "./lesson-setting-dialog";
+import QuizListing from "./quiz-listing";
 
 const schema = z.object({
   id: z.number(),
@@ -158,6 +159,27 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
     return <Cloud className="flex-shrink-0 text-success" />;
   };
 
+  const content = () => {
+    if (lesson.type === "quiz") {
+      return <QuizListing lesson={lesson} />;
+    }
+
+    return (
+      <NovelEditor
+        content={lesson.lexical ? JSON.parse(lesson.lexical) : undefined}
+        onChange={(editor) => {
+          const json = editor.getJSON();
+          const wordCount = editor.storage.characterCount.words();
+          setValue("lexical", JSON.stringify(json));
+          setValue("wordCount", wordCount);
+          if (lesson.chapter?.course?.status === "draft") {
+            debouncedUpdate(undefined);
+          }
+        }}
+      />
+    );
+  };
+
   return (
     <>
       <div className="flex flex-col">
@@ -209,7 +231,7 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
           </DropdownMenu>
         </div>
         <div className="grow fixed inset-0 overflow-y-auto mt-[65px]">
-          <div className="container max-w-3xl 2xl:max-w-4xl mt-7 mb-10">
+          <div className="container max-w-3xl 2xl:max-w-4xl mt-7 mb-16">
             <Breadcrumb className="mb-6">
               <BreadcrumbList>
                 <BreadcrumbItem>
@@ -250,18 +272,7 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
                 }}
               />
             </div>
-            <NovelEditor
-              content={lesson.lexical ? JSON.parse(lesson.lexical) : undefined}
-              onChange={(editor) => {
-                const json = editor.getJSON();
-                const wordCount = editor.storage.characterCount.words();
-                setValue("lexical", JSON.stringify(json));
-                setValue("wordCount", wordCount);
-                if (lesson.chapter?.course?.status === "draft") {
-                  debouncedUpdate(undefined);
-                }
-              }}
-            />
+            {content()}
           </div>
         </div>
       </div>

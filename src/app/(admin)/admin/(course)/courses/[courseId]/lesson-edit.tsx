@@ -1,12 +1,12 @@
 "use client";
 
-import { Input } from "@/components/forms";
+import { Input, Select } from "@/components/forms";
 import { Button } from "@/components/ui/button";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
 import { createLesson, updateLesson } from "@/lib/actions";
-import { Chapter, Course, Lesson } from "@/lib/models";
+import { Chapter, Course, Lesson, LessonType } from "@/lib/models";
 import { parseErrorResponse } from "@/lib/parse-error-response";
 import { setStringToSlug } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,6 +25,9 @@ const schema = z.object({
     message: "Please enter lesson slug",
   }),
   trial: z.boolean().optional(),
+  type: z.custom<LessonType>((v) => {
+    return typeof v === "string" ? /text|video|quiz/.test(v) : false;
+  }),
 });
 
 type LessonForm = z.infer<typeof schema>;
@@ -40,7 +43,6 @@ function LessonEdit({
   data?: Lesson;
   close?: () => void;
 }) {
-
   const { toast } = useToast();
   const {
     control,
@@ -56,6 +58,7 @@ function LessonEdit({
       chapterId: chapter.id,
       title: data?.title,
       slug: data?.slug,
+      type: data?.type ?? "text",
     },
   });
 
@@ -127,6 +130,17 @@ function LessonEdit({
           }}
         />
 
+        <Select
+          label="Content Type"
+          {...register("type")}
+          wrapperClass="mb-4"
+          error={errors.type?.message}
+          disabled={!!data?.id}
+        >
+          <option value="text">Text</option>
+          <option value="quiz">Quiz</option>
+        </Select>
+
         <Controller
           control={control}
           name="trial"
@@ -138,7 +152,9 @@ function LessonEdit({
                   checked={field.value ?? false}
                   onCheckedChange={(v) => setValue("trial", v)}
                 />
-                <label htmlFor="trial" className="font-medium">Trial</label>
+                <label htmlFor="trial" className="font-medium">
+                  Trial
+                </label>
               </div>
             );
           }}

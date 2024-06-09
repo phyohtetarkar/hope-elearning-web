@@ -2,8 +2,8 @@ export * from "./auth/apply-auth-cookies";
 export * from "./auth/clear-auth-cookies";
 export * from "./auth/send-verification-email";
 
-export * from "./user/update-user-role";
 export * from "./user/update-user-profile";
+export * from "./user/update-user-role";
 
 export * from "./post/create-post";
 export * from "./post/delete-post";
@@ -34,6 +34,11 @@ export * from "./course/create-lesson";
 export * from "./course/delete-lesson";
 export * from "./course/sort-lessons";
 export * from "./course/update-lesson";
+
+export * from "./course/create-quiz";
+export * from "./course/delete-quiz";
+export * from "./course/sort-quizzes";
+export * from "./course/update-quiz";
 
 export * from "./review/write-course-review";
 
