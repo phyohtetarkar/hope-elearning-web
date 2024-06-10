@@ -154,6 +154,12 @@ export interface QuizAnswer {
   audit?: Audit;
 }
 
+export interface QuizResponse {
+  quizId: number;
+  shortAnswer?: string;
+  answer: QuizAnswer;
+}
+
 export interface EnrolledCourse {
   course: Course;
   resumeLesson?: Lesson;

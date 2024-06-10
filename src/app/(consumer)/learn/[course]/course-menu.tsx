@@ -15,60 +15,6 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useContext } from "react";
 
-const curriculum = [
-  {
-    name: "Chapter 1",
-    lessons: [
-      {
-        name: "Lessons 1",
-        trial: true,
-      },
-      {
-        name: "Lessons 2",
-        trial: false,
-      },
-      {
-        name: "Lessons 3",
-        trial: false,
-      },
-    ],
-  },
-  {
-    name: "Chapter 2",
-    lessons: [
-      {
-        name: "Lessons 1",
-        trial: true,
-      },
-      {
-        name: "Lessons 2",
-        trial: false,
-      },
-      {
-        name: "Lessons 3",
-        trial: false,
-      },
-    ],
-  },
-  {
-    name: "Chapter 3",
-    lessons: [
-      {
-        name: "Lessons 1",
-        trial: true,
-      },
-      {
-        name: "Lessons 2",
-        trial: false,
-      },
-      {
-        name: "Lessons 3",
-        trial: false,
-      },
-    ],
-  },
-];
-
 export default function CourseMenu({
   course,
   enrolledCourse,
@@ -81,7 +27,9 @@ export default function CourseMenu({
   const params = useParams<{ course: string; lesson: string }>();
 
   const isCompleted = (lesson: Lesson) => {
-    return enrolledCourse.completedLessons.some((v) => v === lesson.id);
+    return (
+      enrolledCourse.completedLessons?.some((v) => v === lesson.id) ?? false
+    );
   };
 
   return (

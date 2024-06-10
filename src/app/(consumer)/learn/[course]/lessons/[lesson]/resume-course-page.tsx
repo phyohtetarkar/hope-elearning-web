@@ -14,16 +14,23 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
 import { addCompletedLesson, removeCompletedLesson } from "@/lib/actions";
-import { Lesson } from "@/lib/models";
+import { Lesson, QuizResponse } from "@/lib/models";
 import { parseErrorResponse } from "@/lib/parse-error-response";
-import { formatRelativeTimestamp } from "@/lib/utils";
+import { cn, formatRelativeTimestamp } from "@/lib/utils";
 import { JSONContent } from "@tiptap/core";
 import { LoaderCircle, LockKeyhole } from "lucide-react";
 import Link from "next/link";
 import { useContext, useMemo, useState } from "react";
 import DrawerToggleButton from "./drawer-toggle-button";
+import QuizListing from "./quiz-listing";
 
-export default function ResumeCoursePage({ lesson }: { lesson: Lesson }) {
+export default function ResumeCoursePage({
+  lesson,
+  responses,
+}: {
+  lesson: Lesson;
+  responses?: QuizResponse[];
+}) {
   const { toast } = useToast();
   const { user } = useContext(AuthenticationContext);
 
@@ -32,6 +39,10 @@ export default function ResumeCoursePage({ lesson }: { lesson: Lesson }) {
 
   const headings = useMemo(() => {
     try {
+      if (lesson.type === "quiz") {
+        return [];
+      }
+
       const json = lesson.lexical
         ? (JSON.parse(lesson.lexical) as JSONContent)
         : undefined;
@@ -115,11 +126,24 @@ export default function ResumeCoursePage({ lesson }: { lesson: Lesson }) {
 
         <Separator className="my-4" />
 
-        <ContentRenderer lexical={lesson.lexical} />
+        {lesson.type === "quiz" ? (
+          <QuizListing lesson={lesson} responses={responses ?? []} />
+        ) : (
+          <ContentRenderer lexical={lesson.lexical} />
+        )}
 
-        <Separator className="mt-16 mb-4" />
+        <Separator
+          className={cn("mb-4 mt-8", {
+            "hidden ": false,
+            "mt-16": lesson.type !== "quiz",
+          })}
+        />
 
-        <div className="flex items-center space-x-2 pb-16">
+        <div
+          className={cn("flex items-center space-x-2 pb-16", {
+            "hidden ": false,
+          })}
+        >
           {isSaving ? (
             <LoaderCircle className="size-4 animate-spin text-primary" />
           ) : (
@@ -144,7 +168,11 @@ export default function ResumeCoursePage({ lesson }: { lesson: Lesson }) {
             </>
           )}
           <div className="flex-grow"></div>
-          <div className="text-muted-foreground text-sm">
+          <div
+            className={cn("text-muted-foreground text-sm", {
+              "hidden ": lesson.type === "quiz",
+            })}
+          >
             Last edited: {formatRelativeTimestamp(lesson.audit?.updatedAt)}
           </div>
         </div>

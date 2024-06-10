@@ -103,7 +103,7 @@ const QuizItem = ({
     <div
       ref={setNodeRef}
       style={style}
-      className="flex items-start gap-2 bg-muted border p-2 active:z-10"
+      className="flex items-start gap-2 bg-muted/50 border p-2 active:z-10"
     >
       <Menu
         className="size-5 cursor-move outline-none text-gray-500 flex-shrink-0"
@@ -111,7 +111,7 @@ const QuizItem = ({
         {...listeners}
       />
       <div className="flex flex-col">
-        <div className="font-medium mb-2">{quiz.question}</div>
+        <div className="font-medium mb-2 text-base">{quiz.question}</div>
         {renderAnswers()}
       </div>
       <div className="flex-1"></div>

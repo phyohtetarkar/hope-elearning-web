@@ -1,5 +1,5 @@
 import { API_URL_LOCAL } from "@/lib/constants";
-import { Lesson } from "@/lib/models";
+import { Lesson, QuizResponse } from "@/lib/models";
 import { validateResponse } from "@/lib/validate-response";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -26,6 +26,27 @@ const getLesson = async (course: string, lesson: string) => {
     .catch((e) => undefined);
 };
 
+const getQuizResponses = async (lessonId: number) => {
+  const url = `${API_URL_LOCAL}/quiz-responses/${lessonId}`;
+
+  const resp = await fetch(url, {
+    headers: {
+      Cookie: cookies().toString(),
+    },
+  });
+
+  validateResponse(resp);
+
+  if (resp.status === 204) {
+    return undefined;
+  }
+
+  return resp
+    .json()
+    .then((json) => json as QuizResponse[])
+    .catch((e) => undefined);
+};
+
 export default async function ResumeCourse({
   params,
 }: {
@@ -37,5 +58,8 @@ export default async function ResumeCourse({
     redirect(`/profile/learnings`);
   }
 
-  return <ResumeCoursePage lesson={lesson} />;
+  const responses =
+    lesson.type === "quiz" ? await getQuizResponses(lesson.id) : undefined;
+
+  return <ResumeCoursePage lesson={lesson} responses={responses} />;
 }
