@@ -72,7 +72,7 @@ export default function QuizListing({
     const quizzes =
       lesson.quizzes?.map((q) => {
         let correct: boolean | "partial" | undefined = undefined;
-        let correctCount = 0;
+        let choiceCount = 0;
 
         const answers: {
           quizId: number;
@@ -86,12 +86,15 @@ export default function QuizListing({
 
           if (q.type === "short_answer" && response) {
             const isCorrect = ans.answer === response.shortAnswer;
-            correct = (correct ?? true) && isCorrect;
-          } else if (response) {
-            const isCorrect = ans.correct ? !!response.answer.correct : false;
-            correct = (correct ?? true) && isCorrect;
-
-            correctCount += isCorrect ? 1 : 0;
+            correct = isCorrect;
+          } else if (response && ans.correct) {
+            correct = (correct ?? true) && true;
+            choiceCount += 1;
+          } else if (response && !ans.correct) {
+            correct = false;
+            choiceCount += 1;
+          } else if (!response && ans.correct) {
+            correct = false;
           }
 
           answers.push({
@@ -104,11 +107,12 @@ export default function QuizListing({
 
         if (q.type === "multiple_choice") {
           const totalCorrect = q.answers.filter((a) => a.correct).length;
-          correct = correct
-            ? correctCount === totalCorrect
-              ? true
-              : "partial"
-            : correct;
+          correct =
+            choiceCount > 0
+              ? choiceCount === totalCorrect && correct
+                ? true
+                : "partial"
+              : false;
         }
 
         return {

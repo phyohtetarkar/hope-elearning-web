@@ -16,7 +16,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { addCompletedLesson, removeCompletedLesson } from "@/lib/actions";
 import { Lesson, QuizResponse } from "@/lib/models";
 import { parseErrorResponse } from "@/lib/parse-error-response";
-import { cn, formatRelativeTimestamp } from "@/lib/utils";
+import { cn, formatRelativeTimestamp, pluralize } from "@/lib/utils";
 import { JSONContent } from "@tiptap/core";
 import { LoaderCircle, LockKeyhole } from "lucide-react";
 import Link from "next/link";
@@ -203,22 +203,28 @@ export default function ResumeCoursePage({
         <div className="absolute inset-0 lg:overflow-y-auto lg:scrollbar-hide p-4">
           <h6 className="text-sm">On this content</h6>
           <Separator className="my-4" />
-          <div className="px-4">
-            <ol className="list-decimal">
-              {headings.map((h, i) => {
-                return (
-                  <li
-                    key={i}
-                    className="text-muted-foreground hover:text-foreground text-sm mb-1"
-                  >
-                    <a href={`#${h.replaceAll(/\s+/g, "-").toLowerCase()}`}>
-                      {h}
-                    </a>
-                  </li>
-                );
-              })}
-            </ol>
-          </div>
+          {lesson.type === "quiz" ? (
+            <span className="text-muted-foreground text-sm">
+              {pluralize(lesson.quizzes?.length ?? 0, "Question")}
+            </span>
+          ) : (
+            <div className="px-4">
+              <ol className="list-decimal">
+                {headings.map((h, i) => {
+                  return (
+                    <li
+                      key={i}
+                      className="text-muted-foreground hover:text-foreground text-sm mb-1"
+                    >
+                      <a href={`#${h.replaceAll(/\s+/g, "-").toLowerCase()}`}>
+                        {h}
+                      </a>
+                    </li>
+                  );
+                })}
+              </ol>
+            </div>
+          )}
         </div>
       </div>
     </div>

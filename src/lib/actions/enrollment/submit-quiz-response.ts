@@ -8,7 +8,7 @@ import { validateResponse } from "@/lib/validate-response";
 export async function submitQuizResponse(lessonId: number, body: any) {
   const session = await getSession();
 
-  const url = `${API_URL_LOCAL}/quiz-responses/${lessonId}`;
+  const url = `${API_URL_LOCAL}/enrollments/${lessonId}/quiz-responses`;
 
   const resp = await fetch(url, {
     method: "POST",

@@ -5,8 +5,8 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import ResumeCoursePage from "./resume-course-page";
 
-const getLesson = async (course: string, lesson: string) => {
-  const url = `${API_URL_LOCAL}/enrollments/${course}/lessons/${lesson}`;
+const getLesson = async (slug: string) => {
+  const url = `${API_URL_LOCAL}/enrollments/${slug}/lesson`;
 
   const resp = await fetch(url, {
     headers: {
@@ -27,7 +27,7 @@ const getLesson = async (course: string, lesson: string) => {
 };
 
 const getQuizResponses = async (lessonId: number) => {
-  const url = `${API_URL_LOCAL}/quiz-responses/${lessonId}`;
+  const url = `${API_URL_LOCAL}/enrollments/${lessonId}/quiz-responses`;
 
   const resp = await fetch(url, {
     headers: {
@@ -52,7 +52,7 @@ export default async function ResumeCourse({
 }: {
   params: { course: string; lesson: string };
 }) {
-  const lesson = await getLesson(params.course, params.lesson);
+  const lesson = await getLesson(params.lesson);
 
   if (!lesson) {
     redirect(`/profile/learnings`);

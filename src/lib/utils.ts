@@ -158,7 +158,7 @@ export function pluralize(
   plural?: string
 ) {
   if (count > 1) {
-    `${formatNumber(count)} ${plural ? plural : label + "s"}`;
+    return `${formatNumber(count)} ${plural ? plural : label + "s"}`;
   }
 
   return `${formatNumber(count)} ${label}`;

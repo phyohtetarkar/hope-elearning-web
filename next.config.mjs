@@ -6,10 +6,10 @@ const nextConfig = {
     },
   },
   experimental: {
-    // staleTimes: {
-    //   dynamic: 1,
-    //   static: 180,
-    // },
+    staleTimes: {
+      dynamic: 0,
+      static: 180,
+    },
   },
   images: {
     remotePatterns: [

@@ -37,9 +37,7 @@ export * from "./course/update-lesson";
 
 export * from "./course/create-quiz";
 export * from "./course/delete-quiz";
-export * from "./course/reset-quiz-response";
 export * from "./course/sort-quizzes";
-export * from "./course/submit-quiz-response";
 export * from "./course/update-quiz";
 
 export * from "./review/write-course-review";
@@ -52,6 +50,8 @@ export * from "./enrollment/enroll-course";
 export * from "./enrollment/remove-completed-lesson";
 export * from "./enrollment/remove-enrollment";
 export * from "./enrollment/update-resume-lesson";
+export * from "./enrollment/reset-quiz-response";
+export * from "./enrollment/submit-quiz-response";
 
 export * from "./ai/generate-gemini-completion";
 export * from "./ai/generate-openai-completion";

@@ -71,7 +71,7 @@ export default function CourseMenu({
                         <div
                           key={i}
                           className={cn(
-                            "flex items-center gap-2 py-3 px-4",
+                            "flex items-center space-x-2 py-3 px-4",
                             params.lesson === l.slug
                               ? "bg-primary/15"
                               : undefined
@@ -85,7 +85,7 @@ export default function CourseMenu({
                           <Link
                             href={`/learn/${course.slug}/lessons/${l.slug}`}
                             className={cn(
-                              "hover:text-primary",
+                              "hover:text-primary grow",
                               params.lesson === l.slug
                                 ? "text-primary"
                                 : undefined
