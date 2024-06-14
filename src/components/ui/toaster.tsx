@@ -11,7 +11,7 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 
 export function Toaster() {
-  const { toasts } = useToast();
+  const { toasts, dismiss } = useToast();
 
   return (
     <ToastProvider duration={3000}>
@@ -32,7 +32,7 @@ export function Toaster() {
               )}
             </div>
             {action}
-            <ToastClose />
+            <ToastClose onClick={() => dismiss(id)} />
           </Toast>
         );
       })}

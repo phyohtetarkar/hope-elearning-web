@@ -12,10 +12,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { RadioButton } from "@/components/ui/radio-button";
 import { useToast } from "@/components/ui/use-toast";
 import { createQuiz, updateQuiz } from "@/lib/actions";
-import { Lesson, Quiz, QuizAnswer, QuizType } from "@/lib/models";
+import { Lesson, Quiz, QuizType } from "@/lib/models";
 import { parseErrorResponse } from "@/lib/parse-error-response";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -31,7 +30,7 @@ const schema = z.object({
   }),
   type: z.custom<QuizType>((v) => {
     return typeof v === "string"
-      ? /multiple_choice|single_choice|true_false|short_answer/.test(v)
+      ? /multiple_choice|single_choice|short_answer/.test(v)
       : false;
   }),
   sortOrder: z.number(),
@@ -166,7 +165,7 @@ export default function QuizEditDialog({
         className="overflow-y-auto max-h-[80vh]"
       >
         <DialogHeader>
-          <DialogTitle>{quiz ? "Update Quiz" : "Create Quiz"}</DialogTitle>
+          <DialogTitle>{quiz ? "Update" : "Create"} Question</DialogTitle>
         </DialogHeader>
         <div className="gird grid-cols-1 mb-8">
           {errors.answers?.root?.message && (
@@ -188,23 +187,7 @@ export default function QuizEditDialog({
             {...register("type", {
               onChange: (evt) => {
                 const value = evt.target.value;
-                if (value === "true_false") {
-                  const answers: QuizAnswer[] = [
-                    {
-                      id: 0,
-                      answer: "True",
-                      correct: false,
-                      sortOrder: 0,
-                    },
-                    {
-                      id: 0,
-                      answer: "False",
-                      correct: false,
-                      sortOrder: 1,
-                    },
-                  ];
-                  setValue("answers", answers);
-                } else if (value === "short_answer") {
+                if (value === "short_answer") {
                   setValue("answers", [
                     {
                       id: 0,
@@ -222,7 +205,6 @@ export default function QuizEditDialog({
           >
             <option value="multiple_choice">Multipe Choice</option>
             <option value="single_choice">Single Choice</option>
-            <option value="true_false">True Or False</option>
             <option value="short_answer">Short Answer</option>
           </Select>
 
@@ -255,85 +237,6 @@ export default function QuizEditDialog({
                       {...register(`answers.${i}.answer`)}
                       error={errors.answers?.[i]?.answer?.message}
                     />
-                  );
-                }
-
-                if (type === "true_false") {
-                  return (
-                    <div
-                      key={i}
-                      className="flex items-center space-x-2"
-                      onClick={(evt) => {
-                        const answers = fields.map((ans, index) => {
-                          return {
-                            ...ans,
-                            correct: i === index,
-                          };
-                        });
-
-                        replace(answers);
-                        trigger("answers");
-                      }}
-                    >
-                      <RadioButton checked={a.correct} />
-                      <label>{a.answer}</label>
-                    </div>
-                  );
-                }
-
-                if (type === "single_choice") {
-                  return (
-                    <div key={i} className="flex flex-col">
-                      <div className="flex items-center space-x-2">
-                        <Input
-                          type="text"
-                          wrapperClass="flex-1 me-3"
-                          placeholder="Enter quiz answer"
-                          {...register(`answers.${i}.answer`)}
-                          error={error}
-                          hideErrorMessage
-                        />
-                        <div
-                          key={i}
-                          className="flex items-center space-x-2"
-                          onClick={(evt) => {
-                            const answers = getValues("answers").map(
-                              (ans, index) => {
-                                return {
-                                  ...ans,
-                                  correct: i === index,
-                                };
-                              }
-                            );
-
-                            replace(answers);
-                            trigger("answers");
-                          }}
-                        >
-                          <RadioButton checked={a.correct} />
-                          <label>Correct</label>
-                        </div>
-                        <Button
-                          variant="destructive"
-                          size="icon"
-                          className="size-8"
-                          onClick={() => {
-                            if (a.id > 0) {
-                              update(i, { ...a, deleted: true });
-                            } else {
-                              remove(i);
-                            }
-                          }}
-                        >
-                          <Trash2 className="size-4" />
-                        </Button>
-                      </div>
-                      {error && (
-                        <div className="text-destructive text-sm mt-1.5">
-                          {error}
-                        </div>
-                      )}
-                    </div>
                   );
                 }
 
@@ -394,9 +297,6 @@ export default function QuizEditDialog({
                   return <></>;
                 }
 
-                if (field.value === "true_false") {
-                  return <></>;
-                }
                 return (
                   <Button
                     size={"sm"}

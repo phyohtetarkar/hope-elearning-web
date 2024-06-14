@@ -8,7 +8,6 @@ export type LessonType = "text" | "video" | "quiz";
 export type QuizType =
   | "multiple_choice"
   | "single_choice"
-  | "true_false"
   | "short_answer";
 
 export interface Page<T> {

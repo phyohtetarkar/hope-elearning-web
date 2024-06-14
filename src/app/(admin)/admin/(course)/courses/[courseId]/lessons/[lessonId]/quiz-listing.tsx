@@ -56,7 +56,7 @@ const QuizItem = ({
     useSortable({ id: quiz.id, resizeObserverConfig: { disabled: true } });
 
   const style = {
-    transform: CSS.Transform.toString(transform),
+    transform: CSS.Translate.toString(transform),
     transition,
   };
 

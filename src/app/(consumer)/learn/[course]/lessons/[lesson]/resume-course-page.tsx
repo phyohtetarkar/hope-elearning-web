@@ -187,19 +187,11 @@ export default function ResumeCoursePage({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 h-full">
       <div className="lg:col-span-9 relative">
-        <div className="absolute inset-0 lg:overflow-y-auto lg:scrollbar-hide p-4 lg:px-6">
+        <div className="absolute inset-0 p-4 lg:px-6 lg:overflow-y-auto lg:scrollbar-hide lg:border-r">
           {content()}
-          {/* <div className="flex justify-between pb-10">
-            <Button variant="default" asChild>
-              <Link href={`/learn`}>Previous</Link>
-            </Button>
-            <Button asChild>
-              <Link href={`/learn`}>Next</Link>
-            </Button>
-          </div> */}
         </div>
       </div>
-      <div className="lg:col-span-3 relative border-l hidden lg:block">
+      <div className="lg:col-span-3 relative hidden lg:block">
         <div className="absolute inset-0 lg:overflow-y-auto lg:scrollbar-hide p-4">
           <h6 className="text-sm">On this content</h6>
           <Separator className="my-4" />

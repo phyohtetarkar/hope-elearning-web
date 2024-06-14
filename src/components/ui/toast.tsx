@@ -1,9 +1,9 @@
 "use client";
 
-import * as React from "react";
 import * as ToastPrimitives from "@radix-ui/react-toast";
 import { cva, type VariantProps } from "class-variance-authority";
 import { X } from "lucide-react";
+import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -73,13 +73,13 @@ const ToastAction = React.forwardRef<
 ToastAction.displayName = ToastPrimitives.Action.displayName;
 
 const ToastClose = React.forwardRef<
-  React.ElementRef<typeof ToastPrimitives.Close>,
-  React.ComponentPropsWithoutRef<typeof ToastPrimitives.Close>
+  HTMLDivElement,
+  React.InputHTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
-  <ToastPrimitives.Close
+  <div
     ref={ref}
     className={cn(
-      "absolute right-2 top-2 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100 group-[.destructive]:text-red-300 group-[.destructive]:hover:text-red-50 group-[.destructive]:focus:ring-red-400 group-[.destructive]:focus:ring-offset-red-600",
+      "absolute right-2 top-2 cursor-pointer rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100 group-[.destructive]:text-red-300 group-[.destructive]:hover:text-red-50 group-[.destructive]:focus:ring-red-400 group-[.destructive]:focus:ring-offset-red-600",
       "group-[.success]:text-success-300 group-[.success]:hover:text-success-50 group-[.success]:focus:ring-success-400 group-[.success]:focus:ring-offset-success-600",
       className
     )}
@@ -87,7 +87,7 @@ const ToastClose = React.forwardRef<
     {...props}
   >
     <X className="h-4 w-4" />
-  </ToastPrimitives.Close>
+  </div>
 ));
 ToastClose.displayName = ToastPrimitives.Close.displayName;
 
@@ -120,13 +120,13 @@ type ToastProps = React.ComponentPropsWithoutRef<typeof Toast>;
 type ToastActionElement = React.ReactElement<typeof ToastAction>;
 
 export {
-  type ToastProps,
-  type ToastActionElement,
-  ToastProvider,
-  ToastViewport,
   Toast,
-  ToastTitle,
-  ToastDescription,
-  ToastClose,
   ToastAction,
+  ToastClose,
+  ToastDescription,
+  ToastProvider,
+  ToastTitle,
+  ToastViewport,
+  type ToastActionElement,
+  type ToastProps,
 };

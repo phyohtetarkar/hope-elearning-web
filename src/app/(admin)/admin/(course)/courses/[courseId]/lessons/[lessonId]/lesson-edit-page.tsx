@@ -75,18 +75,6 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
     auditRef.current = lesson.audit;
   }, [lesson]);
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     if (isStale) {
-  //       handleUpdate();
-  //     }
-  //   }, 5000);
-  //   return () => {
-  //     clearInterval(interval);
-  //   };
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [isStale]);
-
   const handleUpdate = async () => {
     if (isSaving) {
       setStale(true);

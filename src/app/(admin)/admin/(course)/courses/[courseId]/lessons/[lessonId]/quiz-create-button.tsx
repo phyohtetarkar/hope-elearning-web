@@ -22,7 +22,7 @@ export default function QuizCreateButton({
           setOpen(true);
         }}
       >
-        Add quiz
+        Add question
       </Button>
       <QuizEditDialog
         lesson={lesson}

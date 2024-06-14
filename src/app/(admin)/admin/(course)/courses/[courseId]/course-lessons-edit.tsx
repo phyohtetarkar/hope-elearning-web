@@ -42,7 +42,7 @@ const LessonItem = ({ course, value }: { course: Course; value: Lesson }) => {
     useSortable({ id: value.id, resizeObserverConfig: { disabled: true } });
 
   const style = {
-    transform: CSS.Transform.toString(transform),
+    transform: CSS.Translate.toString(transform),
     transition,
   };
 
