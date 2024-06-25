@@ -61,8 +61,8 @@ export default function CourseMenu({
           {course.chapters?.map((c, i) => {
             return (
               <AccordionItem key={i} value={`chapter-${i}`}>
-                <AccordionTrigger className="py-2 px-4">
-                  <h6>{c.title}</h6>
+                <AccordionTrigger className="py-2 px-4 truncate">
+                  <h6 className="truncate">{c.title}</h6>
                 </AccordionTrigger>
                 <AccordionContent>
                   <div className="flex flex-col">

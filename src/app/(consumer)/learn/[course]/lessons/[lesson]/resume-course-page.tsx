@@ -6,7 +6,6 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
@@ -110,19 +109,7 @@ export default function ResumeCoursePage({
 
     return (
       <>
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem className="lg:hidden">
-              <DrawerToggleButton />
-            </BreadcrumbItem>
-            <BreadcrumbSeparator className="lg:hidden" />
-            <BreadcrumbItem>{lesson.chapter?.title}</BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>{lesson.title}</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+        <h2>{lesson.title}</h2>
 
         <Separator className="my-4" />
 
@@ -185,40 +172,55 @@ export default function ResumeCoursePage({
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 h-full">
-      <div className="lg:col-span-9 relative">
-        <div className="absolute inset-0 p-4 lg:px-6 lg:overflow-y-auto lg:scrollbar-hide lg:border-r">
-          {content()}
+    <>
+      <div className="grid grid-cols-1 lg:grid-cols-12 h-full">
+        <div className="lg:col-span-9 relative">
+          <div className="lg:hidden h-[3.5rem] fixed inset-x-0 bg-background border-b z-10 overflow-hidden">
+            <Breadcrumb className="h-full px-4">
+              <BreadcrumbList className="h-full flex-nowrap">
+                <BreadcrumbItem className="lg:hidden">
+                  <DrawerToggleButton />
+                </BreadcrumbItem>
+                <BreadcrumbSeparator className="lg:hidden" />
+                <BreadcrumbItem className="truncate">
+                  <span className="truncate">{lesson.chapter?.title}</span>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+          </div>
+          <div className="absolute inset-0 top-[3.5rem] lg:top-0 p-4 lg:px-6 lg:overflow-y-auto lg:scrollbar-hide lg:border-r">
+            {content()}
+          </div>
+        </div>
+        <div className="lg:col-span-3 relative hidden lg:block">
+          <div className="absolute inset-0 lg:overflow-y-auto lg:scrollbar-hide p-4">
+            <h6 className="text-sm">On this content</h6>
+            <Separator className="my-4" />
+            {lesson.type === "quiz" ? (
+              <span className="text-muted-foreground text-sm">
+                {pluralize(lesson.quizzes?.length ?? 0, "Question")}
+              </span>
+            ) : (
+              <div className="px-4">
+                <ol className="list-decimal">
+                  {headings.map((h, i) => {
+                    return (
+                      <li
+                        key={i}
+                        className="text-muted-foreground hover:text-foreground text-sm mb-1"
+                      >
+                        <a href={`#${h.replaceAll(/\s+/g, "-").toLowerCase()}`}>
+                          {h}
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ol>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-      <div className="lg:col-span-3 relative hidden lg:block">
-        <div className="absolute inset-0 lg:overflow-y-auto lg:scrollbar-hide p-4">
-          <h6 className="text-sm">On this content</h6>
-          <Separator className="my-4" />
-          {lesson.type === "quiz" ? (
-            <span className="text-muted-foreground text-sm">
-              {pluralize(lesson.quizzes?.length ?? 0, "Question")}
-            </span>
-          ) : (
-            <div className="px-4">
-              <ol className="list-decimal">
-                {headings.map((h, i) => {
-                  return (
-                    <li
-                      key={i}
-                      className="text-muted-foreground hover:text-foreground text-sm mb-1"
-                    >
-                      <a href={`#${h.replaceAll(/\s+/g, "-").toLowerCase()}`}>
-                        {h}
-                      </a>
-                    </li>
-                  );
-                })}
-              </ol>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
+    </>
   );
 }

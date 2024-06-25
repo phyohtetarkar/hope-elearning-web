@@ -23,7 +23,6 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
 } from "@nextui-org/navbar";
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import HeaderSearchField from "./header-search-field";
