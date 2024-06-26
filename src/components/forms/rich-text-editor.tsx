@@ -44,11 +44,11 @@ function RichTextEditor({
       }}
       onInit={(evt, editor) => {
         //editorRef.current = editor;
-        editor
-          .getContainer()
-          .getElementsByClassName("tox-edit-area__iframe")
-          .item(0)
-          ?.setAttribute("style", "background-color: transparent");
+        // editor
+        //   .getContainer()
+        //   .getElementsByClassName("tox-edit-area__iframe")
+        //   .item(0)
+        //   ?.setAttribute("style", "background-color: transparent");
         editor.getContainer().style.borderRadius = "0.15rem 0.15rem";
         editor.getContainer().style.border = `${
           noBorder ? 0 : 1

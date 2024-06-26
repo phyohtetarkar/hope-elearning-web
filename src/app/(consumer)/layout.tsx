@@ -26,7 +26,7 @@ export default async function ConsumerLayout({
   return (
     <div className="flex flex-col h-full">
       <Header user={user} />
-      <div className="pt-[65px] flex flex-col grow dark:bg-zinc-950">
+      <div className="pt-[4rem] flex flex-col grow dark:bg-zinc-950">
         <div className="grow">{children}</div>
         <Footer />
       </div>

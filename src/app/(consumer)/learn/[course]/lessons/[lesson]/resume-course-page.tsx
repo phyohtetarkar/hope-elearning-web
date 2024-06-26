@@ -194,8 +194,7 @@ export default function ResumeCoursePage({
         </div>
         <div className="lg:col-span-3 relative hidden lg:block">
           <div className="absolute inset-0 lg:overflow-y-auto lg:scrollbar-hide p-4">
-            <h6 className="text-sm">On this content</h6>
-            <Separator className="my-4" />
+            <h6 className="text-sm mb-4">On this content</h6>
             {lesson.type === "quiz" ? (
               <span className="text-muted-foreground text-sm">
                 {pluralize(lesson.quizzes?.length ?? 0, "Question")}

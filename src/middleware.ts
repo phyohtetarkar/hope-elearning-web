@@ -69,9 +69,9 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/verify-email", request.url));
   }
 
-  if (emailVerified && pathname.startsWith("/verify-email")) {
-    return NextResponse.redirect(new URL("/", request.url));
-  }
+  // if (emailVerified && pathname.startsWith("/verify-email")) {
+  //   return NextResponse.redirect(new URL("/", request.url));
+  // }
 
   const currentTime = new Date().getTime() / 1000;
   const expiredTime = payload.exp ?? 0;

@@ -54,8 +54,8 @@ export default function VerifyEmailPage({ oobCode }: { oobCode: string }) {
     return (
       <div className="flex flex-col items-center">
         <div className="my-5">
-          <div className="rounded-full bg-success p-3.5">
-            <Check size={64} className="text-white" />
+          <div className="rounded-full bg-success ring-8 ring-success/30 p-3">
+            <Check className="text-white size-14" />
           </div>
         </div>
 

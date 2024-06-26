@@ -22,7 +22,6 @@ import {
 import { UploadImagesPlugin } from "novel/plugins";
 import { CustomCodeBlock } from "./extensions/codeblock";
 import { Mathematics } from "./extensions/mathematics";
-import { TableView } from "./utilities/table-view";
 
 // You can overwrite the placeholder with your own configuration
 const aiHighlight = AIHighlight;

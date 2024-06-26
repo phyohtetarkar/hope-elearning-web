@@ -13,7 +13,7 @@ export async function sendVerificationEmail() {
   const emailVerified = payload["email_verified"];
 
   if (emailVerified) {
-    redirect("/profile");
+    redirect("/verify-email");
   }
 
   try {
