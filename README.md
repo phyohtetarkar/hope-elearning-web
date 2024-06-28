@@ -2,7 +2,21 @@
 
 E-learning frontend website build with [Next.js](https://nextjs.org/).
 
-This project is a frontend part of [E-learning backend](https://github.com/phyohtetarkar/elearning-backend/).
+**Features**:
+<ul>
+	<li>Course Management</li>
+	<li>Blog Management</li>
+	<li>Quiz Management</li>
+	<li>Category</li>
+	<li>Tag</li>
+	<li>Course Bookmark</li>
+	<li>Course Review</li>
+	<li>User Management</li>
+	<li>AI powered content editor</li>
+	<li>Dark mode support</li>
+</ul>
+
+This project is a frontend part of [E-learning backend](https://github.com/phyohtetarkar/hope-elearning-backend/).
 
 ## Requirements
 
@@ -14,6 +28,8 @@ This project is a frontend part of [E-learning backend](https://github.com/phyoh
 This project use [TinyMCE](https://www.tiny.cloud/) for some rich text editing. You need to download TinyMCE self-hosted source [here](https://www.tiny.cloud/get-tiny/self-hosted/) and then unzip and place inside **public** folder or you can host anywhere you wish to place. Read more about TinyMCE self-hosted [here](https://www.tiny.cloud/blog/get-started-with-tinymce-self-hosted/).
 
 ## Installation and setup
+
+**This project use Firebase auth as authentication layer. So, you first need to setup firebase auth. Or you can use any other authentication providers like AWS Cognito, Auth0 etc., and setup accordingly.**
 
 Required `.env.local` file properties.
 
@@ -61,4 +77,31 @@ $ npm install
 # development
 $ npm run dev
 ```
+
+## Support me
+
+<a href="https://www.buymeacoffee.com/yzox2vc1i">
+	<img src="images/bmc-button.png" width="200">
+</a>
+<br/>
+<br/>
+
+## Screenshots
+
+<img src="images/landing.png">
+
+<img src="images/course-detail-dark.png">
+
+<img src="images/quiz-learn.png">
+
+<img src="images/dashboard.png">
+
+<img src="images/lesson-edit.png">
+
+<img src="images/lesson-edit-dark.png">
+
+<img src="images/post-edit.png">
+
+<img src="images/math-equations.png">
+
 
