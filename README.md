@@ -79,6 +79,10 @@ $ npm install
 $ npm run dev
 ```
 
+## Styling and theming
+
+This project use [Tailwind CSS](https://tailwindcss.com/) with [Shadcn](https://ui.shadcn.com/) components. You can modify website's theme with shadcn cssVariables.
+
 ## Support me
 
 <a href="https://www.buymeacoffee.com/yzox2vc1i">
