@@ -61,9 +61,8 @@ export default function Pricing() {
             <Button
               variant="outline"
               className="text-primary hover:text-primary border-primary"
-              asChild
             >
-              <Link href={"/login"}>Subscribe</Link>
+              Subscribe
             </Button>
           </CardContent>
         </Card>
@@ -88,9 +87,8 @@ export default function Pricing() {
             <Button
               variant="outline"
               className="text-primary hover:text-primary border-primary"
-              asChild
             >
-              <Link href={"/login"}>Subscribe</Link>
+              Subscribe
             </Button>
           </CardContent>
         </Card>

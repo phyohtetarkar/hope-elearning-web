@@ -27,11 +27,13 @@ export default function EnrollCourseButton({
   const router = useRouter();
 
   const handleEnrollment = async () => {
-    if (
-      course?.access === "premium" &&
-      (user?.expiredAt ?? 0) < new Date().getTime()
-    ) {
-      router.push("/subscriptions");
+    if (!user) {
+      router.push("/login");
+      return;
+    }
+
+    if (course?.access === "premium" && user.expiredAt < new Date().getTime()) {
+      router.push("/pricing");
       return;
     }
     try {

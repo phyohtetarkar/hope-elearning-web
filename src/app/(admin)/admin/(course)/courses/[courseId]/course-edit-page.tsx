@@ -191,7 +191,7 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
 
   return (
     <div className="flex flex-col">
-      <div className="flex items-center space-x-3 fixed inset-x-0 top-0 bg-background px-4 h-[65px] border-b">
+      <div className="flex items-center space-x-3 fixed inset-x-0 top-0 bg-background px-4 h-[65px] border-b z-10">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -227,7 +227,7 @@ export default function CourseEditPage({ course }: CourseEditPageProps) {
         )}
         <CourseDeleteButton course={course} disabled={isSubmitting} />
       </div>
-      <div className="grow fixed inset-0 overflow-y-auto mt-[65px] py-4">
+      <div className="grow mt-[65px] py-4">
         <div className="container grid grid-cols-1 lg:grid-cols-12 gap-4 mb-10">
           <div className="lg:col-span-7">
             <Card className="shadow-none">

@@ -27,7 +27,7 @@ NEXT_PUBLIC_BASE_URL=
 # backend api url
 NEXT_PUBLIC_API_URL= 
 
-# backend api url local e.g, http://localhost:3080/api
+# backend api url local for server actions & server components e.g, http://localhost:3080/api
 NEXT_PUBLIC_API_URL_LOCAL= 
 
 # Self-hosted TinyMCE source url 
@@ -44,6 +44,9 @@ OPENAI_API_KEY=
 
 # Gemini API Key
 GOOGLE_API_KEY=
+
+# Choose Default AI provider
+DEFAULT_AI_PROVIDER= # GOOGLE | OPENAI
 ```
 
 Installing dependencies

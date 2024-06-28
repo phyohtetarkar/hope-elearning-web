@@ -1,5 +1,6 @@
 "use client";
 
+import { AuthenticationContext } from "@/components/authentication-context-porvider";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { bookmarkCourse, removeBookmark } from "@/lib/actions";
@@ -7,7 +8,8 @@ import { Course } from "@/lib/models";
 import { parseErrorResponse } from "@/lib/parse-error-response";
 import { cn } from "@/lib/utils";
 import { LoaderCircle } from "lucide-react";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useContext, useState } from "react";
 
 export default function BookmarkCourseButton({
   course,
@@ -22,8 +24,14 @@ export default function BookmarkCourseButton({
 }) {
   const [isLoading, setLoading] = useState(false);
   const { toast } = useToast();
+  const { user } = useContext(AuthenticationContext);
+  const router = useRouter();
 
   const handleBookmark = async () => {
+    if (!user) {
+      router.push("/login");
+      return;
+    }
     try {
       setLoading(true);
       if (!isBookmarked) {

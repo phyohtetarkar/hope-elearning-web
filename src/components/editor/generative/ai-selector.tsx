@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TypingSpinner } from "@/components/ui/typing-spinner";
 import { useToast } from "@/components/ui/use-toast";
-import { generateGeminiCompletion } from "@/lib/actions";
+import { generateAICompletion } from "@/lib/actions";
 import { AiPromptRequest } from "@/lib/models";
 import { parseErrorResponse } from "@/lib/parse-error-response";
 import { readStreamableValue } from "ai/rsc";
@@ -32,7 +32,7 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
   const handleCompletion = async (values: AiPromptRequest) => {
     try {
       setLoading(true);
-      const result = await generateGeminiCompletion(values);
+      const result = await generateAICompletion(values);
       let textContent = "";
 
       for await (const delta of readStreamableValue(result)) {
@@ -109,9 +109,9 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
                 const slice = editor!.state.selection.content();
 
                 let text = "";
-                
+
                 if (editor?.isActive("math")) {
-                  text = editor.getAttributes('math').latex;
+                  text = editor.getAttributes("math").latex;
                 } else {
                   text = editor!.storage.markdown.serializer.serialize(
                     slice.content

@@ -60,9 +60,9 @@ export default function AdminLayoutWrapper({
   const render = (node: ReactNode) => {
     return (
       <DrawerContextProvider>
-        <div className="flex h-full">
+        <div className="relative h-full">
           <SideMenu />
-          <div className="grow overflow-y-auto mt-[65px]">
+          <div className="grow flex flex-col mt-[65px] lg:ml-[300px]">
             <Header />
             <div className="p-4 lg:p-5">{node}</div>
           </div>

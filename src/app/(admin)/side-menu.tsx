@@ -39,7 +39,7 @@ export default function SideMenu() {
     <div
       className={`${
         isMenuOpen ? "translate-x-0" : `-translate-x-[300px]`
-      } transition-transform ease-out min-w-[200px] max-w-[300px] fixed lg:static inset-y-0 w-full border-r z-50 flex flex-col bg-background lg:translate-x-0`}
+      } transition-transform ease-out min-w-[200px] max-w-[300px] fixed inset-y-0 w-full border-r z-50 flex flex-col bg-background lg:translate-x-0`}
     >
       <div className="h-[65px] min-h-[65px] px-5 flex items-center gap-3">
         <div className="size-[40px] relative bg-primary rounded">

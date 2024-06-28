@@ -55,6 +55,7 @@ export * from "./enrollment/submit-quiz-response";
 
 export * from "./ai/generate-gemini-completion";
 export * from "./ai/generate-openai-completion";
+export * from './ai/generate-ai-completion';
 
 export * from "./setting/update-site-setting";
 

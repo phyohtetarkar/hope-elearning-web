@@ -97,6 +97,8 @@ export default function PostEditPage({ post }: PostEditPageProps) {
   const [isUploading, setUploading] = useState(false);
 
   const coverFileRef = useRef<HTMLInputElement>(null);
+  const staleRef = useRef(false);
+  const savingRef = useRef(false);
 
   const { tags, isLoading: tagLoading } = useTags();
   const { users, isLoading: userLoading } = useStaffs();
@@ -105,17 +107,13 @@ export default function PostEditPage({ post }: PostEditPageProps) {
     auditRef.current = post.audit;
   }, [post]);
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     if (isStale) {
-  //       handleUpdate();
-  //     }
-  //   }, 5000);
-  //   return () => {
-  //     clearInterval(interval);
-  //   };
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [isStale]);
+  useEffect(() => {
+    staleRef.current = isStale;
+  }, [isStale]);
+
+  useEffect(() => {
+    savingRef.current = isSaving;
+  }, [isSaving]);
 
   const {
     control,
@@ -153,7 +151,7 @@ export default function PostEditPage({ post }: PostEditPageProps) {
   });
 
   const handleUpdate = async () => {
-    if (isSaving) {
+    if (savingRef.current) {
       setStale(true);
       return;
     }
@@ -187,7 +185,8 @@ export default function PostEditPage({ post }: PostEditPageProps) {
       }
 
       setSaving(false);
-      if (isStale) {
+      savingRef.current = false;
+      if (staleRef.current) {
         handleUpdate();
       }
     } catch (error) {
@@ -277,7 +276,7 @@ export default function PostEditPage({ post }: PostEditPageProps) {
                 <BreadcrumbPage className="text-nowrap font-medium">
                   {post.status === "published" ? (
                     <Link
-                      href={`/blogs/${post.slug}`}
+                      href={`/posts/${post.slug}`}
                       target="_blank"
                       className="hover:underline flex items-center space-x-1"
                     >
@@ -333,7 +332,7 @@ export default function PostEditPage({ post }: PostEditPageProps) {
             </Tooltip>
           </TooltipProvider>
         </nav>
-        <div className="grow fixed inset-0 overflow-y-auto mt-[65px]">
+        <div className="grow mt-[65px]">
           <div className="container max-w-3xl 2xl:max-w-4xl mt-7 mb-16">
             <Controller
               control={control}
@@ -355,7 +354,12 @@ export default function PostEditPage({ post }: PostEditPageProps) {
                         variant="destructive"
                         size="icon"
                         className="absolute top-4 right-4"
-                        onClick={() => setValue("cover", null)}
+                        onClick={() => {
+                          setValue("cover", null);
+                          if (post.status === "draft") {
+                            handleUpdate();
+                          }
+                        }}
                       >
                         <Trash2 size={20} />
                       </Button>
@@ -428,27 +432,27 @@ export default function PostEditPage({ post }: PostEditPageProps) {
             />
           </div>
         </div>
-        <div
-          onClick={(evt) => {
-            setOpenSettings(false);
-            if (isStale && post.status === "draft") {
-              handleUpdate();
-            }
-          }}
-          className={cn(
-            "bg-black fixed inset-0 z-40",
-            `transition-opacity ease-out`,
-            `${
-              isOpenSettings
-                ? "opacity-70 pointer-events-auto"
-                : "opacity-0 pointer-events-none"
-            }`
-          )}
-        ></div>
       </div>
       <div
+        onClick={(evt) => {
+          setOpenSettings(false);
+          if (isStale && post.status === "draft") {
+            handleUpdate();
+          }
+        }}
         className={cn(
-          "flex flex-col fixed bg-background border-l inset-y-0 right-0 w-full min-w-[100px] max-w-[400px] z-40",
+          "bg-black fixed inset-0 z-40",
+          `transition-opacity ease-out`,
+          `${
+            isOpenSettings
+              ? "opacity-70 pointer-events-auto"
+              : "opacity-0 pointer-events-none"
+          }`
+        )}
+      ></div>
+      <div
+        className={cn(
+          "flex flex-col fixed bg-background border-l inset-y-0 right-0 w-full min-w-[100px] max-w-[400px] z-50",
           `transition-transform ease-out`,
           `${isOpenSettings ? "translate-x-0" : "translate-x-[400px]"}`
         )}

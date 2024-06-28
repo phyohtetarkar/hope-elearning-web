@@ -168,7 +168,7 @@ function EnrolledLineChart() {
       </CardHeader>
       <Separator />
       <CardContent className="p-0 ps-4 pb-4 flex h-full">
-        <div className="overflow-x-auto pt-3 grow">
+        <div className="overflow-x-auto pt-3 grow scrollbar-hide">
           <div className="h-full min-w-[600px]">
             <canvas ref={setCanvas} />
           </div>

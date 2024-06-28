@@ -10,7 +10,6 @@ import {
   formatRelativeTimestamp,
   wordPerMinute,
 } from "@/lib/utils";
-import { EyeIcon } from "lucide-react";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -67,7 +66,7 @@ export default async function Blogs(props: Props) {
       return (
         <div key={b.id}>
           <div className="flex flex-col lg:flex-row gap-4">
-            <Link href={`/blogs/${b.slug}`}>
+            <Link href={`/posts/${b.slug}`}>
               <div className="aspect-w-16 aspect-h-9 w-full lg:w-[200px]">
                 <Image
                   src={b.cover ?? `/images/placeholder.jpeg`}
@@ -81,7 +80,7 @@ export default async function Blogs(props: Props) {
             </Link>
             <div className="flex flex-col grow">
               <Link
-                href={`/blogs/${b.slug}`}
+                href={`/posts/${b.slug}`}
                 className="font-semibold text-xl line-clamp-2"
               >
                 {b.title ?? "(Untitled)"}
@@ -147,7 +146,7 @@ export default async function Blogs(props: Props) {
                     return (
                       <Link
                         key={t.id}
-                        href={`/tags/${t.slug}`}
+                        href={`/blogs/${t.slug}`}
                         className="bg-muted rounded-md text-sm px-3 py-2 text-nowrap"
                       >
                         {t.name}

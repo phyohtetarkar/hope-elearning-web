@@ -54,6 +54,8 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
   const [openDelete, setOpenDelete] = useState(false);
 
   const auditRef = useRef<Audit>();
+  const staleRef = useRef(false);
+  const savingRef = useRef(false);
 
   const { toast } = useToast();
 
@@ -75,8 +77,16 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
     auditRef.current = lesson.audit;
   }, [lesson]);
 
+  useEffect(() => {
+    staleRef.current = isStale;
+  }, [isStale]);
+
+  useEffect(() => {
+    savingRef.current = isSaving;
+  }, [isSaving]);
+
   const handleUpdate = async () => {
-    if (isSaving) {
+    if (savingRef.current) {
       setStale(true);
       return;
     }
@@ -113,7 +123,8 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
       }
 
       setSaving(false);
-      if (isStale) {
+      savingRef.current = false;
+      if (staleRef.current) {
         handleUpdate();
       }
     } catch (error) {
@@ -218,7 +229,7 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <div className="grow fixed inset-0 overflow-y-auto mt-[65px]">
+        <div className="grow mt-[65px]">
           <div className="container max-w-3xl 2xl:max-w-4xl mt-7 mb-16">
             <Breadcrumb className="mb-6">
               <BreadcrumbList>

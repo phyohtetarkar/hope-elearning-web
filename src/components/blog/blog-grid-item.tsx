@@ -13,7 +13,7 @@ export function BlogGridItem({ data }: { data: Post }) {
   return (
     <Card className="overflow-hidden shadow-none flex flex-col">
       <CardContent className="p-0 flex flex-col grow">
-        <Link href={`/blogs/${data.slug}`}>
+        <Link href={`/posts/${data.slug}`}>
           <div className="aspect-w-16 aspect-h-9">
             <Image
               src={data.cover ?? "/images/placeholder.jpeg"}
@@ -28,7 +28,7 @@ export function BlogGridItem({ data }: { data: Post }) {
         {/* <Separator /> */}
         <div className="flex flex-col p-4 grow">
           <Link
-            href={`/blogs/${data.slug}`}
+            href={`/posts/${data.slug}`}
             className="text-foreground font-semibold text-lg line-clamp-2"
           >
             {data.title ?? "(Untitled)"}
