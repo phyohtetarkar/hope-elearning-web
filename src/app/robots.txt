@@ -1,0 +1,7 @@
+User-Agent: *
+Allow: /
+Disallow: /profile/
+Disallow: /admin/
+Disallow: /learn/
+Disallow: /usermgmt
+Disallow: /verify-email

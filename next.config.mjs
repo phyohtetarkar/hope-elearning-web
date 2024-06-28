@@ -1,0 +1,47 @@
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
+  experimental: {
+    staleTimes: {
+      dynamic: 0,
+      static: 180,
+    },
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+      {
+        protocol: "http",
+        hostname: "**",
+      },
+    ],
+  },
+  async redirects() {
+    return [
+      {
+        source: "/admin/courses/:id/lessons",
+        destination: "/admin/courses/:id",
+        permanent: true,
+      },
+      {
+        source: "/courses",
+        destination: "/browse",
+        permanent: true,
+      },
+      {
+        source: "/tags",
+        destination: "/blogs",
+        permanent: true,
+      },
+    ];
+  },
+};
+
+export default nextConfig;

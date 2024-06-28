@@ -1,0 +1,262 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
+@import "swiper/css/zoom";
+@import "../styles/prosemirror.css";
+@import 'katex/dist/katex.min.css';
+
+/* @layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+} */
+
+@layer base {
+  @font-face {
+    font-family: Inter;
+    font-weight: 300;
+    src: url(../../public/fonts/Inter-Light.ttf) format("truetype");
+  }
+  @font-face {
+    font-family: Inter;
+    font-weight: 400;
+    src: url(../../public/fonts/Inter-Regular.ttf) format("truetype");
+  }
+  @font-face {
+    font-family: Inter;
+    font-weight: 500;
+    src: url(../../public/fonts/Inter-Medium.ttf) format("truetype");
+  }
+  @font-face {
+    font-family: Inter;
+    font-weight: 600;
+    src: url(../../public/fonts/Inter-SemiBold.ttf) format("truetype");
+  }
+  @font-face {
+    font-family: Inter;
+    font-weight: 700;
+    src: url(../../public/fonts/Inter-Bold.ttf) format("truetype");
+  }
+
+  :root {
+    --novel-highlight-default: #ffffff;
+    --novel-highlight-purple: #f6f3f8;
+    --novel-highlight-red: #fdebeb;
+    --novel-highlight-yellow: #fbf4a2;
+    --novel-highlight-blue: #c1ecf9;
+    --novel-highlight-green: #acf79f;
+    --novel-highlight-orange: #faebdd;
+    --novel-highlight-pink: #faf1f5;
+    --novel-highlight-gray: #f1f1ef;
+
+    --background: 0 0% 100%;
+    --foreground: 224 71.4% 4.1%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 224 71.4% 4.1%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71.4% 4.1%;
+
+    --primary: 243 75% 59%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 37 95% 56%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 46.1%;
+
+    --accent: 220 14.3% 95.9%;
+    --accent-foreground: 220.9 39.3% 11%;
+
+    --destructive: 359 100% 42%;
+    --destructive-foreground: 210 20% 98%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 224 71.4% 4.1%;
+
+    --radius: 0.35rem;
+  }
+
+  .dark {
+    --novel-highlight-default: #000000;
+    --novel-highlight-purple: #3f2c4b;
+    --novel-highlight-red: #5c1a1a;
+    --novel-highlight-yellow: #5c4b1a;
+    --novel-highlight-blue: #1a3d5c;
+    --novel-highlight-green: #1a5c20;
+    --novel-highlight-orange: #5c3a1a;
+    --novel-highlight-pink: #5c1a3a;
+    --novel-highlight-gray: #3a3a3a;
+
+    --background: 224 71.4% 4.1%;
+    --foreground: 210 20% 98%;
+
+    --card: 224 71.4% 4.1%;
+    --card-foreground: 210 20% 98%;
+
+    --popover: 224 71.4% 4.1%;
+    --popover-foreground: 210 20% 98%;
+
+    --primary: 239 84% 67%;
+    --primary-foreground: 0 0% 93%;
+
+    --secondary: 37 95% 56%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 215 27.9% 16.9%;
+    --muted-foreground: 217.9 10.6% 64.9%;
+
+    --accent: 215 27.9% 16.9%;
+    --accent-foreground: 210 20% 98%;
+
+    --destructive: 359 100% 63%;
+    --destructive-foreground: 222.2 47.4% 11.2%;
+
+    --border: 215 27.9% 16.9%;
+    --input: 215 27.9% 16.9%;
+    --ring: 216 12.2% 83.9%;
+  }
+
+  h1 {
+    @apply text-4xl font-semibold;
+  }
+
+  h2 {
+    @apply text-3xl font-semibold;
+  }
+
+  h3 {
+    @apply text-2xl font-semibold;
+  }
+
+  h4 {
+    @apply text-xl font-semibold;
+  }
+
+  h5 {
+    @apply text-lg font-semibold;
+  }
+
+  h6 {
+    @apply text-base font-semibold;
+  }
+
+  /* a {
+    @apply text-anchor;
+  } */
+}
+
+@layer components {
+  .default-input {
+    @apply border-border focus:border-primary focus:ring-0 bg-background disabled:bg-muted-foreground/20 disabled:cursor-not-allowed;
+  }
+
+  .valid-input {
+    @apply border-success focus:border-success focus:ring-[4px] focus:ring-success/30 bg-background;
+  }
+
+  .invalid-input {
+    @apply border-destructive focus:border-destructive focus:ring-[4px] focus:ring-destructive/30 bg-background;
+  }
+}
+
+/* html,
+body {
+  margin: 0;
+  background-color: #ff0000;
+  font-family: Inter, Noto Sans Myanmar UI, -apple-system, BlinkMacSystemFont,
+    Roboto, Segoe UI, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
+    Helvetica Neue, sans-serif !important;
+} */
+
+/* svg {
+  display: block;
+} */
+
+/* .lucide {
+  stroke-width: 2px;
+} */
+
+html body[data-scroll-locked] {
+  --removed-body-scroll-bar-size: 0px !important;
+  margin-right: 0px !important;
+  overflow-y: auto !important;
+} 
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-none {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* width */
+.scrollbar-custom::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+/* Track */
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: #f2f2f2;
+  border-radius: 3px;
+}
+
+/* Handle */
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+/* Handle on hover */
+.scrollbar-custom::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
+/* Swiper */
+.swiper-pagination-bullet {
+  background-color: hsl(var(--primary));
+  width: 10px;
+  height: 10px;
+  opacity: 0.3;
+}
+.swiper-pagination-bullet-active {
+  background-color: hsl(var(--primary));
+  opacity: 1;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  --swiper-navigation-color: hsl(var(--primary));
+}
+
+/* Tinymce */
+.tox-pop .tox-pop__dialog .tox-toolbar {
+  padding: 0 !important;
+}
+
+.tox .tox-collection__item-label h1, h2, h3, h4, h5, h6, p, pre {
+  background-color: transparent !important;
+}
+
+.tox .tox-edit-area__iframe {
+  border-radius: 0px;
+}
+
+.mce-edit-focus {
+  outline: none;
+}
