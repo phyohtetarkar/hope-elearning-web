@@ -4,16 +4,17 @@ E-learning frontend website build with [Next.js](https://nextjs.org/).
 
 **Features**:
 <ul>
-	<li>Course Management</li>
-	<li>Blog Management</li>
-	<li>Quiz Management</li>
-	<li>Category</li>
-	<li>Tag</li>
-	<li>Course Bookmark</li>
-	<li>Course Review</li>
-	<li>User Management</li>
-	<li>AI powered content editor</li>
-	<li>Dark mode support</li>
+	<li>- [x] Course Management</li>
+	<li>- [x] Blog Management</li>
+	<li>- [x] Quiz Management</li>
+	<li>- [x] Category</li>
+	<li>- [x] Tag</li>
+	<li>- [x] Course Bookmark</li>
+	<li>- [x] Course Review</li>
+	<li>- [x] User Management</li>
+	<li>- [x] AI powered content editor</li>
+	<li>- [x] Dark mode support</li>
+	<li>- [ ] Subscription</li>
 </ul>
 
 This project is a frontend part of [E-learning backend](https://github.com/phyohtetarkar/hope-elearning-backend/).
