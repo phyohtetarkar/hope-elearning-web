@@ -166,7 +166,7 @@ export default function Header({ user }: { user?: User | null }) {
               fill
               className="rounded object-fill"
               priority
-            /> */}
+            />  */}
           </div>
           <h3 className="ms-3 hidden sm:block text-foreground">
             {process.env.NEXT_PUBLIC_APP_NAME}

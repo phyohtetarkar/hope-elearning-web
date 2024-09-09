@@ -1,4 +1,6 @@
 .tiptap {
+  overflow: auto hidden;
+
   pre {
     // background: #0d0d0d;
     // color: #fff;
@@ -77,7 +79,7 @@
   table p {
     margin: 0;
   }
-  
+
   table .selectedCell {
     background-color: rgba(90, 187, 247, 0.3);
   }
@@ -85,4 +87,13 @@
   .tableWrapper {
     overflow-x: auto;
   }
+
+  // h1,
+  // h2,
+  // h3 {
+  //   .katex {
+  //     white-space: nowrap;
+  //     overflow: auto hidden;
+  //   }
+  // }
 }

@@ -11,7 +11,7 @@ import {
 import Pagination from "@/components/ui/pagination";
 import { API_URL_LOCAL } from "@/lib/constants";
 import { Page, Post, Tag } from "@/lib/models";
-import { buildQueryParams, pluralize } from "@/lib/utils";
+import { buildQueryParams } from "@/lib/utils";
 import { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";

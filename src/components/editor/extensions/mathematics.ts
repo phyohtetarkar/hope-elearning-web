@@ -40,7 +40,7 @@ export const Mathematics = Node.create<MathematicsOptions>({
         if (!$pos.parent.isTextblock) {
           return false;
         }
-        
+
         return $pos.parent.type.name !== "codeBlock";
       },
       katexOptions: {

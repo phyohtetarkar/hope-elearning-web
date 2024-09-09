@@ -10,6 +10,7 @@ import {
   formatRelativeTimestamp,
   wordPerMinute,
 } from "@/lib/utils";
+import { CalendarDaysIcon, EyeIcon } from "lucide-react";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -19,7 +20,7 @@ interface Props {
 }
 
 export const metadata: Metadata = {
-  title: "Blog",
+  title: "Blogs",
   description: process.env.NEXT_PUBLIC_APP_DESC,
 };
 
@@ -86,13 +87,11 @@ export default async function Blogs(props: Props) {
                 {b.title ?? "(Untitled)"}
               </Link>
               <div className="text-sm mt-1 text-muted-foreground">
-                {formatRelativeTimestamp(b.publishedAt)}
-                <span className="mx-2">&bull;</span>
                 {`${wordPerMinute(b.wordCount)} min read`}
               </div>
               <p className="font-light mt-1">{b.excerpt}</p>
               <div className="flex-1"></div>
-              <div className="flex flex-wrap gap-2 mt-4">
+              <div className="flex space-x-4 items-center mt-4 mt-lg-6">
                 {/* {b.tags?.map((t) => {
                   return (
                     <Link
@@ -104,13 +103,20 @@ export default async function Blogs(props: Props) {
                     </Link>
                   );
                 })} */}
-                <div className="bg-primary/15 text-primary rounded-full text-sm px-3 py-1">
-                    {formatAbbreviate(BigInt(b.meta?.viewCount ?? 0))} views
+                <div className="flex space-x-1 items-center text-sm text-muted-foreground">
+                  <CalendarDaysIcon size={18} />
+                  <span>{formatRelativeTimestamp(b.publishedAt)}</span>
+                </div>
+                <div className="flex space-x-1 items-center text-sm text-muted-foreground">
+                  <EyeIcon size={18} />
+                  <span>
+                    {formatAbbreviate(BigInt(b.meta?.viewCount ?? 0))}
+                  </span>
                 </div>
               </div>
             </div>
           </div>
-          <Separator className="my-5 hidden lg:block" />
+          <Separator className="mt-7 hidden lg:block" />
         </div>
       );
     });
@@ -128,7 +134,7 @@ export default async function Blogs(props: Props) {
       <div className="container py-7 mb-10">
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-5">
           <div className="xl:col-span-8 order-2 xl:order-1">
-            <div className="grid grid-cols-1 gap-6">{content()}</div>
+            <div className="grid grid-cols-1 gap-7">{content()}</div>
             <div className="flex justify-center mt-10 xl:mt-4">
               <Pagination
                 totalPage={blogs?.totalPage ?? 0}

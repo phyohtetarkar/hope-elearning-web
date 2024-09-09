@@ -69,6 +69,7 @@ const schema = z.object({
     return typeof v === "string" ? /public|member|paid_member/.test(v) : false;
   }),
   lexical: z.string().optional(),
+  html: z.string().optional(),
   wordCount: z.number(),
   authors: z.custom<User>().array().min(1, {
     message: "Required at least one author",
@@ -423,7 +424,9 @@ export default function PostEditPage({ post }: PostEditPageProps) {
               onChange={(editor) => {
                 const json = editor.getJSON();
                 const wordCount = editor.storage.characterCount.words();
+                const html = editor.getHTML();
                 setValue("lexical", JSON.stringify(json));
+                setValue('html', html);
                 setValue("wordCount", wordCount);
                 if (post.status === "draft") {
                   debouncedUpdate(undefined);

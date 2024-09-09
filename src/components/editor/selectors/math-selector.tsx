@@ -7,6 +7,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 import { useEditor } from "novel";
 
 export const MathSelector = () => {
@@ -18,34 +19,29 @@ export const MathSelector = () => {
     <TooltipProvider delayDuration={300}>
       <Tooltip>
         <TooltipTrigger asChild>
-          {editor.isActive("math") ? (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-none w-14"
-              onClick={(evt) => {
+          <Button
+            variant="ghost"
+            size='icon'
+            className="rounded-none w-14"
+            onClick={(evt) => {
+              if (editor.isActive("math")) {
                 editor.chain().focus().unsetLatex().run();
-              }}
-            >
-              <FunctionIcon className={"size-6 text-primary"} />
-            </Button>
-          ) : (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-none w-14"
-              onClick={(evt) => {
+              } else {
                 const { from, to } = editor.state.selection;
                 const latex = editor.state.doc.textBetween(from, to);
 
                 if (!latex) return;
 
                 editor.chain().focus().setLatex({ latex }).run();
-              }}
-            >
-              <FunctionIcon className={"size-6"} />
-            </Button>
-          )}
+              }
+            }}
+          >
+            <FunctionIcon
+              className={cn("size-6", {
+                "text-primary": editor.isActive("math"),
+              })}
+            />
+          </Button>
         </TooltipTrigger>
         <TooltipContent>
           LaTex

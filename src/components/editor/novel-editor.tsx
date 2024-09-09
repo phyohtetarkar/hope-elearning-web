@@ -98,6 +98,7 @@ function NovelEditor({
         extensions={extensions}
         onUpdate={({ editor }) => {
           onChange?.(editor);
+          // console.log(editor.getHTML());
           // debouncedUpdate(editor);
         }}
         onCreate={({ editor }) => onCreate?.(editor)}

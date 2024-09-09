@@ -5,10 +5,7 @@ export type CourseStatus = "draft" | "published";
 export type CourseLevel = "beginner" | "intermediate" | "advanced";
 export type CourseAccess = "free" | "premium";
 export type LessonType = "text" | "video" | "quiz";
-export type QuizType =
-  | "multiple_choice"
-  | "single_choice"
-  | "short_answer";
+export type QuizType = "multiple_choice" | "single_choice" | "short_answer";
 
 export interface Page<T> {
   contents: T[];
@@ -62,6 +59,7 @@ export interface Post {
   slug: string;
   excerpt?: string;
   lexical?: string;
+  html?: string;
   status: PostStatus;
   visibility: PostVisibility;
   featured: boolean;
@@ -126,6 +124,7 @@ export interface Lesson {
   trial: boolean;
   type: LessonType;
   lexical?: string;
+  html?: string;
   sortOrder: number;
   wordCount: number;
   chapter?: Chapter;

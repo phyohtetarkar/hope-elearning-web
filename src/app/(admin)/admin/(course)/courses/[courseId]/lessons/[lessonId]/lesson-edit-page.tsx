@@ -39,6 +39,7 @@ const schema = z.object({
   }),
   slug: z.string().optional(),
   lexical: z.string().optional(),
+  html: z.string().optional(),
   wordCount: z.number(),
 });
 
@@ -168,8 +169,10 @@ export default function LessonEditPage({ lesson }: { lesson: Lesson }) {
         content={lesson.lexical ? JSON.parse(lesson.lexical) : undefined}
         onChange={(editor) => {
           const json = editor.getJSON();
+          const html = editor.getHTML();
           const wordCount = editor.storage.characterCount.words();
           setValue("lexical", JSON.stringify(json));
+          setValue("html", html);
           setValue("wordCount", wordCount);
           if (lesson.chapter?.course?.status === "draft") {
             debouncedUpdate(undefined);

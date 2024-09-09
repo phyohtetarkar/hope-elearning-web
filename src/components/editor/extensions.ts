@@ -111,6 +111,12 @@ const youtube = Youtube.configure({
   inline: false,
 });
 
+const mathematics = Mathematics.configure({
+  HTMLAttributes: {
+    class: cn("text-foreground rounded p-1 katex-wrapper"),
+  },
+});
+
 const TiptapTable = Table.extend({
   renderHTML({ node, HTMLAttributes }) {
     const { colgroup, tableWidth, tableMinWidth } = createColGroup(
@@ -202,7 +208,7 @@ export const defaultExtensions = [
   youtube,
   CharacterCount,
   GlobalDragHandle,
-  Mathematics,
+  mathematics,
   TiptapTable,
   TableHeader.configure({
     HTMLAttributes: {
