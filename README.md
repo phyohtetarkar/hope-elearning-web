@@ -1,6 +1,6 @@
 # E-learning web
 
-E-learning frontend website build with [Next.js](https://nextjs.org/).
+This project is a frontend part of [E-learning backend](https://github.com/phyohtetarkar/hope-elearning-backend/). This project implements micro-frontend architecture built with [Turborepo](https://turbo.build/). 
 
 **Features**:
 <ul>
@@ -17,71 +17,86 @@ E-learning frontend website build with [Next.js](https://nextjs.org/).
 	<li>- [ ] Subscription</li>
 </ul>
 
-This project is a frontend part of [E-learning backend](https://github.com/phyohtetarkar/hope-elearning-backend/).
-
 ## Requirements
 
 <ol>
 	<li>Node.js 18.17 or later</li>
+	<li>E-learning backend APIs</li>
 	<li>TinyMCE self-hosted</li>
 </ol>
 
 This project use [TinyMCE](https://www.tiny.cloud/) for some rich text editing. You need to download TinyMCE self-hosted source [here](https://www.tiny.cloud/get-tiny/self-hosted/) and then unzip and place inside **public** folder or you can host anywhere you wish to place. Read more about TinyMCE self-hosted [here](https://www.tiny.cloud/blog/get-started-with-tinymce-self-hosted/).
 
-## Installation and setup
+Required `.env` file properties are inclued inside each apps as `.env.example` file.
 
-**This project use Firebase auth as authentication layer. So, you first need to setup firebase auth. Or you can use any other authentication providers like AWS Cognito, Auth0 etc., and setup accordingly.**
+## What's inside?
 
-Required `.env.local` file properties.
+This Turborepo includes the following packages/apps:
 
-```ini
-NEXT_PUBLIC_APP_NAME=Brand
-NEXT_PUBLIC_APP_DESC=Start a new career in the software developing industry.
+### Apps and Packages
 
-# http://localhost:3000 or (http|https)://yourdomain.com
-NEXT_PUBLIC_BASE_URL= 
+- `elearning-web`: E-learning consumer app using [Next.js](https://nextjs.org/)
+- `elearning-admin`: E-learning admin app using [Next.js](https://nextjs.org/)
+- `@elearning/ui`: UI and other central components shared by both `elearning-web` and `elearning-admin` applications
+- `@elearning/lib`: a utility library shared by both `elearning-web` and `elearning-admin` applications
+- `@elearning/global-store`: redux global store shared by both `elearning-web` and `elearning-admin` applications
+- `@elearning/block-editor`: customized tiptap based AI-powered block editor
+- `@elearning/assets`: fonts and images assets 
+- `@elearning/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
+- `@elearning/typescript-config`: `tsconfig.json`s used throughout the monorepo
+- `@elearning/tailwind-config`: tailwindcss configuration including base css
 
-# backend api url
-NEXT_PUBLIC_API_URL= 
-
-# backend api url local for server actions & server components e.g, http://localhost:3080/api
-NEXT_PUBLIC_API_URL_LOCAL= 
-
-# Self-hosted TinyMCE source url 
-NEXT_PUBLIC_TINYMCE_SCRIPT_SOURCE=http://localhost:3000/tinymce/tinymce.min.js
-
-# Firebase config
-NEXT_PUBLIC_FIREBASE_API_KEY=
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=
-NEXT_PUBLIC_FIREBASE_APP_ID=
-
-# OpenAI API Key
-OPENAI_API_KEY=
-
-# Gemini API Key
-GOOGLE_API_KEY=
-
-# Choose Default AI provider
-DEFAULT_AI_PROVIDER= # GOOGLE | OPENAI
-```
-
-Installing dependencies
+### Directory structure
 
 ```bash
-$ npm install
+.
+├── apps                   
+│   ├── admin     
+│   └── web  
+├── packages                   
+│   ├── assets     
+│   ├── block-editor     
+│   ├── config-eslint     
+│   ├── config-tailwind     
+│   ├── config-typescript     
+│   ├── global-store     
+│   ├── lib    
+│   └── ui       
+└── ...
 ```
 
-## Running the app
+### Multi-Zones
 
-```bash
-# development
-$ npm run dev
+[Multi-Zones](https://nextjs.org/docs/app/building-your-application/deploying/multi-zones) is a way of having independent Next.js applications that all render on a common domain. This is a method for building separation of concerns in large teams. It works well if a single domain has separate groupings of pages where a user doesn't navigate between the groups very often.
+
+In this project, ./apps/web is our main app, and ./apps/admin is a separate app that handles all routes for /admin/**.
+
+### Utilities
+
+This Turborepo has some additional tools already setup for you:
+
+- [TypeScript](https://www.typescriptlang.org/) for static type checking
+- [ESLint](https://eslint.org/) for code linting
+- [Prettier](https://prettier.io) for code formatting
+
+### Build
+
+To build all apps and packages, run the following command:
+
+```
+cd elearning-frontend
+pnpm build
 ```
 
-## Styling and theming
+### Develop
 
-This project use [Tailwind CSS](https://tailwindcss.com/) with [Shadcn](https://ui.shadcn.com/) components. You can modify website's theme with shadcn cssVariables.
+To develop all apps and packages, run the following command:
+
+```
+cd elearning-frontend
+pnpm i
+pnpm dev
+```
 
 ## Support me
 
@@ -108,5 +123,3 @@ This project use [Tailwind CSS](https://tailwindcss.com/) with [Shadcn](https://
 <img src="images/post-edit.png">
 
 <img src="images/math-equations.png">
-
-
