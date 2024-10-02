@@ -1,0 +1,67 @@
+{
+  "name": "@elearning/block-editor",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./block-editor.css": "./src/styles/block-editor.css"
+  },
+  "scripts": {
+    "sass": "sass ./src/styles/tiptap.scss ./src/styles/tiptap.css --watch",
+    "dev": "tsc --watch",
+    "build": "tsc"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "@elearning/eslint-config": "workspace:*",
+    "@elearning/tailwind-config": "workspace:*",
+    "@elearning/typescript-config": "workspace:*",
+    "@types/eslint": "^8.56.5",
+    "@types/katex": "^0.16.7",
+    "@types/node": "^20.11.24",
+    "@types/react": "^18",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.0",
+    "postcss": "^8.4.47",
+    "sass": "^1.79.1",
+    "tailwindcss": "^3.4.13",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@elearning/lib": "workspace:*",
+    "@elearning/ui": "workspace:*",
+    "@tiptap/core": "^2.7.4",
+    "@tiptap/extension-character-count": "^2.7.4",
+    "@tiptap/extension-code-block-lowlight": "^2.7.4",
+    "@tiptap/extension-heading": "^2.7.4",
+    "@tiptap/extension-image": "^2.7.4",
+    "@tiptap/extension-link": "^2.7.4",
+    "@tiptap/extension-placeholder": "^2.7.4",
+    "@tiptap/extension-table": "^2.7.4",
+    "@tiptap/extension-table-cell": "^2.7.4",
+    "@tiptap/extension-table-header": "^2.7.4",
+    "@tiptap/extension-table-row": "^2.7.4",
+    "@tiptap/extension-text-align": "^2.7.4",
+    "@tiptap/extension-text-style": "^2.7.4",
+    "@tiptap/extension-underline": "^2.7.4",
+    "@tiptap/extension-youtube": "^2.7.4",
+    "@tiptap/pm": "^2.7.4",
+    "@tiptap/react": "^2.7.4",
+    "@tiptap/starter-kit": "^2.7.4",
+    "@tiptap/suggestion": "^2.7.4",
+    "ai": "^3.3.43",
+    "highlight.js": "^11.10.0",
+    "katex": "^0.16.11",
+    "lowlight": "^3.1.0",
+    "lucide-react": "^0.441.0",
+    "react-markdown": "^9.0.1",
+    "tippy.js": "^6.3.7",
+    "tiptap-extension-global-drag-handle": "^0.1.13",
+    "tiptap-markdown": "^0.8.10"
+  }
+}
