@@ -1,0 +1,9 @@
+{
+  "extends": "@elearning/typescript-config/react-library.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": ["."],
+  "exclude": ["node_modules", "tailwind.config.ts", "dist"]
+}
